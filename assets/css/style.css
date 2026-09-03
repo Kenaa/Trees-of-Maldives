@@ -70,6 +70,11 @@ body {
   font-size: 1.125rem;
 }
 :root[lang="dv"] .display { font-family: var(--font-thaana); }
+/* …but a Latin fragment inside a Dhivehi page — an English label, a
+   scientific name — goes back to the Latin stack rather than inheriting
+   a Thaana font that has no glyphs for it. */
+:root[lang="dv"] [lang="en"],
+:root[lang="dv"] [lang="la"] { font-family: var(--font-body); line-height: 1.6; }
 
 .display { font-family: var(--font-display); font-weight: 600; letter-spacing: -.01em; }
 
