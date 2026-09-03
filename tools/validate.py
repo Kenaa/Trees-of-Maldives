@@ -129,15 +129,34 @@ def check_i18n():
 TYPES = {"markdown", "input", "textarea", "dropdown", "checkboxes"}
 
 
-def check_issue_forms():
+def check_issue_forms(species):
     """Validate the GitHub issue forms. Skipped silently if PyYAML is absent —
     it is present on GitHub's runners, so CI always checks them."""
     try:
         import yaml
     except ImportError:
+        # Skipping locally is a convenience. Skipping in CI would mean the
+        # forms go unchecked without anyone noticing, so fail there instead.
+        if os.environ.get("CI"):
+            err("PyYAML is missing, so the issue forms could not be checked. "
+                "Add `pip install pyyaml` to the workflow.")
+            return
         print("  issue forms: skipped (no PyYAML locally; CI still checks them)")
         return
     import glob
+
+    # The species menus in the forms are generated from data/species.js. If they
+    # drift, a contributor picks a species the register does not know about.
+    expected = []
+    for sp in (species or {}).get("species", []):
+        if sp["id"] == "unknown":
+            expected.append("%s | %s" % (sp["en"], sp.get("dv", "")))
+        else:
+            line = "%s \u00b7 %s" % (sp["en"], sp["sci"])
+            if sp.get("dv"):
+                line += " | %s" % sp["dv"]
+            expected.append(line)
+
     files = sorted(glob.glob(os.path.join(ROOT, ".github/ISSUE_TEMPLATE/*.yml")))
     if not files:
         return
@@ -182,6 +201,16 @@ def check_issue_forms():
                 elif a.get("default") is not None and not (0 <= a["default"] < len(opts)):
                     err("%s: default index %d is outside 0..%d"
                         % (loc, a["default"], len(opts) - 1))
+            if t == "dropdown" and item.get("id") == "species" and expected:
+                opts = a.get("options") or []
+                if opts != expected:
+                    err("%s: the species menu does not match data/species.js "
+                        "(%d options here, %d in the data). Regenerate it rather "
+                        "than editing by hand." % (loc, len(opts), len(expected)))
+                    for extra in [o for o in opts if o not in expected][:3]:
+                        err("        not in species.js: %r" % extra)
+                    for miss in [o for o in expected if o not in opts][:3]:
+                        err("        missing from the form: %r" % miss)
             if t == "checkboxes":
                 for o in a.get("options") or []:
                     if not isinstance(o, dict) or not o.get("label"):
@@ -208,7 +237,7 @@ def main():
         print("  trees: %d records" % len(trees.get("trees", [])))
 
     check_i18n()
-    check_issue_forms()
+    check_issue_forms(species)
 
     for w in warnings:
         print("  warning: %s" % w)

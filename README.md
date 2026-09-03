@@ -91,6 +91,24 @@ adding a few lines.
 
 ---
 
+## Where the species list comes from
+
+`data/species.js` holds the species the forms offer. Most of it is drawn from
+Selvam, V. (2007) *Trees and shrubs of the Maldives*, FAO RAP Publication
+2007/12, whose introduction sets out the plant communities of the foreshore,
+the beach crest and the inner island. Entries marked `"source": "FAO 2007"`
+came from there and still need a Dhivehi name; see [TRANSLATION.md](TRANSLATION.md).
+
+The species menus in the GitHub issue forms are **generated** from this file.
+After editing it, run:
+
+```bash
+python3 tools/sync-forms.py
+```
+
+`tools/validate.py` fails the build if the two ever disagree, so the menus
+cannot silently drift from the data.
+
 ## Checking your data
 
 ```bash

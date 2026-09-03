@@ -36,14 +36,20 @@
     if (prev) sel.value = prev;
   }
 
+  var prevSpecies = "";
+
   function buildSelects() {
     fill("ward", WARDS, function (v) { return t("ward." + v); });
     fill("lostReason", REASONS, function (v) { return t("reason." + v); });
+    /* Default to "not yet identified" rather than whatever sorts first, so a
+       half-read form cannot file a confident guess. */
     fill("species", SPECIES.map(function (s) { return s.id; }), function (id) {
       var s = SPECIES.filter(function (x) { return x.id === id; })[0];
       var native = window.i18n.current === "dv" && s.dv ? s.dv : s.en;
       return s.sci === "Unidentified" ? native : native + " \u00b7 " + s.sci;
     });
+    if (!$("species").value || !prevSpecies) $("species").value = "unknown";
+    prevSpecies = $("species").value;
     $("photo-hint").textContent = t("submit.photoHint", { mb: C.maxPhotoMb });
   }
 

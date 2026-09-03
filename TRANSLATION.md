@@ -52,6 +52,29 @@ Species carrying `"dvReview": true` are the ones I was least confident about:
 The others (ރުއް، ނިކަ، މިދިލި، ފުނަ، ހިރުނދު، ކާނި، ބަނބުކެޔޮ، އަނބު، ކަށިކެޔޮ) still deserve
 a glance. Set `"dvReview": false` once a name has been confirmed.
 
+### Species with no Dhivehi name at all
+
+These 12 came from the FAO's *Trees and shrubs of the Maldives* (Selvam, 2007,
+RAP Publication 2007/12), whose introduction names the species of each island
+plant community but gives no Dhivehi names. Rather than guess at Thaana, the
+field is left empty, and the forms fall back to the English name.
+
+- `allophylus-cobbe`: Allophylus (Allophylus cobbe)
+- `suriana-maritima`: Bay cedar (Suriana maritima)
+- `guettarda-speciosa`: Beach gardenia (Guettarda speciosa)
+- `casuarina-equisetifolia`: Casuarina (Casuarina equisetifolia)
+- `premna-serratifolia`: Headache tree (Premna serratifolia)
+- `hernandia-nymphaeifolia`: Lantern tree (Hernandia nymphaeifolia)
+- `pisonia-grandis`: Lettuce tree (Pisonia grandis)
+- `morinda-citrifolia`: Noni (Morinda citrifolia)
+- `ochrosia-oppositifolia`: Ochrosia (Ochrosia oppositifolia)
+- `adenanthera-pavonina`: Red bead tree (Adenanthera pavonina)
+- `barringtonia-asiatica`: Sea poison tree (Barringtonia asiatica)
+- `tournefortia-argentea`: Tree heliotrope (Tournefortia argentea)
+
+The full FAO book has an **Index of Dhivehi names** on p. 238. That is the right
+place to fill these in from. Add the name to `dv` and set `"dvReview": false`.
+
 Place names live in each record's `place.dv` in `data/trees.js`.
 
 ## Checking your work
