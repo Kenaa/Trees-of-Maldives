@@ -126,6 +126,69 @@ def check_i18n():
         print("  i18n: %d keys, English and Dhivehi in step" % len(e))
 
 
+TYPES = {"markdown", "input", "textarea", "dropdown", "checkboxes"}
+
+
+def check_issue_forms():
+    """Validate the GitHub issue forms. Skipped silently if PyYAML is absent —
+    it is present on GitHub's runners, so CI always checks them."""
+    try:
+        import yaml
+    except ImportError:
+        print("  issue forms: skipped (no PyYAML locally; CI still checks them)")
+        return
+    import glob
+    files = sorted(glob.glob(os.path.join(ROOT, ".github/ISSUE_TEMPLATE/*.yml")))
+    if not files:
+        return
+    for path in files:
+        rel = os.path.relpath(path, ROOT)
+        try:
+            d = yaml.safe_load(open(path, encoding="utf-8"))
+        except yaml.YAMLError as e:
+            err("%s: invalid YAML — %s" % (rel, e))
+            continue
+        if rel.endswith("config.yml"):
+            for cl in d.get("contact_links") or []:
+                for k in ("name", "url", "about"):
+                    if not cl.get(k):
+                        err("%s: a contact link is missing %r" % (rel, k))
+            continue
+        for k in ("name", "description", "body"):
+            if k not in d:
+                err("%s: missing top-level %r" % (rel, k))
+        ids = set()
+        for i, item in enumerate(d.get("body") or []):
+            loc = "%s body[%d]" % (rel, i)
+            t = item.get("type")
+            if t not in TYPES:
+                err("%s: unknown field type %r" % (loc, t))
+                continue
+            a = item.get("attributes") or {}
+            if t == "markdown":
+                if not a.get("value"):
+                    err("%s: markdown needs attributes.value" % loc)
+            else:
+                if not a.get("label"):
+                    err("%s: %s needs attributes.label" % (loc, t))
+                if item.get("id"):
+                    if item["id"] in ids:
+                        err("%s: duplicate field id %r" % (loc, item["id"]))
+                    ids.add(item["id"])
+            if t == "dropdown":
+                opts = a.get("options")
+                if not isinstance(opts, list) or not opts:
+                    err("%s: dropdown needs a non-empty options list" % loc)
+                elif a.get("default") is not None and not (0 <= a["default"] < len(opts)):
+                    err("%s: default index %d is outside 0..%d"
+                        % (loc, a["default"], len(opts) - 1))
+            if t == "checkboxes":
+                for o in a.get("options") or []:
+                    if not isinstance(o, dict) or not o.get("label"):
+                        err("%s: a checkbox option has no label" % loc)
+    print("  issue forms: %d checked" % len(files))
+
+
 def main():
     species = load_wrapped("data/species.js", "SPECIES_DATA")
     trees   = load_wrapped("data/trees.js", "TREE_DATA")
@@ -145,6 +208,7 @@ def main():
         print("  trees: %d records" % len(trees.get("trees", [])))
 
     check_i18n()
+    check_issue_forms()
 
     for w in warnings:
         print("  warning: %s" % w)

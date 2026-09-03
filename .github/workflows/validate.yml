@@ -21,5 +21,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Check the data files
+      - name: Install PyYAML (used to check the issue forms)
+        run: pip install pyyaml
+
+      - name: Check the data files and issue forms
         run: python3 tools/validate.py

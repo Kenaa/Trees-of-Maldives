@@ -370,6 +370,16 @@ window.i18n = (function () {
     document.documentElement.setAttribute("lang", meta.code);
     document.documentElement.setAttribute("dir", meta.dir);
     apply();
+
+    /* The toggle's own label is written in the language it switches TO, so it
+       has to be marked as a foreign fragment (WCAG 3.1.2). Without this a
+       screen reader reads Thaana with an English voice, and the Thaana font
+       stack never applies to it. */
+    var other = lang === "en" ? "dv" : "en";
+    document.querySelectorAll('[data-lang-toggle] [data-i18n="lang.switch"]').forEach(function (el) {
+      el.setAttribute("lang", window.LANGS[other].code);
+      el.setAttribute("dir", window.LANGS[other].dir);
+    });
     if (typeof rerender === "function") rerender();
     document.dispatchEvent(new CustomEvent("langchange", { detail: { lang: lang } }));
   }
