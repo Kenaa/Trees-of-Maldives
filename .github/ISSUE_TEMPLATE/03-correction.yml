@@ -1,0 +1,50 @@
+name: "✏️ A correction to an existing record"
+description: "Something in the archive is wrong, out of date, or needs verifying"
+title: "[Correction] MLE-"
+labels: ["correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Corrections are as valuable as new records. An archive nobody checks is just a
+        rumour with a map.
+
+  - type: input
+    id: record
+    attributes:
+      label: "Which record? | ކޮން ރެކޯޑެއް؟"
+      description: "The record number, shown at the bottom of every tree's page."
+      placeholder: "MLE-0005"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: "What sort of correction?"
+      options:
+        - "The tree is gone — it was standing in the record"
+        - "The species is wrong"
+        - "The location is wrong"
+        - "The measurements are wrong"
+        - "The felling date or reason is wrong"
+        - "I can verify this record — I have seen it or have a source"
+        - "This record should be deleted"
+        - "Something else"
+    validations:
+      required: true
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: "What should it say instead?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: "Evidence"
+      description: "A photograph, a date, a source, or simply: I stood in front of it on this date."
+    validations:
+      required: false

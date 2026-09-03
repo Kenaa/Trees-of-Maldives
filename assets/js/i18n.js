@@ -152,7 +152,9 @@ window.I18N = {
     "fallback.copied": "Copied",
     "fallback.email": "Send by email",
     "fallback.summary": "Your record",
-    "fallback.attach": "Attach your photograph to the email — it cannot be sent automatically."
+    "fallback.attach": "Attach your photograph to the email — it cannot be sent automatically.",
+    "alt.github": "Already have a GitHub account?",
+    "alt.githubHint": "You can file the record directly as a structured issue instead. Same information, and your name stays on it."
   },
 
   dv: {
@@ -293,7 +295,9 @@ window.I18N = {
     "fallback.copied": "ކޮޕީ ކުރެވިއްޖެ",
     "fallback.email": "އީމެއިލްކުރޭ",
     "fallback.summary": "ތިޔަބޭފުޅާގެ ރެކޯޑް",
-    "fallback.attach": "ފޮޓޯ އީމެއިލްއާއެކު އެޓޭޗް ކުރައްވާ — އޮޓޮމެޓިކުން ނުފޮނުވޭނެ."
+    "fallback.attach": "ފޮޓޯ އީމެއިލްއާއެކު އެޓޭޗް ކުރައްވާ — އޮޓޮމެޓިކުން ނުފޮނުވޭނެ.",
+    "alt.github": "GitHub އެކައުންޓެއް އެބައޮތްތަ؟",
+    "alt.githubHint": "އެގޮތުންވެސް ސީދާ ރެކޯޑް ފޮނުވިދާނެ. އެއް މަޢުލޫމާތު، އަދި ތިޔަބޭފުޅާގެ ނަން ރެކޯޑްގައި ހުންނާނެ."
   }
 };
 

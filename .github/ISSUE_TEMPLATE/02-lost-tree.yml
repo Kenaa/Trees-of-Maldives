@@ -1,0 +1,135 @@
+name: "🪵 A tree that was cut down"
+description: "Record a tree that has been removed | ކަނޑާލާފައިވާ ގަހެއް"
+title: "[Lost] "
+labels: ["tree record", "lost", "unverified"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These are the hardest records to gather and the most valuable ones in the archive.
+
+        **The single most useful thing you can supply is an old photograph with a date
+        on it.** Family albums and old phone backups are where nearly all of this
+        evidence still lives. A photograph in the background of a birthday picture
+        counts — it does not need to be a photograph *of* the tree.
+
+        *ކަނޑާލާފައިވާ ގަހެއްގެ ރެކޯޑެއް ފޮނުވާނަމަ، އެންމެ އަގުހުރި އެއްޗަކީ ތާރީޚު އެނގޭ ކުރީގެ ފޮޓޯއެކެވެ.*
+
+  - type: textarea
+    id: photo
+    attributes:
+      label: "Photograph from before it was removed | ކުރީގެ ފޮޓޯ"
+      description: >
+        Drag the photo straight into this box. If you have a photo of the same spot
+        today as well, add both — the pair says more than either one alone.
+      placeholder: "Drop your photo here"
+    validations:
+      required: false
+
+  - type: input
+    id: place
+    attributes:
+      label: "Where was it? | ހުރީ ކޮންތާކު؟"
+      description: "A street name or a nearby landmark is plenty."
+      placeholder: "Ameenee Magu, near the junction"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ward
+    attributes:
+      label: "Ward | އަވަށް"
+      options:
+        - "Henveiru | ހެންވޭރު"
+        - "Galolhu | ގަލޮޅު"
+        - "Maafannu | މާފަންނު"
+        - "Machchangolhi | މައްޗަންގޮޅި"
+        - "Villimalé | ވިލިމާލެ"
+        - "Hulhumalé | ހުޅުމާލެ"
+    validations:
+      required: true
+
+  - type: input
+    id: when
+    attributes:
+      label: "When was it removed? | ކަނޑާލީ ކޮން އިރަކު؟"
+      description: >
+        An approximate month or year is fine. "Sometime in 2023" is a real answer and a
+        useful one — do not leave the record out because you cannot be exact.
+      placeholder: "2024-02, or: early 2024"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reason
+    attributes:
+      label: "Why was it removed? | ސަބަބު"
+      description: "Choose 'Not known' if you are unsure. A guess recorded as fact is worse than an honest gap."
+      options:
+        - "Road widening | މަގު ފުޅާކުރުން"
+        - "Construction | ޢިމާރާތްކުރުން"
+        - "Storm damage | ވިއްސާރައިގެ ގެއްލުން"
+        - "Disease or decay | ބައްޔެއް ނުވަތަ ފީވުން"
+        - "Safety works | ރައްކާތެރިކަމުގެ މަސައްކަތް"
+        - "Moved elsewhere, not felled | އެހެން ތަނަކަށް ބަދަލުކުރުން"
+        - "Not known | ނޭނގޭ"
+      default: 6
+    validations:
+      required: true
+
+  - type: dropdown
+    id: species
+    attributes:
+      label: "What kind of tree was it? | ބާވަތް"
+      options:
+        - "Coconut palm — Cocos nucifera | ރުއް"
+        - "Banyan — Ficus benghalensis | ނިކަ"
+        - "Indian almond — Terminalia catappa | މިދިލި"
+        - "Alexandrian laurel — Calophyllum inophyllum | ފުނަ"
+        - "Portia tree — Thespesia populnea | ހިރުނދު"
+        - "Sea trumpet — Cordia subcordata | ކާނި"
+        - "Breadfruit — Artocarpus altilis | ބަނބުކެޔޮ"
+        - "Mango — Mangifera indica | އަނބު"
+        - "Screwpine — Pandanus tectorius | ކަށިކެޔޮ"
+        - "Beach hibiscus — Hibiscus tiliaceus | ދިގގާ"
+        - "Neem — Azadirachta indica | ހިތިގަސް"
+        - "Beach cabbage — Scaevola taccada | މަގޫ"
+        - "Ironwood — Pemphis acidula | ކުރެދި"
+        - "Rain tree — Samanea saman | ސަމަނާ"
+        - "Frangipani — Plumeria obtusa | ގުލްޗަނބޭލީ"
+        - "Not yet identified | ދެނެގަނެވިފައި ނުވޭ"
+      default: 15
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: "How do you know? | ހެކި"
+      description: >
+        Where does this come from — you saw it happen, a neighbour told you, a news
+        report, a dated photograph? This is what turns a memory into a record, and it is
+        what lets someone verify it later.
+      placeholder: "I walked past it every day. It was gone the week the road works started."
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "What was it like? | އިތުރު މަޢުލޫމާތު"
+      description: >
+        How big, how old, who planted it, who sat under it, what is standing there now.
+        This part is the memorial, and no one else can write it.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: "Permission | ހުއްދަ"
+      options:
+        - label: "I am happy for this photograph and description to be published in the archive under CC BY-SA 4.0."
+          required: true
+        - label: "No one is identifiable in this photograph, or everyone in it has agreed to it being published."
+          required: true

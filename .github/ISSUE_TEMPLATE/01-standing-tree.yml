@@ -1,0 +1,124 @@
+name: "🌳 A tree that is still standing"
+description: "Record a tree that is alive and in place today | އަދިވެސް ދިރިހުރި ގަހެއް"
+title: "[Tree] "
+labels: ["tree record", "standing", "unverified"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for adding to the archive.
+
+        **You do not need to fill in every box.** A photograph and a street name are
+        already a useful record — someone else can measure it later.
+
+        *ހުރިހާ ގޮޅިއެއް ފުރާކަށް ނުޖެހޭނެ. ފޮޓޯއަކާއި މަގުގެ ނަން އެނގުނަސް ފުދޭ.*
+
+  - type: textarea
+    id: photo
+    attributes:
+      label: "Photograph | ފޮޓޯ"
+      description: >
+        Drag a photo straight into this box, or click it and paste. GitHub will upload
+        and host it for you. The whole tree if you can manage it — trunk and canopy both.
+      placeholder: "Drop your photo here"
+    validations:
+      required: false
+
+  - type: input
+    id: place
+    attributes:
+      label: "Where is it? | ހުރީ ކޮންތާކު؟"
+      description: "A street name or a nearby landmark is plenty. | މަގުގެ ނަން ނުވަތަ ކައިރީގައި ހުރި ތަނެއްގެ ނަން ފުދޭ."
+      placeholder: "Majeedhee Magu, opposite the school"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ward
+    attributes:
+      label: "Ward | އަވަށް"
+      options:
+        - "Henveiru | ހެންވޭރު"
+        - "Galolhu | ގަލޮޅު"
+        - "Maafannu | މާފަންނު"
+        - "Machchangolhi | މައްޗަންގޮޅި"
+        - "Villimalé | ވިލިމާލެ"
+        - "Hulhumalé | ހުޅުމާލެ"
+    validations:
+      required: true
+
+  - type: input
+    id: coords
+    attributes:
+      label: "GPS coordinates | މަޤާމު"
+      description: >
+        Optional. In your phone's map app, press and hold on the tree's position and copy
+        the numbers it shows.
+      placeholder: "4.17570, 73.50900"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: species
+    attributes:
+      label: "What kind of tree is it? | ބާވަތް"
+      description: "If you are not sure, choose the last option. Someone else can confirm it."
+      options:
+        - "Coconut palm — Cocos nucifera | ރުއް"
+        - "Banyan — Ficus benghalensis | ނިކަ"
+        - "Indian almond — Terminalia catappa | މިދިލި"
+        - "Alexandrian laurel — Calophyllum inophyllum | ފުނަ"
+        - "Portia tree — Thespesia populnea | ހިރުނދު"
+        - "Sea trumpet — Cordia subcordata | ކާނި"
+        - "Breadfruit — Artocarpus altilis | ބަނބުކެޔޮ"
+        - "Mango — Mangifera indica | އަނބު"
+        - "Screwpine — Pandanus tectorius | ކަށިކެޔޮ"
+        - "Beach hibiscus — Hibiscus tiliaceus | ދިގގާ"
+        - "Neem — Azadirachta indica | ހިތިގަސް"
+        - "Beach cabbage — Scaevola taccada | މަގޫ"
+        - "Ironwood — Pemphis acidula | ކުރެދި"
+        - "Rain tree — Samanea saman | ސަމަނާ"
+        - "Frangipani — Plumeria obtusa | ގުލްޗަނބޭލީ"
+        - "Not yet identified | ދެނެގަނެވިފައި ނުވޭ"
+      default: 15
+    validations:
+      required: true
+
+  - type: input
+    id: size
+    attributes:
+      label: "Rough size | ބޮޑުމިން"
+      description: >
+        Optional. Girth is the distance around the trunk at about chest height — a piece
+        of string and a tape measure is all it takes.
+      placeholder: "Girth about 340 cm, roughly 14 m tall"
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Anything else worth recording | އިތުރު މަޢުލޫމާތު"
+      description: >
+        Its story, who planted it, how long it has stood, what it is used for, whether
+        anything is threatening it.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: private
+    attributes:
+      label: "Private land | އަމިއްލަ ބިން"
+      options:
+        - label: "This tree is on private land — please round the published location so the address cannot be identified."
+          required: false
+
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: "Permission | ހުއްދަ"
+      options:
+        - label: "I am happy for this photograph and description to be published in the archive under CC BY-SA 4.0."
+          required: true
+        - label: "No one is identifiable in this photograph, or everyone in it has agreed to it being published."
+          required: true

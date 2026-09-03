@@ -70,6 +70,44 @@ if the service is ever down.
 
 ---
 
+## The two ways people contribute
+
+**The public form** — <https://kenaa.github.io/Trees-of-Maldives/submit.html>. No account,
+no signup, works on a phone. This is the main route and the one to share publicly.
+See *Turning submissions on* above to give it an inbox.
+
+**GitHub issue forms** — <https://github.com/Kenaa/Trees-of-Maldives/issues/new/choose>.
+Structured forms for people who already have a GitHub account. Three of them: a standing
+tree, a tree that was cut down, and a correction to an existing record. Photographs are
+dragged straight into the form and GitHub hosts them free.
+
+The GitHub route costs nothing, never expires, and gives you moderation for free — each
+submission arrives as an issue you triage, with the contributor's name attached and a
+permanent audit trail. Its one limitation is that it needs a GitHub account, which is why
+the public form exists alongside it rather than being replaced by it.
+
+Edit the forms in `.github/ISSUE_TEMPLATE/`. They are plain YAML — adding a question means
+adding a few lines.
+
+---
+
+## Checking your data
+
+```bash
+python3 tools/validate.py
+```
+
+It reads `data/trees.js`, `data/species.js` and `assets/js/i18n.js` and reports anything
+that would break the site: broken JSON with the line number, duplicate record ids, a
+species that does not exist, coordinates outside Malé City, a `lost` block missing from a
+felled tree, a photo file that is not there, missing `alt` text, or a translation key that
+exists in one language but not the other.
+
+The same check runs automatically on every push and pull request
+(`.github/workflows/validate.yml`), so a stray comma cannot silently empty the live map.
+
+---
+
 ## Adding a tree by hand
 
 Open `data/trees.js`. It is ordinary JSON with one line of wrapper at the top and a
