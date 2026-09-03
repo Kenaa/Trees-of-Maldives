@@ -196,6 +196,74 @@
     fallback.focus();
   }
 
+  /* --- Google Apps Script transport ---------------------------------------
+     Apps Script cannot parse multipart/form-data, so records go to it as JSON
+     with the photograph inlined as a data: URL. The Content-Type below is
+     deliberate: text/plain keeps this a CORS-simple request, and Apps Script
+     never answers the preflight that application/json would trigger. */
+
+  function isAppsScript(url) { return /script\.google\.com/.test(url); }
+
+  /* Phone photos run to 4-12 MB and the register has no use for that. Shrinking
+     in the browser keeps uploads quick on a mobile connection and well inside
+     the request limit. Falls back to the original bytes when the browser cannot
+     decode the format, which today mostly means HEIC outside Safari. */
+  function shrinkPhoto(file, maxPx, quality) {
+    return new Promise(function (resolve) {
+      function raw() {
+        var fr = new FileReader();
+        fr.onload  = function () { resolve({ dataUrl: fr.result, name: file.name }); };
+        fr.onerror = function () { resolve(null); };
+        fr.readAsDataURL(file);
+      }
+      function draw(bmp) {
+        try {
+          var scale = Math.min(1, maxPx / Math.max(bmp.width, bmp.height));
+          var w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+          var c = document.createElement("canvas");
+          c.width = w; c.height = h;
+          c.getContext("2d").drawImage(bmp, 0, 0, w, h);
+          if (bmp.close) bmp.close();
+          var url = c.toDataURL("image/jpeg", quality);
+          /* Re-encoding is not always a saving. A small PNG, a screenshot or a
+             already-compressed image can come out larger as JPEG, so keep
+             whichever is actually smaller. */
+          if (url.length * 0.75 >= file.size) return raw();
+          resolve({ dataUrl: url, name: file.name.replace(/\.[^.]+$/, "") + ".jpg" });
+        } catch (e) { raw(); }
+      }
+      if (typeof createImageBitmap !== "function") return raw();
+      createImageBitmap(file, { imageOrientation: "from-image" }).then(draw, function () {
+        createImageBitmap(file).then(draw, raw);
+      });
+    });
+  }
+
+  function sendToAppsScript(record, done, fail) {
+    var payload = {
+      consent: true, website: $("website").value,
+      kind: record.kind, species: record.species, place: record.place,
+      ward: record.ward, lat: record.lat, lng: record.lng,
+      privateLand: record.privateLand, lostDate: record.lostDate,
+      lostReason: record.lostReason, notes: record.notes,
+      name: record.name, email: record.email, language: record.language
+    };
+    function go() {
+      fetch(C.submitEndpoint, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (out) { if (out && out.ok) { done(); } else { fail(); } }, fail);
+    }
+    if (!record.photo) return go();
+    shrinkPhoto(record.photo, 2000, 0.82).then(function (p) {
+      if (p) { payload.photo = p.dataUrl; payload.photoName = p.name; }
+      go();
+    }, go);
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     clearErrors();
@@ -210,6 +278,17 @@
 
     btn.disabled = true;
     btn.textContent = t("submit.sending");
+
+    function reset()  { btn.disabled = false; btn.textContent = t("submit.send"); }
+    function done()   { form.hidden = true; doneBox.hidden = false; doneBox.focus(); reset(); }
+    function failed() {
+      showErrors([{ id: "send", msg: t("err.send") }]);
+      showFallback(record);
+      errBox.hidden = false;
+      reset();
+    }
+
+    if (isAppsScript(C.submitEndpoint)) { sendToAppsScript(record, done, failed); return; }
 
     var fd = new FormData();
     Object.keys(record).forEach(function (k) {

@@ -6,13 +6,22 @@
 window.CONFIG = {
 
   /* 1. WHERE SUBMISSIONS GO -------------------------------------------------
-     Paste the endpoint URL from your form service between the quotes.
-     Works with any service that accepts a plain multipart POST — for example
-     Formspree, Getform, Web3Forms or Basin. Check the current free tier for
-     photo uploads before you commit to one; limits change.
+     Paste your endpoint URL between the quotes.
 
-     Leave it as "" and the form still works: it will hand the submitter a
-     tidy summary to copy, plus a pre-filled email to you. Nothing is lost. */
+     Set up for this project: a Google Apps Script web app that writes to the
+     "Tree submissions" Sheet in Drive and files photographs in the
+     "Submitted photos" folder beside it. The script is in
+     tools/apps-script/Code.gs and the deployment steps are in the README
+     next to it. Once deployed the URL looks like:
+
+       https://script.google.com/macros/s/AKfycb.../exec
+
+     Any service taking a plain multipart POST works too (Formspree, Getform,
+     Web3Forms, Basin). Check the current free tier for photo uploads before
+     committing to one, because those limits change.
+
+     Leave it as "" and the form still works. It hands the submitter a tidy
+     summary to copy and a pre-filled email to you, so nothing is lost. */
   submitEndpoint: "",
 
   /* 2. FALLBACK INBOX -------------------------------------------------------

@@ -191,6 +191,13 @@
       <p class="field-error" id="consent-error" hidden></p>
     </fieldset>
 
+    <!-- Honeypot. Hidden from people and from assistive tech, and out of the
+         tab order, so only an automated submitter ever fills it in. -->
+    <div class="visually-hidden" aria-hidden="true">
+      <label for="website">Leave this field empty</label>
+      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
     <p><button type="submit" class="btn btn-primary btn-lg" id="send" data-i18n="submit.send">Send this record</button></p>
   </form>
 
