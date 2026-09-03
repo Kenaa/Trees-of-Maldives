@@ -3,7 +3,7 @@
 ## Adding a tree you have seen
 
 Use the [add a tree](submit.html) form. No account, no sign-up. A photograph and a
-street name are enough — the rest can be filled in later by someone else.
+street name are enough. The rest can be filled in later by someone else.
 
 The single most valuable contribution is **an old, dated photograph of a tree that is
 now gone**. That evidence exists almost nowhere else, and it is quietly disappearing
@@ -12,7 +12,7 @@ from family albums and old phone backups.
 ## For moderators: turning a submission into a record
 
 1. Read the submission. Does it describe one identifiable tree in one place?
-   A message about "the trees along Ameenee Magu" is a lead, not a record — reply and
+   A message about "the trees along Ameenee Magu" is a lead, not a record. Reply and
    ask which one, or open one record per tree.
 2. Save the photograph into `photos/` as `mle-00NN.jpg`, resized to about 1600px on the
    long edge.
@@ -50,7 +50,7 @@ Every change has to hold two lines that are easy to break by accident:
   sure focus is always visible and never trapped; check every image has `alt`; check
   every form control has a real `<label>`; and check any new colour against its
   background at 4.5:1 for text, 3:1 for borders and icons. The palette at the top of
-  `assets/css/style.css` is already verified — reuse those variables rather than
+  `assets/css/style.css` is already verified, so reuse those variables rather than
   inventing new colours.
 
 Layout uses CSS **logical properties** (`padding-inline`, `inset-inline-start`,

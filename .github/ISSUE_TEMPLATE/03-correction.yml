@@ -1,12 +1,12 @@
 name: "✏️ A correction to an existing record"
-description: "Something in the archive is wrong, out of date, or needs verifying"
+description: "Something in the register is wrong, out of date, or needs verifying"
 title: "[Correction] MLE-"
 labels: ["correction"]
 body:
   - type: markdown
     attributes:
       value: |
-        Corrections are as valuable as new records. An archive nobody checks is just a
+        Corrections are as valuable as new records. A register nobody checks is just a
         rumour with a map.
 
   - type: input
@@ -23,12 +23,12 @@ body:
     attributes:
       label: "What sort of correction?"
       options:
-        - "The tree is gone — it was standing in the record"
+        - "The tree is gone, but the record says standing"
         - "The species is wrong"
         - "The location is wrong"
         - "The measurements are wrong"
         - "The felling date or reason is wrong"
-        - "I can verify this record — I have seen it or have a source"
+        - "I can verify this record: I have seen it, or I have a source"
         - "This record should be deleted"
         - "Something else"
     validations:

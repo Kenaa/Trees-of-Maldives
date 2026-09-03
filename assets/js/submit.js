@@ -2,8 +2,8 @@
    Submission form.
 
    Two paths, decided by whether CONFIG.submitEndpoint is filled in:
-     1. Configured   — POST the record (photo included) to the form service.
-     2. Not configured — hand the submitter a copyable summary and a
+     1. Configured:     POST the record (photo included) to the form service.
+     2. Not configured: hand the submitter a copyable summary and a
         pre-filled email. A record is never silently lost.
    =========================================================================== */
 (function () {
@@ -42,7 +42,7 @@
     fill("species", SPECIES.map(function (s) { return s.id; }), function (id) {
       var s = SPECIES.filter(function (x) { return x.id === id; })[0];
       var native = window.i18n.current === "dv" && s.dv ? s.dv : s.en;
-      return s.sci === "Unidentified" ? native : native + " — " + s.sci;
+      return s.sci === "Unidentified" ? native : native + " \u00b7 " + s.sci;
     });
     $("photo-hint").textContent = t("submit.photoHint", { mb: C.maxPhotoMb });
   }
@@ -149,24 +149,28 @@
     };
   }
 
+  /* Labels are written as questions for the form. In a plain-text summary a
+     trailing question mark before a colon reads badly, so trim it. */
+  function lbl(key) { return t(key).replace(/[?\u061F]\s*$/, ""); }
+
   function asText(r) {
     var sp = SPECIES.filter(function (x) { return x.id === r.species; })[0] || {};
     var lines = [
-      t("submit.kind") + ": " + t(r.kind === "lost" ? "submit.kindLost" : "submit.kindStanding"),
-      t("submit.species") + ": " + (sp.sci || r.species) + (sp.en ? " (" + sp.en + ")" : ""),
-      t("submit.where") + ": " + (r.place || "—"),
-      t("submit.ward") + ": " + t("ward." + r.ward),
+      lbl("submit.kind") + ": " + t(r.kind === "lost" ? "submit.kindLost" : "submit.kindStanding"),
+      lbl("submit.species") + ": " + (sp.sci || r.species) + (sp.en ? " (" + sp.en + ")" : ""),
+      lbl("submit.where") + ": " + (r.place || "—"),
+      lbl("submit.ward") + ": " + t("ward." + r.ward),
       "GPS: " + (r.lat ? r.lat + ", " + r.lng : "—"),
-      t("submit.private") + ": " + r.privateLand
+      lbl("submit.private") + ": " + r.privateLand
     ];
     if (r.kind === "lost") {
-      lines.push(t("submit.lostDate") + ": " + (r.lostDate || "—"));
-      lines.push(t("submit.lostReason") + ": " + t("reason." + (r.lostReason || "unknown")));
+      lines.push(lbl("submit.lostDate") + ": " + (r.lostDate || "—"));
+      lines.push(lbl("submit.lostReason") + ": " + t("reason." + (r.lostReason || "unknown")));
     }
-    lines.push(t("submit.notes") + ": " + (r.notes || "—"));
-    lines.push(t("submit.name") + ": " + (r.name || "—"));
-    lines.push(t("submit.email") + ": " + (r.email || "—"));
-    lines.push(t("submit.photo") + ": " + (r.photo ? r.photo.name : "—"));
+    lines.push(lbl("submit.notes") + ": " + (r.notes || "—"));
+    lines.push(lbl("submit.name") + ": " + (r.name || "—"));
+    lines.push(lbl("submit.email") + ": " + (r.email || "—"));
+    lines.push(lbl("submit.photo") + ": " + (r.photo ? r.photo.name : "—"));
     if (r.photo) lines.push("→ " + t("fallback.attach"));
     return lines.join("\n");
   }
@@ -176,7 +180,7 @@
     var text = asText(record);
     $("fallback-text").textContent = text;
     $("mailto").href = "mailto:" + encodeURIComponent(C.contactEmail) +
-      "?subject=" + encodeURIComponent("Tree record — " + (record.place || record.ward)) +
+      "?subject=" + encodeURIComponent("Tree record: " + (record.place || record.ward)) +
       "&body=" + encodeURIComponent(text);
     fallback.hidden = false;
     form.hidden = true;
@@ -203,7 +207,7 @@
       if (k === "photo") { if (record.photo) fd.append("photo", record.photo, record.photo.name); }
       else fd.append(k, record[k]);
     });
-    fd.append("_subject", "Tree record — " + (record.place || record.ward));
+    fd.append("_subject", "Tree record: " + (record.place || record.ward));
 
     fetch(C.submitEndpoint, { method: "POST", body: fd, headers: { Accept: "application/json" } })
       .then(function (res) {

@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: "🌴 Add a tree without a GitHub account"
     url: https://kenaa.github.io/Trees-of-Maldives/submit.html
-    about: "The public form. No signup, works on a phone. This is the main way to contribute — the forms below are for people who already have a GitHub account."
-  - name: "📖 How the archive works"
+    about: "The public form. No signup, works on a phone. This is the main way to contribute. The forms below are for people who already have a GitHub account."
+  - name: "📖 How the register works"
     url: https://kenaa.github.io/Trees-of-Maldives/about.html
     about: "What the four statuses mean, how records get verified, and the privacy rules for trees on private land."

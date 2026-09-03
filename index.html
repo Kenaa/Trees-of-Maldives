@@ -4,164 +4,202 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Last Trees of Malé</title>
-<meta name="description" content="A citizen archive of the trees still standing in Malé City — and a record of the ones that were cut down.">
+<meta name="description" content="A public register of the trees still standing in Malé City, and the ones that are gone.">
 <meta name="color-scheme" content="light dark">
-
 <meta property="og:title" content="The Last Trees of Malé">
-<meta property="og:description" content="A citizen archive of the trees still standing in Malé City — and a record of the ones that were cut down.">
+<meta property="og:description" content="A public register of the trees still standing in Malé City, and the ones that are gone.">
 <meta property="og:type" content="website">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..112,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🌳</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316171A' stroke-width='2'><circle cx='12' cy='9' r='6'/><path d='M12 15v7'/></svg>">
 </head>
 <body>
 
 <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
 
-<header class="site-header">
+<header class="masthead">
   <div class="wrap">
-    <a class="brand" href="index.html">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-        <path d="M6.6 14.6h10.8a4 4 0 0 0 .9-7.9 5.1 5.1 0 0 0-9.7-1.4 3.9 3.9 0 0 0-2 9.3Z"/><path d="M12 21.5v-7"/><path d="M9.6 21.5h4.8"/><path d="M12 17.6l-2.3-2.1M12 16.4l2.3-1.8"/>
-      </svg>
-      <span data-i18n="site.name">The Last Trees of Malé</span>
-    </a>
+    <div class="masthead-top">
+      <a class="wordmark reactive" href="index.html">
+        <svg class="mark ico" width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="9" r="6"/><path d="M12 15v7"/>
+        </svg>
+        <span data-i18n="site.name">The Last Trees of Malé</span>
+      </a>
 
-    <nav class="nav" data-i18n-attr="aria-label:nav.label" aria-label="Main">
-      <ul>
-        <li><a href="index.html" aria-current="page" data-i18n="nav.archive">Archive</a></li>
-        <li><a href="submit.html" data-i18n="nav.submit">Add a tree</a></li>
-        <li><a href="about.html" data-i18n="nav.about">About</a></li>
-      </ul>
-    </nav>
+      <nav class="nav" data-i18n-attr="aria-label:nav.label" aria-label="Main">
+        <ul>
+          <li><a href="index.html" aria-current="page" data-i18n="nav.archive">Register</a></li>
+          <li><a href="submit.html" data-i18n="nav.submit">Add a tree</a></li>
+          <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        </ul>
+      </nav>
 
-    <button type="button" class="btn" data-lang-toggle
-            data-i18n-attr="aria-label:lang.label" aria-label="Language">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-        <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/>
-      </svg>
-      <span data-i18n="lang.switch">ދިވެހި</span>
-    </button>
-  </div>
-</header>
-
-<main id="main" class="wrap">
-
-  <div class="hero">
-    <h1 class="display" data-i18n="site.name">The Last Trees of Malé</h1>
-    <p class="lede" data-i18n="site.tagline">A citizen archive of the trees still standing — and the ones we lost.</p>
-  </div>
-
-  <ul class="stats" id="stats" aria-label="Archive totals"></ul>
-
-  <div class="notice" id="seed-notice" hidden>
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
-    </svg>
-    <div>
-      <h2 data-i18n="seed.title">This archive is still empty of real data</h2>
-      <p data-i18n="seed.body"></p>
+      <button type="button" class="btn reactive" data-lang-toggle
+              data-i18n-attr="aria-label:lang.label" aria-label="Language">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.8 2.6 15.2 0 18"/>
+        </svg>
+        <span data-i18n="lang.switch">ދިވެހި</span>
+      </button>
     </div>
   </div>
 
-  <!-- ---------------------------------------------------------------- -->
-  <section aria-labelledby="filters-h">
-    <form class="panel" id="filters" role="search" novalidate>
-      <fieldset class="filters">
-        <legend id="filters-h" data-i18n="filters.title">Find a tree</legend>
+  <div class="wrap">
+    <p class="colophon">
+      <span data-i18n="colophon.what">Register of standing and felled trees</span>
+      <span aria-hidden="true">·</span>
+      <span data-i18n="colophon.place">Malé City</span>
+      <span aria-hidden="true">·</span>
+      <b id="colophon-count"></b>
+      <span aria-hidden="true">·</span>
+      <b id="colophon-updated"></b>
+    </p>
+  </div>
+</header>
 
+<main id="main">
+  <div class="wrap">
+
+    <div style="padding-block: clamp(1.75rem, 5vw, 3.5rem) 1.5rem;">
+      <h1 data-i18n="site.name">The Last Trees of Malé</h1>
+      <p class="lede" data-i18n="site.tagline"></p>
+    </div>
+
+    <ul class="ledger" id="ledger" data-i18n-attr="aria-label:ledger.label" aria-label="Totals"></ul>
+
+    <div class="notice" id="seed-notice" hidden>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+      </svg>
+      <div>
+        <h2 data-i18n="seed.title">Nothing here is real data yet</h2>
+        <p data-i18n="seed.body"></p>
+      </div>
+    </div>
+
+    <form class="rail" id="filters" role="search" novalidate>
+      <fieldset class="rail" style="display:contents;">
+        <legend class="visually-hidden" data-i18n="filters.title">Find a tree</legend>
         <div class="field">
           <label for="q" data-i18n="filters.search">Search</label>
-          <input class="input" type="search" id="q" name="q" autocomplete="off" aria-describedby="q-hint">
+          <input class="input" type="search" id="q" autocomplete="off" aria-describedby="q-hint">
           <span class="hint" id="q-hint" data-i18n="filters.searchHint"></span>
         </div>
-
         <div class="field">
           <label for="f-status" data-i18n="filters.status">Status</label>
           <select class="select" id="f-status"></select>
         </div>
-
         <div class="field">
           <label for="f-ward" data-i18n="filters.ward">Ward</label>
           <select class="select" id="f-ward"></select>
         </div>
-
         <div class="field">
           <label for="f-species" data-i18n="filters.species">Species</label>
           <select class="select" id="f-species"></select>
         </div>
-
         <div class="field">
           <button type="button" class="btn" id="clear" data-i18n="filters.clear">Clear filters</button>
         </div>
       </fieldset>
     </form>
-  </section>
 
-  <div class="results-bar">
-    <p class="results-count" id="count" role="status" aria-live="polite" aria-atomic="true"></p>
+    <p class="results-line" id="count" role="status" aria-live="polite" aria-atomic="true"></p>
 
-    <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-      <div class="field" style="flex-direction:row; align-items:center; gap:.5rem;">
-        <label for="sort" data-i18n="filters.sort">Sort by</label>
-        <select class="select" id="sort" style="inline-size:auto;"></select>
-      </div>
-
-      <fieldset class="segmented" id="viewtoggle">
-        <legend class="visually-hidden" data-i18n="view.label">View</legend>
-        <label><input type="radio" name="view" value="map" checked><span data-i18n="view.map">Map</span></label>
-        <label><input type="radio" name="view" value="list"><span data-i18n="view.list">List</span></label>
-      </fieldset>
+    <div class="tabs" id="tabs" role="tablist" data-i18n-attr="aria-label:tabs.label" aria-label="Views">
+      <button class="tab reactive" role="tab" id="t-register" aria-controls="p-register" aria-selected="true">
+        <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>
+        </svg>
+        <span data-i18n="tab.register">Register</span>
+        <span class="count" id="c-register"></span>
+      </button>
+      <button class="tab reactive" role="tab" id="t-map" aria-controls="p-map" aria-selected="false" tabindex="-1">
+        <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="10" r="3"/><path d="M12 21c5-6 7-9.2 7-11a7 7 0 1 0-14 0c0 1.8 2 5 7 11Z"/>
+        </svg>
+        <span data-i18n="view.map">Map</span>
+        <span class="count" id="c-map"></span>
+      </button>
+      <button class="tab reactive" role="tab" id="t-lost" aria-controls="p-lost" aria-selected="false" tabindex="-1">
+        <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 6l12 12"/><path d="M18 6 6 18"/>
+        </svg>
+        <span data-i18n="tab.lost">Lost</span>
+        <span class="count" id="c-lost"></span>
+      </button>
+      <span class="tab-ind" aria-hidden="true"></span>
     </div>
   </div>
 
-  <!-- Map is an enhancement. The list below carries the same information
-       and is the accessible path through the data. -->
-  <section class="map-wrap" id="map-section" aria-labelledby="map-h">
-    <h2 class="visually-hidden" id="map-h" data-i18n="view.map">Map</h2>
-    <div id="map"></div>
-    <p class="map-caption" data-i18n="map.caption"></p>
-  </section>
-
-  <section aria-labelledby="list-h">
-    <h2 class="visually-hidden" id="list-h" data-i18n="view.list">List</h2>
-    <ul class="grid" id="list"></ul>
-    <div class="empty" id="empty" hidden>
-      <p data-i18n="results.none"></p>
-      <p class="hint" data-i18n="results.noneHint"></p>
-      <a class="btn btn-primary" href="submit.html" data-i18n="nav.submit">Add a tree</a>
+  <!-- Register ------------------------------------------------------------ -->
+  <section id="p-register" role="tabpanel" aria-labelledby="t-register" tabindex="0">
+    <div class="wrap">
+      <div class="table-scroll" id="table-scroll" role="region" tabindex="0"
+           data-i18n-attr="aria-label:table.region">
+        <table class="register">
+          <caption class="visually-hidden" data-i18n="table.caption"></caption>
+          <thead>
+            <tr>
+              <th scope="col" data-sort="id"><button type="button" class="sortbtn" data-i18n="col.id">Record</button></th>
+              <th scope="col" data-sort="name"><button type="button" class="sortbtn" data-i18n="col.name">Name</button></th>
+              <th scope="col" class="col-opt" data-sort="species"><button type="button" class="sortbtn" data-i18n="col.species">Species</button></th>
+              <th scope="col" class="col-opt" data-sort="ward"><button type="button" class="sortbtn" data-i18n="col.ward">Ward</button></th>
+              <th scope="col" data-sort="status"><button type="button" class="sortbtn" data-i18n="col.status">Status</button></th>
+              <th scope="col" class="col-opt" data-sort="girth"><button type="button" class="sortbtn" data-i18n="col.girth">Girth</button></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" hidden>
+        <p data-i18n="results.none"></p>
+        <p class="hint" data-i18n="results.noneHint"></p>
+        <p><a class="btn btn-primary" href="submit.html" data-i18n="nav.submit">Add a tree</a></p>
+      </div>
     </div>
   </section>
 
+  <!-- Map ----------------------------------------------------------------- -->
+  <section id="p-map" role="tabpanel" aria-labelledby="t-map" tabindex="0" hidden>
+    <div class="bleed map-panel"><div id="map"></div></div>
+    <div class="wrap"><p class="map-note" data-i18n="map.note"></p></div>
+  </section>
+
+  <!-- Lost ---------------------------------------------------------------- -->
+  <section id="p-lost" role="tabpanel" aria-labelledby="t-lost" tabindex="0" hidden>
+    <div class="wrap">
+      <p class="lede" style="padding-block-start:1.5rem;" data-i18n="lost.lede"></p>
+      <ul class="losses" id="losses"></ul>
+      <div class="empty" id="lost-empty" hidden><p data-i18n="lost.none"></p></div>
+    </div>
+  </section>
 </main>
 
-<dialog class="detail" id="detail" data-i18n-attr="aria-label:tree.detailLabel" aria-label="Tree record">
-  <div class="detail-head">
-    <h2 id="detail-title" class="display"></h2>
+<dialog class="sheet" id="detail" data-i18n-attr="aria-label:tree.detailLabel" aria-label="Tree record">
+  <div class="sheet-head">
+    <h2 id="detail-title"></h2>
     <button type="button" class="btn" id="detail-close" data-i18n-attr="aria-label:tree.close" aria-label="Close">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
-  <div class="detail-body" id="detail-body"></div>
+  <div class="sheet-body" id="detail-body"></div>
 </dialog>
 
 <footer class="site-footer">
-  <div class="wrap cols">
-    <div>
-      <p><strong data-i18n="site.name">The Last Trees of Malé</strong></p>
-      <p data-i18n="site.tagline"></p>
-    </div>
-    <div>
-      <p><a href="about.html" data-i18n="nav.about">About</a></p>
-      <p><a href="submit.html" data-i18n="nav.submit">Add a tree</a></p>
-    </div>
-    <div>
-      <p data-i18n="map.attribution">Map data © OpenStreetMap contributors</p>
-    </div>
+  <div class="wrap row">
+    <span data-i18n="site.name">The Last Trees of Malé</span>
+    <a href="about.html" data-i18n="nav.about">About</a>
+    <a href="submit.html" data-i18n="nav.submit">Add a tree</a>
+    <a href="https://github.com/Kenaa/Trees-of-Maldives">GitHub</a>
+    <span data-i18n="map.attribution">Map data © OpenStreetMap contributors</span>
+    <span>CC BY-SA 4.0</span>
   </div>
 </footer>
 

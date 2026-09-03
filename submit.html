@@ -3,46 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Add a tree — The Last Trees of Malé</title>
+<title>Add a tree · The Last Trees of Malé</title>
 <meta name="description" content="Record a tree still standing in Malé, or one that was cut down. No account needed.">
 <meta name="color-scheme" content="light dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..112,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🌳</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316171A' stroke-width='2'><circle cx='12' cy='9' r='6'/><path d='M12 15v7'/></svg>"><text y='26' font-size='26'>🌳</text></svg>">
 </head>
 <body>
 
 <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
 
-<header class="site-header">
+<header class="masthead">
   <div class="wrap">
-    <a class="brand" href="index.html">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-        <path d="M6.6 14.6h10.8a4 4 0 0 0 .9-7.9 5.1 5.1 0 0 0-9.7-1.4 3.9 3.9 0 0 0-2 9.3Z"/><path d="M12 21.5v-7"/><path d="M9.6 21.5h4.8"/><path d="M12 17.6l-2.3-2.1M12 16.4l2.3-1.8"/>
-      </svg>
-      <span data-i18n="site.name">The Last Trees of Malé</span>
-    </a>
-    <nav class="nav" data-i18n-attr="aria-label:nav.label" aria-label="Main">
-      <ul>
-        <li><a href="index.html" data-i18n="nav.archive">Archive</a></li>
-        <li><a href="submit.html" aria-current="page" data-i18n="nav.submit">Add a tree</a></li>
-        <li><a href="about.html" data-i18n="nav.about">About</a></li>
-      </ul>
-    </nav>
-    <button type="button" class="btn" data-lang-toggle data-i18n-attr="aria-label:lang.label" aria-label="Language">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-        <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/>
-      </svg>
-      <span data-i18n="lang.switch">ދިވެހި</span>
-    </button>
+    <div class="masthead-top">
+      <a class="wordmark reactive" href="index.html">
+        <svg class="mark ico" width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="9" r="6"/><path d="M12 15v7"/>
+        </svg>
+        <span data-i18n="site.name">The Last Trees of Malé</span>
+      </a>
+      <nav class="nav" data-i18n-attr="aria-label:nav.label" aria-label="Main">
+        <ul>
+          <li><a href="index.html" data-i18n="nav.archive">Register</a></li>
+          <li><a href="submit.html" aria-current="page" data-i18n="nav.submit">Add a tree</a></li>
+          <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        </ul>
+      </nav>
+      <button type="button" class="btn reactive" data-lang-toggle
+              data-i18n-attr="aria-label:lang.label" aria-label="Language">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.8 2.6 15.2 0 18"/>
+        </svg>
+        <span data-i18n="lang.switch">ދިވެހި</span>
+      </button>
+    </div>
   </div>
 </header>
 
 <main id="main" class="wrap">
   <div class="hero">
-    <h1 class="display" data-i18n="submit.title">Add a tree to the archive</h1>
+    <h1 data-i18n="submit.title">Add a tree to the register</h1>
     <p class="lede" data-i18n="submit.lede"></p>
   </div>
 
@@ -55,13 +60,13 @@
   </div>
 
   <div class="success" id="done" tabindex="-1" hidden>
-    <h2 data-i18n="ok.title">Thank you — record received</h2>
+    <h2 data-i18n="ok.title">Thank you. Record received.</h2>
     <p data-i18n="ok.body"></p>
     <p><a class="btn btn-primary" href="submit.html" data-i18n="ok.another">Add another tree</a></p>
   </div>
 
   <div class="panel" id="fallback" tabindex="-1" hidden style="margin-block:1.5rem;">
-    <h2 data-i18n="fallback.title">Almost there — one more step</h2>
+    <h2 data-i18n="fallback.title">One more step</h2>
     <p data-i18n="fallback.body"></p>
     <h3 data-i18n="fallback.summary">Your record</h3>
     <pre class="summary" id="fallback-text"></pre>
@@ -197,9 +202,13 @@
 </main>
 
 <footer class="site-footer">
-  <div class="wrap cols">
-    <div><p><strong data-i18n="site.name"></strong></p><p data-i18n="site.tagline"></p></div>
-    <div><p><a href="index.html" data-i18n="nav.archive">Archive</a></p><p><a href="about.html" data-i18n="nav.about">About</a></p></div>
+  <div class="wrap row">
+    <span data-i18n="site.name">The Last Trees of Malé</span>
+    <a href="index.html" data-i18n="nav.archive">Register</a>
+    <a href="submit.html" data-i18n="nav.submit">Add a tree</a>
+    <a href="about.html" data-i18n="nav.about">About</a>
+    <a href="https://github.com/Kenaa/Trees-of-Maldives">GitHub</a>
+    <span>CC BY-SA 4.0</span>
   </div>
 </footer>
 
