@@ -129,6 +129,22 @@ def check_i18n():
 TYPES = {"markdown", "input", "textarea", "dropdown", "checkboxes"}
 
 
+def species_label(sp):
+    """The one true option label for a species in the issue-form menus.
+
+    tools/build-forms.py generates the menus with this function and
+    check_issue_forms() verifies them with it, so the two cannot drift.
+    The romanisation is included because most people in Male type Dhivehi
+    in Latin script, and it is what makes the menu searchable for them.
+    """
+    line = sp["en"] if sp["id"] == "unknown" else "%s \u00b7 %s" % (sp["en"], sp["sci"])
+    if sp.get("dv"):
+        line += " | %s" % sp["dv"]
+        if sp.get("dvLatin"):
+            line += " (%s)" % sp["dvLatin"]
+    return line
+
+
 def check_issue_forms(species):
     """Validate the GitHub issue forms. Skipped silently if PyYAML is absent —
     it is present on GitHub's runners, so CI always checks them."""
@@ -147,15 +163,7 @@ def check_issue_forms(species):
 
     # The species menus in the forms are generated from data/species.js. If they
     # drift, a contributor picks a species the register does not know about.
-    expected = []
-    for sp in (species or {}).get("species", []):
-        if sp["id"] == "unknown":
-            expected.append("%s | %s" % (sp["en"], sp.get("dv", "")))
-        else:
-            line = "%s \u00b7 %s" % (sp["en"], sp["sci"])
-            if sp.get("dv"):
-                line += " | %s" % sp["dv"]
-            expected.append(line)
+    expected = [species_label(sp) for sp in (species or {}).get("species", [])]
 
     files = sorted(glob.glob(os.path.join(ROOT, ".github/ISSUE_TEMPLATE/*.yml")))
     if not files:

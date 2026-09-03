@@ -80,7 +80,10 @@
   function speciesLabel(id) {
     var s = byId[id];
     if (!s) return id;
-    return window.i18n.current === "dv" && s.dv ? s.dv : s.en;
+    if (window.i18n.current === "dv" && s.dv) return s.dv;
+    /* Most people in Malé type Dhivehi in Latin script, so the romanisation
+       is what makes this menu searchable for them. Redundant in Thaana. */
+    return s.dvLatin ? s.en + " (" + s.dvLatin + ")" : s.en;
   }
 
   function matches(x) {

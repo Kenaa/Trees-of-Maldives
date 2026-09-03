@@ -38,42 +38,70 @@ The About page carries two parallel blocks of writing:
 Edit inside the `dv` block. The Dhivehi version is deliberately a little shorter than
 the English; a faithful rewrite that reads naturally is better than a literal one.
 
-## 3. Species and place names: `data/species.js` and `data/trees.js`
+## 3. Species names: `data/species.js`
 
-Species carrying `"dvReview": true` are the ones I was least confident about:
+Source: FAO, *Trees and shrubs of the Maldives* (Selvam, 2007, RAP Publication
+2007/12). The text supplied covers pp. 3-81: 33 species accounts running from
+*Adenanthera pavonina* to *Desmodium umbellatum*. Eight of our species fall in
+that range. `dvLatin` holds the book's romanisation verbatim; `dv` holds Thaana.
 
-- `hibiscus-tiliaceus`: given as ދިގގާ
-- `azadirachta-indica`: given as ހިތިގަސް
+
+### Settled against the book (5)
+
+Romanisation from the book, Thaana confirmed to match it. Nothing to do here.
+
+- `calophyllum-inophyllum`: ފުނަ (Funa).
+- `artocarpus-altilis`: ބަނބުކެޔޮ (Ban'bukeyo).
+- `azadirachta-indica`: ހިތި ގަސް (Hithi gas).
+- `samanea-saman`: ބޮޑު ގަސް (Bodu gas). Book files it under the synonym Albizia saman.
+- `cordia-subcordata`: ކާނި (Kaani).
+
+### Romanisation is sourced, Thaana is mine (3) — please check these first
+
+The book gives the name only in Latin script. I transliterated it into Thaana,
+which is the step most likely to be wrong. The romanisation in brackets is
+authoritative; the Thaana beside it is not.
+
+- `allophylus-cobbe`: ދޮންމޫސާ — book says **Dhon'moosa**.
+- `adenanthera-pavonina`: މަދޮށި — book says **Madhoshi**.
+- `barringtonia-asiatica`: ކިންބި — book says **Kin'bi**. Also recorded as Kim'bi.
+
+### Not in the supplied pages, still unverified (5)
+
 - `scaevola-taccada`: given as މަގޫ
-- `pemphis-acidula`: given as ކުރެދި
-- `samanea-saman`: transliterated as ސަމަނާ; there may be a real Dhivehi name
+- `hibiscus-tiliaceus`: given as ދިގގާ
 - `plumeria-obtusa`: given as ގުލްޗަނބޭލީ
+- `pemphis-acidula`: given as ކުރެދި
+- `unknown`: given as ދެނެގަނެވިފައި ނުވޭ
 
-The others (ރުއް، ނިކަ، މިދިލި، ފުނަ، ހިރުނދު، ކާނި، ބަނބުކެޔޮ، އަނބު، ކަށިކެޔޮ) still deserve
-a glance. Set `"dvReview": false` once a name has been confirmed.
+### Not in the supplied pages, believed right (6)
 
-### Species with no Dhivehi name at all
+Common names I am reasonably confident of, but none has been checked:
 
-These 12 came from the FAO's *Trees and shrubs of the Maldives* (Selvam, 2007,
-RAP Publication 2007/12), whose introduction names the species of each island
-plant community but gives no Dhivehi names. Rather than guess at Thaana, the
-field is left empty, and the forms fall back to the English name.
+- ނިކަ، ރުއް، މިދިލި، އަނބު، ހިރުނދު، ކަށިކެޔޮ
 
-- `allophylus-cobbe`: Allophylus (Allophylus cobbe)
-- `suriana-maritima`: Bay cedar (Suriana maritima)
-- `guettarda-speciosa`: Beach gardenia (Guettarda speciosa)
-- `casuarina-equisetifolia`: Casuarina (Casuarina equisetifolia)
-- `premna-serratifolia`: Headache tree (Premna serratifolia)
-- `hernandia-nymphaeifolia`: Lantern tree (Hernandia nymphaeifolia)
-- `pisonia-grandis`: Lettuce tree (Pisonia grandis)
-- `morinda-citrifolia`: Noni (Morinda citrifolia)
-- `ochrosia-oppositifolia`: Ochrosia (Ochrosia oppositifolia)
-- `adenanthera-pavonina`: Red bead tree (Adenanthera pavonina)
-- `barringtonia-asiatica`: Sea poison tree (Barringtonia asiatica)
-- `tournefortia-argentea`: Tree heliotrope (Tournefortia argentea)
+### Still with no Dhivehi name at all (9)
 
-The full FAO book has an **Index of Dhivehi names** on p. 238. That is the right
-place to fill these in from. Add the name to `dv` and set `"dvReview": false`.
+- `suriana-maritima`: Bay cedar (*Suriana maritima*)
+- `guettarda-speciosa`: Beach gardenia (*Guettarda speciosa*)
+- `casuarina-equisetifolia`: Casuarina (*Casuarina equisetifolia*)
+- `premna-serratifolia`: Headache tree (*Premna serratifolia*)
+- `hernandia-nymphaeifolia`: Lantern tree (*Hernandia nymphaeifolia*)
+- `pisonia-grandis`: Lettuce tree (*Pisonia grandis*)
+- `morinda-citrifolia`: Noni (*Morinda citrifolia*)
+- `ochrosia-oppositifolia`: Ochrosia (*Ochrosia oppositifolia*)
+- `tournefortia-argentea`: Tree heliotrope (*Tournefortia argentea*)
+
+The **Index of Dhivehi names on p. 238** would close all of these at once. It is
+not in the pages supplied so far. Add the name to `dv`, put the book's spelling in
+`dvLatin`, set `"dvSource": "FAO"`, then run:
+
+```bash
+python3 tools/build-forms.py && python3 tools/validate.py
+```
+
+The first regenerates the GitHub issue-form menus from the data; the second checks
+they match. Never hand-edit the species list inside the `.yml` forms.
 
 Place names live in each record's `place.dv` in `data/trees.js`.
 
