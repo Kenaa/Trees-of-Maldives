@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add a tree — The Last Trees of Malé</title>
+<meta name="description" content="Record a tree still standing in Malé, or one that was cut down. No account needed.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🌳</text></svg>">
+</head>
+<body>
+
+<a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path d="M6.6 14.6h10.8a4 4 0 0 0 .9-7.9 5.1 5.1 0 0 0-9.7-1.4 3.9 3.9 0 0 0-2 9.3Z"/><path d="M12 21.5v-7"/><path d="M9.6 21.5h4.8"/><path d="M12 17.6l-2.3-2.1M12 16.4l2.3-1.8"/>
+      </svg>
+      <span data-i18n="site.name">The Last Trees of Malé</span>
+    </a>
+    <nav class="nav" data-i18n-attr="aria-label:nav.label" aria-label="Main">
+      <ul>
+        <li><a href="index.html" data-i18n="nav.archive">Archive</a></li>
+        <li><a href="submit.html" aria-current="page" data-i18n="nav.submit">Add a tree</a></li>
+        <li><a href="about.html" data-i18n="nav.about">About</a></li>
+      </ul>
+    </nav>
+    <button type="button" class="btn" data-lang-toggle data-i18n-attr="aria-label:lang.label" aria-label="Language">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/>
+      </svg>
+      <span data-i18n="lang.switch">ދިވެހި</span>
+    </button>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <div class="hero">
+    <h1 class="display" data-i18n="submit.title">Add a tree to the archive</h1>
+    <p class="lede" data-i18n="submit.lede"></p>
+  </div>
+
+  <!-- Errors are collected here and focused, so a screen-reader user is taken
+       straight to what needs fixing rather than hunting through the form. -->
+  <div class="error-summary" id="errors" tabindex="-1" role="alert" hidden aria-labelledby="errors-h">
+    <h2 id="errors-h" data-i18n="err.title">There is a problem with this form</h2>
+    <p data-i18n="err.intro"></p>
+    <ul id="errors-list"></ul>
+  </div>
+
+  <div class="success" id="done" tabindex="-1" hidden>
+    <h2 data-i18n="ok.title">Thank you — record received</h2>
+    <p data-i18n="ok.body"></p>
+    <p><a class="btn btn-primary" href="submit.html" data-i18n="ok.another">Add another tree</a></p>
+  </div>
+
+  <div class="panel" id="fallback" tabindex="-1" hidden style="margin-block:1.5rem;">
+    <h2 data-i18n="fallback.title">Almost there — one more step</h2>
+    <p data-i18n="fallback.body"></p>
+    <h3 data-i18n="fallback.summary">Your record</h3>
+    <pre class="summary" id="fallback-text"></pre>
+    <p style="display:flex; gap:.75rem; flex-wrap:wrap;">
+      <button type="button" class="btn" id="copy" data-i18n="fallback.copy">Copy the details</button>
+      <a class="btn btn-primary" id="mailto" href="#" data-i18n="fallback.email">Send by email</a>
+    </p>
+    <p class="visually-hidden" id="copy-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <form class="form" id="tree-form" novalidate enctype="multipart/form-data">
+
+    <fieldset class="group">
+      <legend data-i18n="submit.kind">What are you recording?</legend>
+      <div class="radio-row">
+        <label class="radio-card">
+          <input type="radio" name="kind" value="standing" checked>
+          <span data-i18n="submit.kindStanding">A tree that is still standing</span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="kind" value="lost">
+          <span data-i18n="submit.kindLost">A tree that was cut down or removed</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend data-i18n="submit.photo">Photograph</legend>
+      <div class="field">
+        <label for="photo" data-i18n="submit.photo">Photograph</label>
+        <input class="input" type="file" id="photo" name="photo" accept="image/*" capture="environment"
+               aria-describedby="photo-hint photo-error">
+        <span class="hint" id="photo-hint"></span>
+        <p class="field-error" id="photo-error" hidden></p>
+      </div>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend data-i18n="submit.where">Where is it?</legend>
+
+      <div class="field" style="margin-block-end:1rem;">
+        <label for="place" data-i18n="submit.where">Where is it?</label>
+        <input class="input" type="text" id="place" name="place" autocomplete="off"
+               aria-describedby="place-hint place-error">
+        <span class="hint" id="place-hint" data-i18n="submit.whereHint"></span>
+        <p class="field-error" id="place-error" hidden></p>
+      </div>
+
+      <div class="field" style="margin-block-end:1rem;">
+        <label for="ward" data-i18n="submit.ward">Ward</label>
+        <select class="select" id="ward" name="ward"></select>
+      </div>
+
+      <p><button type="button" class="btn" id="geo" data-i18n="submit.geo">Use my current location</button></p>
+      <p class="hint" id="geo-status" role="status" aria-live="polite"></p>
+      <input type="hidden" id="lat" name="lat"><input type="hidden" id="lng" name="lng">
+
+      <label class="check" style="margin-block-start:1rem;">
+        <input type="checkbox" id="private" name="private">
+        <span>
+          <span data-i18n="submit.private">This tree is on private land</span><br>
+          <span class="hint" data-i18n="submit.privateHint"></span>
+        </span>
+      </label>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend data-i18n="submit.species">What kind of tree is it?</legend>
+      <div class="field">
+        <label for="species" data-i18n="submit.species">What kind of tree is it?</label>
+        <select class="select" id="species" name="species" aria-describedby="species-hint"></select>
+        <span class="hint" id="species-hint" data-i18n="submit.speciesHint"></span>
+      </div>
+    </fieldset>
+
+    <!-- Only shown when the submitter is recording a loss. -->
+    <fieldset class="group" id="lost-group" hidden>
+      <legend data-i18n="submit.kindLost">A tree that was cut down</legend>
+      <div class="field" style="margin-block-end:1rem;">
+        <label for="lostDate" data-i18n="submit.lostDate">When was it removed?</label>
+        <input class="input" type="text" id="lostDate" name="lostDate" inputmode="numeric"
+               placeholder="2024-02" aria-describedby="lostDate-hint">
+        <span class="hint" id="lostDate-hint" data-i18n="submit.lostDateHint"></span>
+      </div>
+      <div class="field">
+        <label for="lostReason" data-i18n="submit.lostReason">Why was it removed, if you know?</label>
+        <select class="select" id="lostReason" name="lostReason"></select>
+      </div>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend data-i18n="submit.notes">Anything else worth recording</legend>
+      <div class="field">
+        <label for="notes" data-i18n="submit.notes">Anything else worth recording</label>
+        <textarea id="notes" name="notes" aria-describedby="notes-hint"></textarea>
+        <span class="hint" id="notes-hint" data-i18n="submit.notesHint"></span>
+      </div>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend data-i18n="submit.name">Your name</legend>
+      <div class="field" style="margin-block-end:1rem;">
+        <label for="name" data-i18n="submit.name">Your name</label>
+        <input class="input" type="text" id="name" name="name" autocomplete="name" aria-describedby="name-hint">
+        <span class="hint" id="name-hint" data-i18n="submit.nameHint"></span>
+      </div>
+      <div class="field">
+        <label for="email" data-i18n="submit.email">Your email</label>
+        <input class="input" type="email" id="email" name="email" autocomplete="email"
+               aria-describedby="email-hint email-error">
+        <span class="hint" id="email-hint" data-i18n="submit.emailHint"></span>
+        <p class="field-error" id="email-error" hidden></p>
+      </div>
+    </fieldset>
+
+    <fieldset class="group">
+      <legend data-i18n="submit.consent">Permission</legend>
+      <label class="check">
+        <input type="checkbox" id="consent" name="consent" aria-describedby="consent-error">
+        <span data-i18n="submit.consent"></span>
+      </label>
+      <p class="field-error" id="consent-error" hidden></p>
+    </fieldset>
+
+    <p><button type="submit" class="btn btn-primary btn-lg" id="send" data-i18n="submit.send">Send this record</button></p>
+  </form>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap cols">
+    <div><p><strong data-i18n="site.name"></strong></p><p data-i18n="site.tagline"></p></div>
+    <div><p><a href="index.html" data-i18n="nav.archive">Archive</a></p><p><a href="about.html" data-i18n="nav.about">About</a></p></div>
+  </div>
+</footer>
+
+<script src="data/species.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/submit.js"></script>
+</body>
+</html>
