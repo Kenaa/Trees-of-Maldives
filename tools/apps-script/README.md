@@ -22,7 +22,11 @@ Their IDs are already written into `Code.gs`, so there is nothing to fill in.
 ## Steps
 
 1. Open the **Tree submissions** sheet, then choose **Extensions → Apps Script**.
-2. Delete the few lines of placeholder code in the editor.
+2. Delete the placeholder in the editor. Select all of it and delete, rather than
+   clearing the middle. A leftover closing brace from `function myFunction() {}`
+   produces `SyntaxError: Unexpected token '}'` reported on a line one past the
+   end of the file, which is the tell that something is still sitting below the
+   code you pasted.
 3. Paste in everything from [`Code.gs`](Code.gs), then save.
 4. In the function dropdown at the top, pick **`testFromEditor`** and press **Run**.
 
