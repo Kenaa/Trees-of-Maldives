@@ -37,8 +37,9 @@ becomes questionable too.
 **Count relocations separately.** A mature tree moved elsewhere frequently does not
 survive. Filing it under "saved" flatters the outcome.
 
-**Respect private ground.** Tick the private-land box for courtyard trees. The published
-coordinates are rounded so a household cannot be identified from the map.
+**Ask before you measure.** Tick the private-land box for courtyard trees. Coordinates
+are published as given, so the box is not about hiding the tree. It is a note to the
+next surveyor that there is a household to ask first.
 
 ## Changing the site itself
 

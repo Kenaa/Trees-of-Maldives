@@ -133,13 +133,6 @@
     var kind = form.querySelector('input[name="kind"]:checked').value;
     var lat = $("lat").value, lng = $("lng").value;
 
-    /* Blur the position for trees on private land so a household is not
-       identifiable from the published archive. */
-    if ($("private").checked && lat && C.privateLandPrecision !== null) {
-      lat = Number(lat).toFixed(C.privateLandPrecision);
-      lng = Number(lng).toFixed(C.privateLandPrecision);
-    }
-
     return {
       kind: kind,
       species: $("species").value,

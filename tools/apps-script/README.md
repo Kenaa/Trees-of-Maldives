@@ -76,7 +76,5 @@ submissions and copy the good ones into `data/trees.js`.
   typical 8 MB phone photo well under 1 MB. Uploads finish quickly on a mobile
   connection. If the browser cannot decode the format, usually HEIC outside
   Safari, the original file is sent instead.
-- **Rounds the location** for trees marked as being on private land, so a
-  household cannot be identified from the published map.
 - **Carries a honeypot field** that people never see. Anything that fills it in
   is a bot, and the script accepts the request and discards it.

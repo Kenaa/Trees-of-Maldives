@@ -113,7 +113,7 @@ window.TREE_DATA =
       "ward": "galolhu", "place": { "en": "Galolhu (private courtyard)", "dv": "ގަލޮޅު" },
       "lat": 4.17510, "lng": 73.51290,
       "girthCm": 130, "heightM": 7, "ageYears": 35,
-      "notes": { "en": "PLACEHOLDER. Courtyard trees are the largest hidden reservoir of canopy in Malé and the least recorded. Location deliberately imprecise — see the privacy note in the guide.", "dv": "ގޯތިތެރޭގެ ގަސްތަކަކީ މާލޭގައި އެންމެ ގިނަ ނަމަވެސް އެންމެ ރެކޯޑް ނުކުރެވޭ ގަސްތަކެވެ." },
+      "notes": { "en": "PLACEHOLDER. Courtyard trees are the largest hidden reservoir of canopy in Malé and the least recorded. Recorded as private land, which means asking the household before measuring it.", "dv": "ގޯތިތެރޭގެ ގަސްތަކަކީ މާލޭގައި އެންމެ ގިނަ ނަމަވެސް އެންމެ ރެކޯޑް ނުކުރެވޭ ގަސްތަކެވެ." },
       "photos": [], "recorded": "2026-09-03", "lost": null, "sources": []
     },
     {

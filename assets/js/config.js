@@ -41,8 +41,4 @@ window.CONFIG = {
      Largest photo the form will accept, in megabytes. */
   maxPhotoMb: 8,
 
-  /* 5. PRIVACY --------------------------------------------------------------
-     Round published coordinates for trees on private land to this many
-     decimal places (3 ≈ 110 m). Set to null to publish exact positions. */
-  privateLandPrecision: 3
 };

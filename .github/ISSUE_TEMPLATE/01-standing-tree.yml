@@ -122,7 +122,7 @@ body:
     attributes:
       label: "Private land | އަމިއްލަ ބިން"
       options:
-        - label: "This tree is on private land. Please round the published location so the address cannot be identified."
+        - label: "This tree is on private land. Worth flagging: anyone going to survey it will need to ask permission first."
           required: false
 
   - type: checkboxes
