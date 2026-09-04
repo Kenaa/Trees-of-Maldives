@@ -18,14 +18,95 @@ var SHEET_ID  = '15WS4SdPekAjyTJK-HVWDtYJSFPi3fs5TbqWBhABFQlg';  // "Tree submis
 var PHOTO_DIR = '1Esf-Lz2qIvaVZ0-Jj_kdABoFMVU0Fj5Z';             // "Submitted photos"
 
 var COLUMNS = [
-  'Received', 'Recording', 'Species', 'Where', 'Ward', 'Lat', 'Lng',
+  'Ref', 'Received', 'Recording', 'Species', 'Where', 'Ward', 'Lat', 'Lng',
   'Private land', 'Removed when', 'Removed why', 'Notes',
   'Submitter', 'Email', 'Photo', 'Form language', 'Reviewed'
 ];
 
-/* Visiting the /exec URL in a browser should tell you it is alive. */
-function doGet() {
+/* Anything in this list, in the Reviewed column, means "publish it". A tick
+   box gives a real boolean, so that counts too. */
+var APPROVED = ['yes', 'y', 'true', 'approved', 'ok', 'x'];
+
+/* Visiting the /exec URL in a browser should tell you it is alive.
+   ?list=approved  the rows ticked Reviewed, for the ingest workflow
+   ?photo=<id>     the bytes of one photograph belonging to an approved row */
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  if (p.list === 'approved') return json({ ok: true, records: approvedRecords() });
+  if (p.photo) return json(approvedPhoto(p.photo));
   return json({ ok: true, service: 'trees-of-maldives', hint: 'POST a record here.' });
+}
+
+function rows() {
+  var sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  if (sheet.getLastRow() < 2) return [];
+  var values = sheet.getDataRange().getValues();
+  var head = values[0];
+  return values.slice(1).map(function (r) {
+    var o = {};
+    head.forEach(function (h, i) { o[h] = r[i]; });
+    return o;
+  });
+}
+
+function isApproved(row) {
+  var v = row['Reviewed'];
+  if (v === true) return true;
+  return APPROVED.indexOf(String(v || '').trim().toLowerCase()) !== -1;
+}
+
+function fileIdFrom(url) {
+  var m = /[-\w]{25,}/.exec(String(url || ''));
+  return m ? m[0] : '';
+}
+
+/**
+ * Approved rows, ready to publish. Email is deliberately absent: the archive
+ * never publishes it, so it should not leave the sheet at all. The submitter's
+ * name does travel, because that is the credit they agreed to.
+ */
+function approvedRecords() {
+  return rows().filter(isApproved).map(function (r) {
+    return {
+      ref: String(r['Ref'] || ''),
+      received: r['Received'] instanceof Date
+        ? Utilities.formatDate(r['Received'], 'Indian/Maldives', 'yyyy-MM-dd') : String(r['Received'] || ''),
+      recording: String(r['Recording'] || ''),
+      species: String(r['Species'] || ''),
+      place: String(r['Where'] || ''),
+      ward: String(r['Ward'] || ''),
+      lat: String(r['Lat'] || ''),
+      lng: String(r['Lng'] || ''),
+      privateLand: String(r['Private land'] || ''),
+      lostDate: String(r['Removed when'] || ''),
+      lostReason: String(r['Removed why'] || ''),
+      notes: String(r['Notes'] || ''),
+      submitter: String(r['Submitter'] || ''),
+      language: String(r['Form language'] || 'en'),
+      photoId: fileIdFrom(r['Photo'])
+    };
+  });
+}
+
+/**
+ * One photograph, base64, so the workflow can put it in the repository.
+ *
+ * The id has to belong to an approved row. Without that check this would be an
+ * open proxy to every file in the Drive account, which is emphatically not what
+ * a public endpoint should be.
+ */
+function approvedPhoto(id) {
+  var allowed = approvedRecords().some(function (r) { return r.photoId === id; });
+  if (!allowed) return { ok: false, error: 'not-an-approved-photo' };
+  try {
+    var f = DriveApp.getFileById(id);
+    if (f.getParents().next().getId() !== PHOTO_DIR) return { ok: false, error: 'wrong-folder' };
+    var blob = f.getBlob();
+    return { ok: true, name: f.getName(), mimeType: blob.getContentType(),
+             base64: Utilities.base64Encode(blob.getBytes()) };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
 }
 
 function doPost(e) {
@@ -46,6 +127,8 @@ function doPost(e) {
     }
 
     sheet.appendRow([
+      'S-' + Utilities.formatDate(new Date(), 'Indian/Maldives', 'yyyyMMdd-HHmmss') +
+        '-' + Utilities.getUuid().slice(0, 4),
       new Date(),
       body.kind === 'lost' ? 'Cut down' : 'Standing',
       body.species || '',

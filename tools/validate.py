@@ -71,9 +71,14 @@ def check_trees(data, species_ids):
             elif not v.get("dv"):
                 warn("%s: %s has no Dhivehi translation" % (where, field))
 
+        # Coordinates are optional: the form lets someone give a street name
+        # instead. Such a record belongs in the register, it just cannot be
+        # drawn on the map until somebody places it.
         lat, lng = t.get("lat"), t.get("lng")
-        if not isinstance(lat, (int, float)) or not isinstance(lng, (int, float)):
-            err("%s: lat and lng must be numbers" % where)
+        if lat is None and lng is None:
+            warn("%s: no coordinates, so it is missing from the map" % where)
+        elif not isinstance(lat, (int, float)) or not isinstance(lng, (int, float)):
+            err("%s: lat and lng must both be numbers, or both be null" % where)
         elif not (BOUNDS[0] <= lat <= BOUNDS[1] and BOUNDS[2] <= lng <= BOUNDS[3]):
             err("%s: %s, %s is outside Malé City — check the order (lat first)" % (where, lat, lng))
 
@@ -102,6 +107,9 @@ def check_trees(data, species_ids):
             alt = p.get("alt")
             if not isinstance(alt, dict) or not alt.get("en"):
                 err("%s: photo %s needs English alt text (a WCAG requirement)" % (where, src))
+            elif p.get("altReview"):
+                warn("%s: alt text for %s was written without anyone seeing the "
+                     "photograph — describe what is actually in frame" % (where, src))
 
     if data.get("meta", {}).get("seed") and not any(not t.get("verified") for t in trees):
         warn("meta.seed is still true but every record is verified — you can set it to false")

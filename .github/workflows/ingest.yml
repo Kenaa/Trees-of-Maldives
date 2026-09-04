@@ -1,0 +1,54 @@
+name: Ingest approved submissions
+
+# Picks up rows ticked Reviewed in the Google Sheet and commits them to the
+# register. Nothing reaches the site until the validator has passed on it.
+#
+# The schedule is a best effort: GitHub runs cron jobs late when it is busy, so
+# treat "every 15 minutes" as "within the hour". Use the Run workflow button on
+# the Actions tab when you want a record up now.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - name: Fetch approved rows
+        run: python3 tools/ingest.py
+
+      - name: Check the result
+        run: python3 tools/validate.py
+
+      - name: Commit anything new
+        run: |
+          if git diff --quiet; then
+            echo "No new records."
+            exit 0
+          fi
+          git config user.name  "tree-register-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/trees.js photos
+          COUNT=$(git diff --cached --numstat -- data/trees.js | awk '{print $1}')
+          git commit -m "Add approved submissions from the sheet
+
+          Ingested by .github/workflows/ingest.yml. Records arrive unverified:
+          approval means fit to publish, not confirmed on the ground."
+          git push

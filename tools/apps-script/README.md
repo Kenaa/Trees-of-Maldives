@@ -62,14 +62,41 @@ serving the deployed version. After changing `Code.gs`, go to
 **Deploy → Manage deployments → edit (pencil) → Version: New version → Deploy**.
 The URL stays the same.
 
+## Approving a submission
+
+Nothing reaches the site until you say so. Put **yes** in the `Reviewed` column
+(a tick box works too), and the record is picked up and committed to the
+register, photograph and all.
+
+That happens on a schedule, roughly every fifteen minutes. GitHub runs cron jobs
+late when it is busy, so treat it as "within the hour". When you want a record up
+now, open the repository's **Actions** tab, choose **Ingest approved submissions**
+and press **Run workflow**.
+
+Nothing is copied blindly. A row is refused, and reported in the run log, if it
+has no location or an unrecognised ward. A species the register does not know is
+filed as unidentified rather than dropped, and coordinates outside Malé City are
+discarded while the record itself is kept. Every record then goes through
+`tools/validate.py` before it is allowed to commit.
+
+Records arrive with `"verified": false`, and that is deliberate. Approving a
+submission says it is fit to publish. It does not say anyone has stood in front
+of the tree. The register keeps those two claims apart, and only you can make
+the second one.
+
+To take something down again, delete its row from `data/trees.js`. Clearing the
+`Reviewed` cell will not remove a record that has already been committed.
+
 ## What arrives
 
 One row per record, with the photograph saved to Drive and linked from the
 `Photo` column:
 
-`Received · Recording · Species · Where · Ward · Lat · Lng · Private land ·
+`Ref · Received · Recording · Species · Where · Ward · Lat · Lng · Private land ·
 Removed when · Removed why · Notes · Submitter · Email · Photo · Form language ·
 Reviewed`
+
+`Ref` is how the ingest knows which rows it has already taken. Leave it alone.
 
 `Reviewed` is left empty on purpose. It is yours to mark as you work through
 submissions and copy the good ones into `data/trees.js`.
