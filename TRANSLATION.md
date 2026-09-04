@@ -80,6 +80,13 @@ transliteration of that romanisation, which is the step most likely to be wrong.
 
 Set `"dvReview": false` on each once you have confirmed the spelling.
 
+One more entry carries `dvReview` without appearing above: the `unknown`
+placeholder, ދެނެގަނެވިފައި ނުވޭ, meaning "not yet identified". It is the option
+someone picks when they cannot name a tree, so it is a phrase I wrote rather than
+a species name from the book, and there is no page to check it against. It reads
+as interface text, so judge it the way you judge section 1. That makes 16 entries
+flagged in the data against the 15 in the table above.
+
 ### Settled (12)
 
 Book spelling and Thaana agree, and these are everyday words. Nothing to do.
