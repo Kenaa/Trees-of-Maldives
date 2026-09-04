@@ -4,9 +4,10 @@
 window.SPECIES_DATA =
 {
  "meta": {
-  "note": "Dhivehi names come from FAO, Trees and Shrubs of the Maldives. dvLatin is that book's romanisation verbatim and dvPage is the page its two indexes agree on, so every name here is checkable. Where dvReview is true the Thaana is a transliteration of the romanisation and still wants a native speaker's eye.",
+  "note": "dvLatin is the book's romanisation, verbatim, with the page it appears on. dv holds Thaana where a name has one; entries added from the index have dvLatin only, and dvReview true, until a Dhivehi speaker writes the Thaana. Mangroves are deliberately excluded. See TRANSLATION.md.",
   "reviewed": false,
-  "source": "FAO, Trees and Shrubs of the Maldives (Selvam 2007). Names resolved via the index of scientific and common names and the index of Dhivehi names."
+  "source": "FAO, Trees and shrubs of the Maldives (Selvam, 2007). Species joined to their Dhivehi names by page number across the book's Index of Dhivehi names and Index of Scientific and Common Names.",
+  "excludes": "Mangrove species (book pp. 181-205, except Pemphis acidula p.197)"
  },
  "species": [
   {
@@ -93,6 +94,31 @@ window.SPECIES_DATA =
    "dvNote": "Book spells it Dhigga; I had recorded Dhiggaa."
   },
   {
+   "id": "areca-catechu",
+   "sci": "Areca catechu",
+   "en": "Betel nut palm",
+   "dv": "",
+   "dvLatin": "Fen-foah",
+   "dvSource": "FAO",
+   "dvPage": 209,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "averrhoa-bilimbi",
+   "sci": "Averrhoa bilimbi",
+   "en": "Bilimbi",
+   "dv": "",
+   "dvLatin": "Bilamagu",
+   "dvSource": "FAO",
+   "dvPage": 35,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Bilimagu"
+   ]
+  },
+  {
    "id": "artocarpus-altilis",
    "sci": "Artocarpus altilis",
    "en": "Breadfruit",
@@ -102,6 +128,17 @@ window.SPECIES_DATA =
    "dvLatin": "Ban'bukeyo",
    "dvSource": "FAO",
    "dvPage": 31
+  },
+  {
+   "id": "ricinus-communis",
+   "sci": "Ricinus communis",
+   "en": "Castor oil plant",
+   "dv": "",
+   "dvLatin": "Amanaka",
+   "dvSource": "FAO",
+   "dvPage": 147,
+   "dvReview": true,
+   "native": null
   },
   {
    "id": "casuarina-equisetifolia",
@@ -116,6 +153,17 @@ window.SPECIES_DATA =
    "dvSource": "FAO"
   },
   {
+   "id": "citrus-medica",
+   "sci": "Citrus medica",
+   "en": "Citron",
+   "dv": "",
+   "dvLatin": "Bodu Lun’boa",
+   "dvSource": "FAO",
+   "dvPage": 71,
+   "dvReview": true,
+   "native": null
+  },
+  {
    "id": "cocos-nucifera",
    "sci": "Cocos nucifera",
    "en": "Coconut palm",
@@ -126,6 +174,111 @@ window.SPECIES_DATA =
    "dvPage": 211,
    "dvSource": "FAO",
    "dvNote": "Book's full entry name is Dhivehi ruh."
+  },
+  {
+   "id": "senna-occidentalis",
+   "sci": "Senna occidentalis",
+   "en": "Coffee senna",
+   "dv": "",
+   "dvLatin": "Dhigu thiyara",
+   "dvSource": "FAO",
+   "dvPage": 59,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "peltophorum-pterocarpum",
+   "sci": "Peltophorum pterocarpum",
+   "en": "Copper pod",
+   "dv": "",
+   "dvLatin": "Reendho varey",
+   "dvSource": "FAO",
+   "dvPage": 127,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "erythrina-orientalis",
+   "sci": "Erythrina orientalis",
+   "en": "Coral tree",
+   "dv": "",
+   "dvLatin": "Berebedhi",
+   "dvSource": "FAO",
+   "dvPage": 85,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "murraya-koenigii",
+   "sci": "Murraya koenigii",
+   "en": "Curry leaf",
+   "dv": "",
+   "dvLatin": "Hikan’dhi gas",
+   "dvSource": "FAO",
+   "dvPage": 123,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Hikan’dhi faiy"
+   ]
+  },
+  {
+   "id": "annona-reticulata",
+   "sci": "Annona reticulata",
+   "en": "Custard apple",
+   "dv": "",
+   "dvLatin": "Dhan’digandu atha",
+   "dvSource": "FAO",
+   "dvPage": 27,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Vilaathu atha"
+   ]
+  },
+  {
+   "id": "moringa-oleifera",
+   "sci": "Moringa oleifera",
+   "en": "Drumstick tree",
+   "dv": "",
+   "dvLatin": "Muran’ga gas",
+   "dvSource": "FAO",
+   "dvPage": 119,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "vitex-negundo",
+   "sci": "Vitex negundo",
+   "en": "Five-leaved chaste tree",
+   "dv": "",
+   "dvLatin": "Dhunnika",
+   "dvSource": "FAO",
+   "dvPage": 171,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "delonix-regia",
+   "sci": "Delonix regia",
+   "en": "Flame of the forest",
+   "dv": "",
+   "dvLatin": "Ginimaa",
+   "dvSource": "FAO",
+   "dvPage": 79,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "pandanus-amaryllifolius",
+   "sci": "Pandanus amaryllifolius",
+   "en": "Fragrant pandan",
+   "dv": "",
+   "dvLatin": "Raampa faiy",
+   "dvSource": "FAO",
+   "dvPage": 221,
+   "dvReview": true,
+   "native": null
   },
   {
    "id": "plumeria-obtusa",
@@ -140,6 +293,50 @@ window.SPECIES_DATA =
    "dvNote": "Page 137 covers several Plumeria; it also lists Raiy gulchampa for the red one."
   },
   {
+   "id": "calotropis-gigantea",
+   "sci": "Calotropis gigantea",
+   "en": "Giant milkweed",
+   "dv": "",
+   "dvLatin": "Ruvaa",
+   "dvSource": "FAO",
+   "dvPage": 51,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "cassia-fistula",
+   "sci": "Cassia fistula",
+   "en": "Golden shower",
+   "dv": "",
+   "dvLatin": "An’malthassh",
+   "dvSource": "FAO",
+   "dvPage": 57,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "caesalpinia-bonduc",
+   "sci": "Caesalpinia bonduc",
+   "en": "Grey nickernut",
+   "dv": "",
+   "dvLatin": "Kashi kaburan",
+   "dvSource": "FAO",
+   "dvPage": 43,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "psidium-guajava",
+   "sci": "Psidium guajava",
+   "en": "Guava",
+   "dv": "",
+   "dvLatin": "Feyru",
+   "dvSource": "FAO",
+   "dvPage": 141,
+   "dvReview": true,
+   "native": null
+  },
+  {
    "id": "premna-serratifolia",
    "sci": "Premna serratifolia",
    "en": "Headache tree",
@@ -150,6 +347,31 @@ window.SPECIES_DATA =
    "dvLatin": "Dhakan'dhaa",
    "dvPage": 139,
    "dvSource": "FAO"
+  },
+  {
+   "id": "lawsonia-inermis",
+   "sci": "Lawsonia inermis",
+   "en": "Henna tree",
+   "dv": "",
+   "dvLatin": "Heenaa",
+   "dvSource": "FAO",
+   "dvPage": 107,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "desmodium-umbellatum",
+   "sci": "Desmodium umbellatum",
+   "en": "Horse bush",
+   "dv": "",
+   "dvLatin": "Haalhala",
+   "dvSource": "FAO",
+   "dvPage": 81,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Haulhala"
+   ]
   },
   {
    "id": "terminalia-catappa",
@@ -163,6 +385,53 @@ window.SPECIES_DATA =
    "dvSource": "FAO"
   },
   {
+   "id": "erythrina-variegata",
+   "sci": "Erythrina variegata",
+   "en": "Indian coral tree",
+   "dv": "",
+   "dvLatin": "Faiy kurehi",
+   "dvSource": "FAO",
+   "dvPage": 87,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Berebedhi"
+   ]
+  },
+  {
+   "id": "phyllanthus-emblica",
+   "sci": "Phyllanthus emblica",
+   "en": "Indian gooseberry",
+   "dv": "",
+   "dvLatin": "Beys goan’bili",
+   "dvSource": "FAO",
+   "dvPage": 131,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "ziziphus-mauritiana",
+   "sci": "Ziziphus mauritiana",
+   "en": "Indian jujube",
+   "dv": "",
+   "dvLatin": "Kunnaaru",
+   "dvSource": "FAO",
+   "dvPage": 175,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "ficus-elastica",
+   "sci": "Ficus elastica",
+   "en": "Indian rubber tree",
+   "dv": "",
+   "dvLatin": "Rabaru gas",
+   "dvSource": "FAO",
+   "dvPage": 95,
+   "dvReview": true,
+   "native": null
+  },
+  {
    "id": "pemphis-acidula",
    "sci": "Pemphis acidula",
    "en": "Ironwood",
@@ -173,6 +442,39 @@ window.SPECIES_DATA =
    "dvPage": 197,
    "dvSource": "FAO",
    "dvNote": "Also indexed as Keredhi."
+  },
+  {
+   "id": "artocarpus-heterophyllus",
+   "sci": "Artocarpus heterophyllus",
+   "en": "Jackfruit",
+   "dv": "",
+   "dvLatin": "Sakkeyo",
+   "dvSource": "FAO",
+   "dvPage": 33,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "muntingia-calabura",
+   "sci": "Muntingia calabura",
+   "en": "Jamaica cherry",
+   "dv": "",
+   "dvLatin": "Jeymu",
+   "dvSource": "FAO",
+   "dvPage": 121,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "syzygium-cumini",
+   "sci": "Syzygium cumini",
+   "en": "Jambolan",
+   "dv": "",
+   "dvLatin": "Dhan’bu gas",
+   "dvSource": "FAO",
+   "dvPage": 157,
+   "dvReview": true,
+   "native": null
   },
   {
    "id": "hernandia-nymphaeifolia",
@@ -188,6 +490,45 @@ window.SPECIES_DATA =
    "dvNote": "Also indexed as Mas kandhu."
   },
   {
+   "id": "pandanus-odoratissimus",
+   "sci": "Pandanus odoratissimus",
+   "en": "Large screwpine",
+   "dv": "",
+   "dvLatin": "Maakashikeyo",
+   "dvSource": "FAO",
+   "dvPage": 217,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "colubrina-asiatica",
+   "sci": "Colubrina asiatica",
+   "en": "Latherleaf",
+   "dv": "",
+   "dvLatin": "Raarohi",
+   "dvSource": "FAO",
+   "dvPage": 75,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Raaruhi"
+   ]
+  },
+  {
+   "id": "citrus-limon",
+   "sci": "Citrus limon",
+   "en": "Lemon",
+   "dv": "",
+   "dvLatin": "Dhoalhan’bu",
+   "dvSource": "FAO",
+   "dvPage": 67,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Jambhoshi"
+   ]
+  },
+  {
    "id": "pisonia-grandis",
    "sci": "Pisonia grandis",
    "en": "Lettuce tree",
@@ -200,6 +541,28 @@ window.SPECIES_DATA =
    "dvSource": "FAO"
   },
   {
+   "id": "leucaena-leucocephala",
+   "sci": "Leucaena leucocephala",
+   "en": "Leucaena",
+   "dv": "",
+   "dvLatin": "Ipil-ipil",
+   "dvSource": "FAO",
+   "dvPage": 109,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "citrus-aurantifolia",
+   "sci": "Citrus aurantifolia",
+   "en": "Lime",
+   "dv": "",
+   "dvLatin": "Lun’boa",
+   "dvSource": "FAO",
+   "dvPage": 63,
+   "dvReview": true,
+   "native": null
+  },
+  {
    "id": "mangifera-indica",
    "sci": "Mangifera indica",
    "en": "Mango",
@@ -209,6 +572,39 @@ window.SPECIES_DATA =
    "dvLatin": "An'bu",
    "dvPage": 111,
    "dvSource": "FAO"
+  },
+  {
+   "id": "pithecellobium-dulce",
+   "sci": "Pithecellobium dulce",
+   "en": "Manila tamarind",
+   "dv": "",
+   "dvLatin": "Kashi helebeli",
+   "dvSource": "FAO",
+   "dvPage": 135,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "senna-auriculata",
+   "sci": "Senna auriculata",
+   "en": "Mature tea tree",
+   "dv": "",
+   "dvLatin": "Ranauraa",
+   "dvSource": "FAO",
+   "dvPage": 55,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "pterocarpus-indicus",
+   "sci": "Pterocarpus indicus",
+   "en": "Narra",
+   "dv": "",
+   "dvLatin": "Ofi elay gas",
+   "dvSource": "FAO",
+   "dvPage": 143,
+   "dvReview": true,
+   "native": null
   },
   {
    "id": "azadirachta-indica",
@@ -247,6 +643,68 @@ window.SPECIES_DATA =
    "dvSource": "FAO"
   },
   {
+   "id": "carica-papaya",
+   "sci": "Carica papaya",
+   "en": "Papaya",
+   "dv": "",
+   "dvLatin": "Falho",
+   "dvSource": "FAO",
+   "dvPage": 53,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Rangu falho",
+    "Veyo falho"
+   ]
+  },
+  {
+   "id": "caesalpinia-pulcherrima",
+   "sci": "Caesalpinia pulcherrima",
+   "en": "Peacock flower",
+   "dv": "",
+   "dvLatin": "Fa’thangu",
+   "dvSource": "FAO",
+   "dvPage": 45,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "euphorbia-tirucalli",
+   "sci": "Euphorbia tirucalli",
+   "en": "Pencil cactus",
+   "dv": "",
+   "dvLatin": "Eggamu muraka",
+   "dvSource": "FAO",
+   "dvPage": 89,
+   "dvReview": true,
+   "native": null,
+   "dvLatinVariants": [
+    "Hudu kiruthona"
+   ]
+  },
+  {
+   "id": "punica-granatum",
+   "sci": "Punica granatum",
+   "en": "Pomegranate",
+   "dv": "",
+   "dvLatin": "Annaaru",
+   "dvSource": "FAO",
+   "dvPage": 145,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "annona-glabra",
+   "sci": "Annona glabra",
+   "en": "Pond apple",
+   "dv": "",
+   "dvLatin": "Kalhuthumeyvaa",
+   "dvSource": "FAO",
+   "dvPage": 23,
+   "dvReview": true,
+   "native": null
+  },
+  {
    "id": "thespesia-populnea",
    "sci": "Thespesia populnea",
    "en": "Portia tree",
@@ -256,6 +714,17 @@ window.SPECIES_DATA =
    "dvLatin": "Hirun'dhu",
    "dvPage": 167,
    "dvSource": "FAO"
+  },
+  {
+   "id": "citrus-maxima",
+   "sci": "Citrus maxima",
+   "en": "Pummelo",
+   "dv": "",
+   "dvLatin": "Ban’bulhabos",
+   "dvSource": "FAO",
+   "dvPage": 69,
+   "dvReview": true,
+   "native": null
   },
   {
    "id": "samanea-saman",
@@ -280,6 +749,61 @@ window.SPECIES_DATA =
    "dvLatin": "Madhoshi",
    "dvSource": "FAO",
    "dvPage": 17
+  },
+  {
+   "id": "syzygium-jambos",
+   "sci": "Syzygium jambos",
+   "en": "Rose apple",
+   "dv": "",
+   "dvLatin": "Janbu",
+   "dvSource": "FAO",
+   "dvPage": 159,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "dodonaea-viscosa",
+   "sci": "Dodonaea viscosa",
+   "en": "Sand olive",
+   "dv": "",
+   "dvLatin": "Kudhi-ruuvaali",
+   "dvSource": "FAO",
+   "dvPage": 83,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "manilkara-zapota",
+   "sci": "Manilkara zapota",
+   "en": "Sapodilla",
+   "dv": "",
+   "dvLatin": "Sabhudheli",
+   "dvSource": "FAO",
+   "dvPage": 113,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "caesalpinia-sappan",
+   "sci": "Caesalpinia sappan",
+   "en": "Sappan wood",
+   "dv": "",
+   "dvLatin": "Bey’s fathangu",
+   "dvSource": "FAO",
+   "dvPage": 47,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "senna-surattensis",
+   "sci": "Senna surattensis",
+   "en": "Scrambled egg tree",
+   "dv": "",
+   "dvLatin": "Ranuwia",
+   "dvSource": "FAO",
+   "dvPage": 61,
+   "dvReview": true,
+   "native": null
   },
   {
    "id": "pandanus-tectorius",
@@ -320,6 +844,127 @@ window.SPECIES_DATA =
    "dvNote": "Also indexed as Kauni."
   },
   {
+   "id": "clerodendrum-inerme",
+   "sci": "Clerodendrum inerme",
+   "en": "Seaside clerodendron",
+   "dv": "",
+   "dvLatin": "Dhun’gethi",
+   "dvSource": "FAO",
+   "dvPage": 73,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "sesbania-grandiflora",
+   "sci": "Sesbania grandiflora",
+   "en": "Sesban",
+   "dv": "",
+   "dvLatin": "Feerumuran’ga",
+   "dvSource": "FAO",
+   "dvPage": 151,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "citrus-aurantium",
+   "sci": "Citrus aurantium",
+   "en": "Sour orange",
+   "dv": "",
+   "dvLatin": "Naarin’gu",
+   "dvSource": "FAO",
+   "dvPage": 65,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "ximenia-americana",
+   "sci": "Ximenia americana",
+   "en": "Sour plum",
+   "dv": "",
+   "dvLatin": "En’boo",
+   "dvSource": "FAO",
+   "dvPage": 173,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "annona-muricata",
+   "sci": "Annona muricata",
+   "en": "Soursop",
+   "dv": "",
+   "dvLatin": "Anoanaa",
+   "dvSource": "FAO",
+   "dvPage": 25,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "averrhoa-carambola",
+   "sci": "Averrhoa carambola",
+   "en": "Star fruit",
+   "dv": "",
+   "dvLatin": "Kaamaranga",
+   "dvSource": "FAO",
+   "dvPage": 37,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "phyllanthus-acidus",
+   "sci": "Phyllanthus acidus",
+   "en": "Star gooseberry",
+   "dv": "",
+   "dvLatin": "Goan’bili",
+   "dvSource": "FAO",
+   "dvPage": 129,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "annona-squamosa",
+   "sci": "Annona squamosa",
+   "en": "Sugar apple",
+   "dv": "",
+   "dvLatin": "Dhivehi atha",
+   "dvSource": "FAO",
+   "dvPage": 29,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "tamarindus-indica",
+   "sci": "Tamarindus indica",
+   "en": "Tamarind",
+   "dv": "",
+   "dvLatin": "Helen’beli",
+   "dvSource": "FAO",
+   "dvPage": 161,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "mimusops-elengi",
+   "sci": "Mimusops elengi",
+   "en": "Tanjong tree",
+   "dv": "",
+   "dvLatin": "Moonimaa",
+   "dvSource": "FAO",
+   "dvPage": 115,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "tectona-grandis",
+   "sci": "Tectona grandis",
+   "en": "Teak",
+   "dv": "",
+   "dvLatin": "Haivakaru",
+   "dvSource": "FAO",
+   "dvPage": 163,
+   "dvReview": true,
+   "native": null
+  },
+  {
    "id": "tournefortia-argentea",
    "sci": "Tournefortia argentea",
    "en": "Tree heliotrope",
@@ -331,6 +976,28 @@ window.SPECIES_DATA =
    "dvLatin": "Boshi",
    "dvPage": 169,
    "dvSource": "FAO"
+  },
+  {
+   "id": "syzygium-aqueum",
+   "sci": "Syzygium aqueum",
+   "en": "Water apple",
+   "dv": "",
+   "dvLatin": "Jan’buroalu",
+   "dvSource": "FAO",
+   "dvPage": 155,
+   "dvReview": true,
+   "native": null
+  },
+  {
+   "id": "ficus-benjamina",
+   "sci": "Ficus benjamina",
+   "en": "Weeping fig",
+   "dv": "",
+   "dvLatin": "Faiy kudhi nika",
+   "dvSource": "FAO",
+   "dvPage": 93,
+   "dvReview": true,
+   "native": null
   },
   {
    "id": "unknown",

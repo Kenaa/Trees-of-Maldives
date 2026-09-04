@@ -150,6 +150,10 @@ def species_label(sp):
         line += " | %s" % sp["dv"]
         if sp.get("dvLatin"):
             line += " (%s)" % sp["dvLatin"]
+    elif sp.get("dvLatin"):
+        # No Thaana yet. The romanisation is still the Dhivehi name, and it is
+        # more use in the menu than nothing.
+        line += " | %s" % sp["dvLatin"]
     return line
 
 

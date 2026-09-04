@@ -80,7 +80,9 @@
   function speciesLabel(id) {
     var s = byId[id];
     if (!s) return id;
-    if (window.i18n.current === "dv" && s.dv) return s.dv;
+    /* In Dhivehi, prefer Thaana, then the book's romanisation. Falling back to
+       English would be worse: the romanisation is still the Dhivehi name. */
+    if (window.i18n.current === "dv") return s.dv || s.dvLatin || s.en;
     /* Most people in Malé type Dhivehi in Latin script, so the romanisation
        is what makes this menu searchable for them. Redundant in Thaana. */
     return s.dvLatin ? s.en + " (" + s.dvLatin + ")" : s.en;

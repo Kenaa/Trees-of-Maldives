@@ -45,10 +45,10 @@
        half-read form cannot file a confident guess. */
     fill("species", SPECIES.map(function (s) { return s.id; }), function (id) {
       var s = SPECIES.filter(function (x) { return x.id === id; })[0];
-      var inThaana = window.i18n.current === "dv" && s.dv;
-      var label = inThaana ? s.dv : s.en;
+      var dvMode = window.i18n.current === "dv";
+      var label = dvMode ? (s.dv || s.dvLatin || s.en) : s.en;
       if (s.sci !== "Unidentified") label += " \u00b7 " + s.sci;
-      if (!inThaana && s.dvLatin) label += " (" + s.dvLatin + ")";
+      if (!dvMode && s.dvLatin) label += " (" + s.dvLatin + ")";
       return label;
     });
     if (!$("species").value || !prevSpecies) $("species").value = "unknown";
