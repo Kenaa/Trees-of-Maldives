@@ -14,7 +14,8 @@
   var C = window.CONFIG;
 
   var WARDS   = ["henveiru", "galolhu", "maafannu", "machchangolhi", "villimale", "hulhumale"];
-  var REASONS = ["road-widening", "construction", "storm", "disease", "safety", "unknown"];
+  var REASONS = ["road-widening", "construction", "storm", "disease", "safety",
+               "maintenance", "powerlines", "unknown"];
 
   var form     = document.getElementById("tree-form");
   var errBox   = document.getElementById("errors");
@@ -53,14 +54,14 @@
     });
     if (!$("species").value || !prevSpecies) $("species").value = "unknown";
     prevSpecies = $("species").value;
-    $("photo-hint").textContent = t("submit.photoHint", { mb: C.maxPhotoMb });
+    $("photo-hint").textContent = t("submit.photoHint", { mb: C.maxPhotoMb, max: C.maxPhotos });
   }
 
   /* --- errors ------------------------------------------------------------- */
   function clearErrors() {
     errBox.hidden = true;
     errList.textContent = "";
-    ["photo", "place", "email", "consent"].forEach(function (f) {
+    ["photo", "place", "email", "consent", "people", "lat"].forEach(function (f) {
       var e = $(f + "-error");
       if (e) { e.hidden = true; e.textContent = ""; }
       var input = $(f);
@@ -100,20 +101,29 @@
   function validate() {
     var problems = [];
 
-    var file = $("photo").files[0];
-    if (file) {
-      if (file.type && file.type.indexOf("image/") !== 0) {
+    var files = Array.prototype.slice.call($("photo").files);
+    if (files.length > C.maxPhotos) {
+      problems.push({ id: "photo", msg: t("err.photoCount", { n: files.length, max: C.maxPhotos }) });
+    }
+    files.forEach(function (f) {
+      if (f.type && f.type.indexOf("image/") !== 0) {
         problems.push({ id: "photo", msg: t("err.photoType") });
-      } else if (file.size > C.maxPhotoMb * 1024 * 1024) {
+      } else if (f.size > C.maxPhotoMb * 1024 * 1024) {
         problems.push({ id: "photo", msg: t("err.photoSize", {
-          size: (file.size / 1048576).toFixed(1), mb: C.maxPhotoMb
+          size: (f.size / 1048576).toFixed(1), mb: C.maxPhotoMb
         }) });
       }
+    });
+
+    if (!$("people").checked) {
+      problems.push({ id: "people", msg: t("err.people") });
     }
 
-    var hasCoords = $("lat").value && $("lng").value;
-    if (!$("place").value.trim() && !hasCoords) {
+    if (!$("place").value.trim()) {
       problems.push({ id: "place", msg: t("err.required", { field: t("submit.where") }) });
+    }
+    if (!validCoords()) {
+      problems.push({ id: "lat", msg: t("err.coords") });
     }
 
     var email = $("email").value.trim();
@@ -131,7 +141,8 @@
   /* --- the record --------------------------------------------------------- */
   function collect() {
     var kind = form.querySelector('input[name="kind"]:checked').value;
-    var lat = $("lat").value, lng = $("lng").value;
+    var lat = $("lat").value.trim(), lng = $("lng").value.trim();
+    var isEvent = kind === "lost" || kind === "cutback";
 
     return {
       kind: kind,
@@ -140,12 +151,14 @@
       ward: $("ward").value,
       lat: lat, lng: lng,
       privateLand: $("private").checked ? "yes" : "no",
-      lostDate: kind === "lost" ? $("lostDate").value.trim() : "",
-      lostReason: kind === "lost" ? $("lostReason").value : "",
+      speciesOther: $("speciesOther").value.trim(),
+      lostDate: isEvent ? $("lostDate").value.trim() : "",
+      lostReason: isEvent ? $("lostReason").value : "",
+      people: $("people").checked ? "yes" : "",
       notes: $("notes").value.trim(),
       name: $("name").value.trim(),
       email: $("email").value.trim(),
-      photo: $("photo").files[0] || null,
+      photos: Array.prototype.slice.call($("photo").files),
       language: window.i18n.current,
       submitted: new Date().toISOString().slice(0, 10)
     };
@@ -158,22 +171,24 @@
   function asText(r) {
     var sp = SPECIES.filter(function (x) { return x.id === r.species; })[0] || {};
     var lines = [
-      lbl("submit.kind") + ": " + t(r.kind === "lost" ? "submit.kindLost" : "submit.kindStanding"),
+      lbl("submit.kind") + ": " + t("submit.kind" +
+        (r.kind === "lost" ? "Lost" : r.kind === "cutback" ? "Cutback" : "Standing")),
       lbl("submit.species") + ": " + (sp.sci || r.species) + (sp.en ? " (" + sp.en + ")" : ""),
       lbl("submit.where") + ": " + (r.place || "—"),
       lbl("submit.ward") + ": " + t("ward." + r.ward),
       "GPS: " + (r.lat ? r.lat + ", " + r.lng : "—"),
       lbl("submit.private") + ": " + r.privateLand
     ];
-    if (r.kind === "lost") {
+    if (r.kind !== "standing") {
       lines.push(lbl("submit.lostDate") + ": " + (r.lostDate || "—"));
       lines.push(lbl("submit.lostReason") + ": " + t("reason." + (r.lostReason || "unknown")));
     }
     lines.push(lbl("submit.notes") + ": " + (r.notes || "—"));
     lines.push(lbl("submit.name") + ": " + (r.name || "—"));
     lines.push(lbl("submit.email") + ": " + (r.email || "—"));
-    lines.push(lbl("submit.photo") + ": " + (r.photo ? r.photo.name : "—"));
-    if (r.photo) lines.push("→ " + t("fallback.attach"));
+    lines.push(lbl("submit.photo") + ": " +
+      (r.photos.length ? r.photos.map(function (f) { return f.name; }).join(", ") : "—"));
+    if (r.photos.length) lines.push("→ " + t("fallback.attach"));
     return lines.join("\n");
   }
 
@@ -239,6 +254,7 @@
       ward: record.ward, lat: record.lat, lng: record.lng,
       privateLand: record.privateLand, lostDate: record.lostDate,
       lostReason: record.lostReason, notes: record.notes,
+      speciesOther: record.speciesOther, people: record.people,
       name: record.name, email: record.email, language: record.language
     };
     function go() {
@@ -250,9 +266,14 @@
         .then(function (res) { return res.json(); })
         .then(function (out) { if (out && out.ok) { done(); } else { fail(); } }, fail);
     }
-    if (!record.photo) return go();
-    shrinkPhoto(record.photo, 2000, 0.82).then(function (p) {
-      if (p) { payload.photo = p.dataUrl; payload.photoName = p.name; }
+    if (!record.photos.length) return go();
+    payload.photos = [];
+    Promise.all(record.photos.map(function (f) {
+      return shrinkPhoto(f, 2000, 0.82);
+    })).then(function (list) {
+      list.forEach(function (p) {
+        if (p) payload.photos.push({ dataUrl: p.dataUrl, name: p.name });
+      });
       go();
     }, go);
   }
@@ -309,10 +330,16 @@
   });
 
   /* --- conditional section ------------------------------------------------ */
+  function kindChanged() {
+    var kind = form.querySelector('input[name="kind"]:checked').value;
+    var isEvent = kind === "lost" || kind === "cutback";
+    $("event-group").hidden = !isEvent;
+    if (isEvent) {
+      $("event-legend").textContent = t(kind === "lost" ? "submit.kindLost" : "submit.kindCutback");
+    }
+  }
   form.querySelectorAll('input[name="kind"]').forEach(function (r) {
-    r.addEventListener("change", function () {
-      $("lost-group").hidden = form.querySelector('input[name="kind"]:checked').value !== "lost";
-    });
+    r.addEventListener("change", kindChanged);
   });
 
   /* --- geolocation -------------------------------------------------------- */
@@ -323,6 +350,7 @@
     navigator.geolocation.getCurrentPosition(function (pos) {
       var lat = pos.coords.latitude.toFixed(5), lng = pos.coords.longitude.toFixed(5);
       $("lat").value = lat; $("lng").value = lng;
+      setPin(Number(lat), Number(lng), true);
       status.textContent = t("submit.geoOk", { lat: lat, lng: lng });
     }, function () {
       status.textContent = t("submit.geoFail");
@@ -331,10 +359,63 @@
 
   /* --- photo chosen ------------------------------------------------------- */
   $("photo").addEventListener("change", function () {
-    var f = this.files[0];
-    $("photo-hint").textContent = f
-      ? t("submit.photoChosen", { name: f.name })
-      : t("submit.photoHint", { mb: C.maxPhotoMb });
+    $("photo-hint").textContent = this.files.length
+      ? t("submit.photoChosen", { n: this.files.length })
+      : t("submit.photoHint", { mb: C.maxPhotoMb, max: C.maxPhotos });
+  });
+
+  /* --- where the tree is ---------------------------------------------------
+     The map is the quick way. The two number fields are the accessible way,
+     and they stay in step with it, so neither is second-class. */
+
+  function validCoords() {
+    var lat = parseFloat($("lat").value), lng = parseFloat($("lng").value);
+    if (isNaN(lat) || isNaN(lng)) return false;
+    var b = C.map.maxBounds;
+    return lat >= b[0][0] && lat <= b[1][0] && lng >= b[0][1] && lng <= b[1][1];
+  }
+
+  var picker = null, pin = null;
+
+  function setPin(lat, lng, recentre) {
+    if (!picker) return;
+    if (pin) { pin.setLatLng([lat, lng]); }
+    else {
+      pin = L.marker([lat, lng], { draggable: true }).addTo(picker);
+      pin.on("dragend", function () {
+        var p = pin.getLatLng();
+        $("lat").value = p.lat.toFixed(5);
+        $("lng").value = p.lng.toFixed(5);
+      });
+    }
+    if (recentre) picker.setView([lat, lng], Math.max(picker.getZoom(), 16));
+  }
+
+  function initPicker() {
+    if (typeof L === "undefined") return;      /* offline: the fields still work */
+    var c = C.map;
+    picker = L.map("picker", {
+      center: c.center, zoom: c.zoom, minZoom: c.minZoom, maxZoom: c.maxZoom,
+      maxBounds: c.maxBounds, maxBoundsViscosity: 0.7, scrollWheelZoom: false
+    });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: c.maxZoom,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(picker);
+    picker.on("click", function (e) {
+      $("lat").value = e.latlng.lat.toFixed(5);
+      $("lng").value = e.latlng.lng.toFixed(5);
+      setPin(e.latlng.lat, e.latlng.lng, false);
+    });
+    picker.on("focus", function () { picker.scrollWheelZoom.enable(); });
+    picker.on("blur",  function () { picker.scrollWheelZoom.disable(); });
+  }
+
+  /* Typing coordinates moves the pin, so the two ways of answering agree. */
+  ["lat", "lng"].forEach(function (id) {
+    $(id).addEventListener("change", function () {
+      if (validCoords()) setPin(parseFloat($("lat").value), parseFloat($("lng").value), true);
+    });
   });
 
   /* --- copy --------------------------------------------------------------- */
@@ -357,6 +438,8 @@
   });
 
   /* --- go ----------------------------------------------------------------- */
-  window.i18n.init(buildSelects);
+  window.i18n.init(function () { buildSelects(); kindChanged(); });
   buildSelects();
+  kindChanged();
+  initPicker();
 })();

@@ -16,9 +16,11 @@
   var t = function () { return window.i18n.t.apply(null, arguments); };
   var pick = function (p) { return window.i18n.pick(p); };
 
-  var STATUSES = ["standing", "lost", "threatened", "relocated"];
+  var STATUSES = ["standing", "cutback", "threatened", "lost", "relocated"];
   var WARDS = ["henveiru", "galolhu", "maafannu", "machchangolhi", "villimale", "hulhumale"];
-  var GONE = { lost: 1, relocated: 1 };
+  /* What the Lost panel covers. A tree stripped of its canopy belongs here:
+     leaving it out would hide the commonest way canopy actually goes. */
+  var GONE = { lost: 1, relocated: 1, cutback: 1 };
 
   var byId = {};
   SPECIES.forEach(function (s) { byId[s.id] = s; });
@@ -54,7 +56,8 @@
     standing:   '<circle cx="12" cy="12" r="7"/>',
     lost:       '<path d="M6 6l12 12M18 6 6 18"/>',
     threatened: '<path d="M12 4 21 20H3Z"/>',
-    relocated:  '<path d="M4 12h13"/><path d="m13 6 6 6-6 6"/>'
+    relocated:  '<path d="M4 12h13"/><path d="m13 6 6 6-6 6"/>',
+    cutback:    '<path d="M3 8h18"/><path d="M8 13a4 4 0 0 1 8 0v6H8Z"/>'
   };
   function glyph(status, size) {
     var s = size || 11;
@@ -123,11 +126,12 @@
   }
 
   function renderLedger() {
-    var c = { standing: 0, lost: 0, threatened: 0, relocated: 0 };
+    var c = { standing: 0, lost: 0, threatened: 0, relocated: 0, cutback: 0 };
     T.trees.forEach(function (x) { c[x.status] = (c[x.status] || 0) + 1; });
     var box = $("ledger");
     box.textContent = "";
     [["stat.standing", c.standing, ""],
+     ["stat.cutback", c.cutback, "is-loss"],
      ["stat.lost", c.lost + c.relocated, "is-loss"],
      ["stat.threatened", c.threatened, ""],
      ["stat.total", T.trees.length, ""]
@@ -200,7 +204,8 @@
 
   /* --- map ---------------------------------------------------------------- */
   var map = null, layer = null, markers = {};
-  var MARK = { standing: "--ink", lost: "--verm", threatened: "--verm", relocated: "--muted" };
+  var MARK = { standing: "--ink", lost: "--verm", threatened: "--verm",
+               relocated: "--muted", cutback: "--verm" };
 
   function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 

@@ -41,4 +41,6 @@ window.CONFIG = {
      Largest photo the form will accept, in megabytes. */
   maxPhotoMb: 8,
 
+  /* How many photographs one submission may carry. */
+  maxPhotos: 5
 };

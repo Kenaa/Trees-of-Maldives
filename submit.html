@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..112,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316171A' stroke-width='2'><circle cx='12' cy='9' r='6'/><path d='M12 15v7'/></svg>"><text y='26' font-size='26'>🌳</text></svg>">
 </head>
@@ -90,6 +91,10 @@
           <input type="radio" name="kind" value="lost">
           <span data-i18n="submit.kindLost">A tree that was cut down or removed</span>
         </label>
+        <label class="radio-card">
+          <input type="radio" name="kind" value="cutback">
+          <span data-i18n="submit.kindCutback">A tree that was cut back or heavily pruned</span>
+        </label>
       </div>
     </fieldset>
 
@@ -97,11 +102,17 @@
       <legend data-i18n="submit.photo">Photograph</legend>
       <div class="field">
         <label for="photo" data-i18n="submit.photo">Photograph</label>
-        <input class="input" type="file" id="photo" name="photo" accept="image/*" capture="environment"
+        <input class="input" type="file" id="photo" name="photo" accept="image/*" multiple
                aria-describedby="photo-hint photo-error">
         <span class="hint" id="photo-hint"></span>
         <p class="field-error" id="photo-error" hidden></p>
       </div>
+
+      <label class="check" style="margin-block-start:1rem;">
+        <input type="checkbox" id="people" name="people" aria-describedby="people-error">
+        <span data-i18n="submit.people"></span>
+      </label>
+      <p class="field-error" id="people-error" hidden></p>
     </fieldset>
 
     <fieldset class="group">
@@ -120,16 +131,35 @@
         <select class="select" id="ward" name="ward"></select>
       </div>
 
+      <div class="field" style="margin-block-end:1rem;">
+        <span class="label-text" id="pin-label" data-i18n="submit.pin">Put a pin where the tree is</span>
+        <span class="hint" id="pin-hint" data-i18n="submit.pinHint"></span>
+        <!-- The map is a convenience. Everything it does can also be done by
+             typing into the two number fields below, which is the path a
+             keyboard or screen-reader user takes. -->
+        <div id="picker" role="group" aria-labelledby="pin-label pin-hint"></div>
+        <p class="field-error" id="coords-error" hidden></p>
+      </div>
+
+      <div style="display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); margin-block-end:1rem;">
+        <div class="field">
+          <label for="lat" data-i18n="submit.lat">Latitude</label>
+          <input class="input mono" type="text" id="lat" name="lat" inputmode="decimal"
+                 autocomplete="off" placeholder="4.17570" aria-describedby="pin-hint">
+        </div>
+        <div class="field">
+          <label for="lng" data-i18n="submit.lng">Longitude</label>
+          <input class="input mono" type="text" id="lng" name="lng" inputmode="decimal"
+                 autocomplete="off" placeholder="73.50900" aria-describedby="pin-hint">
+        </div>
+      </div>
+
       <p><button type="button" class="btn" id="geo" data-i18n="submit.geo">Use my current location</button></p>
       <p class="hint" id="geo-status" role="status" aria-live="polite"></p>
-      <input type="hidden" id="lat" name="lat"><input type="hidden" id="lng" name="lng">
 
       <label class="check" style="margin-block-start:1rem;">
         <input type="checkbox" id="private" name="private">
-        <span>
-          <span data-i18n="submit.private">This tree is on private land</span><br>
-          <span class="hint" data-i18n="submit.privateHint"></span>
-        </span>
+        <span data-i18n="submit.private">This tree is on private land</span>
       </label>
     </fieldset>
 
@@ -140,11 +170,18 @@
         <select class="select" id="species" name="species" aria-describedby="species-hint"></select>
         <span class="hint" id="species-hint" data-i18n="submit.speciesHint"></span>
       </div>
+
+      <div class="field" style="margin-block-start:1rem;">
+        <label for="speciesOther" data-i18n="submit.speciesOther">Not in the list? What do people call it?</label>
+        <input class="input" type="text" id="speciesOther" name="speciesOther" autocomplete="off"
+               aria-describedby="speciesOther-hint">
+        <span class="hint" id="speciesOther-hint" data-i18n="submit.speciesOtherHint"></span>
+      </div>
     </fieldset>
 
     <!-- Only shown when the submitter is recording a loss. -->
-    <fieldset class="group" id="lost-group" hidden>
-      <legend data-i18n="submit.kindLost">A tree that was cut down</legend>
+    <fieldset class="group" id="event-group" hidden>
+      <legend id="event-legend" data-i18n="submit.kindLost">A tree that was cut down</legend>
       <div class="field" style="margin-block-end:1rem;">
         <label for="lostDate" data-i18n="submit.lostDate">When was it removed?</label>
         <input class="input" type="text" id="lostDate" name="lostDate" inputmode="numeric"
@@ -219,6 +256,7 @@
   </div>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="data/species.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/i18n.js"></script>

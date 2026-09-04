@@ -18,10 +18,13 @@ var SHEET_ID  = '15WS4SdPekAjyTJK-HVWDtYJSFPi3fs5TbqWBhABFQlg';  // "Tree submis
 var PHOTO_DIR = '1Esf-Lz2qIvaVZ0-Jj_kdABoFMVU0Fj5Z';             // "Submitted photos"
 
 var COLUMNS = [
-  'Ref', 'Received', 'Recording', 'Species', 'Where', 'Ward', 'Lat', 'Lng',
-  'Private land', 'Removed when', 'Removed why', 'Notes',
-  'Submitter', 'Email', 'Photo', 'Form language', 'Reviewed'
+  'Ref', 'Received', 'Recording', 'Species', 'Species as named', 'Where', 'Ward',
+  'Lat', 'Lng', 'Private land', 'Happened when', 'Happened why', 'Notes',
+  'Submitter', 'Email', 'People check', 'Photos', 'Form language', 'Reviewed'
 ];
+
+/* What the three radio buttons on the form become in the sheet. */
+var RECORDING = { standing: 'Standing', lost: 'Cut down', cutback: 'Cut back' };
 
 /* Anything in this list, in the Reviewed column, means "publish it". A tick
    box gives a real boolean, so that counts too. */
@@ -78,12 +81,14 @@ function approvedRecords() {
       lat: String(r['Lat'] || ''),
       lng: String(r['Lng'] || ''),
       privateLand: String(r['Private land'] || ''),
-      lostDate: String(r['Removed when'] || ''),
-      lostReason: String(r['Removed why'] || ''),
+      speciesOther: String(r['Species as named'] || ''),
+      lostDate: String(r['Happened when'] || ''),
+      lostReason: String(r['Happened why'] || ''),
       notes: String(r['Notes'] || ''),
       submitter: String(r['Submitter'] || ''),
       language: String(r['Form language'] || 'en'),
-      photoId: fileIdFrom(r['Photo'])
+      photoIds: String(r['Photos'] || '').split('\n')
+        .map(fileIdFrom).filter(function (x) { return x; })
     };
   });
 }
@@ -96,7 +101,7 @@ function approvedRecords() {
  * a public endpoint should be.
  */
 function approvedPhoto(id) {
-  var allowed = approvedRecords().some(function (r) { return r.photoId === id; });
+  var allowed = approvedRecords().some(function (r) { return r.photoIds.indexOf(id) !== -1; });
   if (!allowed) return { ok: false, error: 'not-an-approved-photo' };
   try {
     var f = DriveApp.getFileById(id);
@@ -130,8 +135,9 @@ function doPost(e) {
       'S-' + Utilities.formatDate(new Date(), 'Indian/Maldives', 'yyyyMMdd-HHmmss') +
         '-' + Utilities.getUuid().slice(0, 4),
       new Date(),
-      body.kind === 'lost' ? 'Cut down' : 'Standing',
+      RECORDING[body.kind] || 'Standing',
       body.species || '',
+      body.speciesOther || '',
       body.place || '',
       body.ward || '',
       body.lat || '',
@@ -142,7 +148,8 @@ function doPost(e) {
       body.notes || '',
       body.name || '',
       body.email || '',
-      savePhoto(body),
+      body.people ? 'confirmed' : '',
+      savePhotos(body),
       body.language || '',
       ''
     ]);
@@ -156,19 +163,22 @@ function doPost(e) {
 }
 
 /**
- * Writes the photograph to Drive and returns a link to it.
- * The form sends it as a data: URL so the whole record fits in one JSON body.
+ * Writes every photograph to Drive and returns the links, one per line.
+ * The form sends them as data: URLs so a whole record fits in one JSON body.
  */
-function savePhoto(body) {
-  if (!body.photo) return '';
-  var m = /^data:([^;]+);base64,(.*)$/.exec(body.photo);
-  if (!m) return '';
-
-  var name = (body.photoName || 'photo').replace(/[^\w.\- ]/g, '_');
+function savePhotos(body) {
+  var list = body.photos || (body.photo ? [{ dataUrl: body.photo, name: body.photoName }] : []);
+  var folder = DriveApp.getFolderById(PHOTO_DIR);
   var stamp = Utilities.formatDate(new Date(), 'Indian/Maldives', 'yyyy-MM-dd HHmm');
-  var blob = Utilities.newBlob(Utilities.base64Decode(m[2]), m[1], stamp + ' ' + name);
-
-  return DriveApp.getFolderById(PHOTO_DIR).createFile(blob).getUrl();
+  var urls = [];
+  for (var i = 0; i < list.length; i++) {
+    var m = /^data:([^;]+);base64,(.*)$/.exec(list[i].dataUrl || '');
+    if (!m) continue;
+    var name = (list[i].name || ('photo-' + (i + 1))).replace(/[^\w.\- ]/g, '_');
+    var blob = Utilities.newBlob(Utilities.base64Decode(m[2]), m[1], stamp + ' ' + name);
+    urls.push(folder.createFile(blob).getUrl());
+  }
+  return urls.join('\n');
 }
 
 function json(obj) {
@@ -184,7 +194,7 @@ function json(obj) {
  */
 function testFromEditor() {
   var out = doPost({ postData: { contents: JSON.stringify({
-    consent: true, kind: 'standing', species: 'cocos-nucifera',
+    consent: true, people: 'yes', kind: 'standing', species: 'cocos-nucifera',
     place: 'Test row from the script editor', ward: 'henveiru',
     notes: 'Delete this row.', language: 'en'
   }) } });

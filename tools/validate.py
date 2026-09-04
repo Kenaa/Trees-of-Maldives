@@ -11,9 +11,10 @@ import json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATUSES = {"standing", "lost", "threatened", "relocated"}
+STATUSES = {"standing", "lost", "threatened", "relocated", "cutback"}
 WARDS    = {"henveiru", "galolhu", "maafannu", "machchangolhi", "villimale", "hulhumale"}
-REASONS  = {"road-widening", "construction", "storm", "disease", "safety", "relocated", "unknown"}
+REASONS  = {"road-widening", "construction", "storm", "disease", "safety",
+            "maintenance", "powerlines", "relocated", "unknown"}
 # Malé, Villimalé and Hulhumalé all sit inside this box.
 BOUNDS   = (4.10, 4.30, 73.40, 73.60)
 
@@ -84,7 +85,7 @@ def check_trees(data, species_ids):
 
         # A lost or relocated tree needs its lost block; a living one must not have one.
         lost = t.get("lost")
-        if t.get("status") in ("lost", "relocated"):
+        if t.get("status") in ("lost", "relocated", "cutback"):
             if not isinstance(lost, dict):
                 err("%s: status is %r but there is no `lost` block" % (where, t["status"]))
             else:

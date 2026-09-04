@@ -1,5 +1,5 @@
-name: "🪵 A tree that was cut down"
-description: "Record a tree that has been removed | ކަނޑާލާފައިވާ ގަހެއް"
+name: "🪵 A tree that was cut down or cut back"
+description: "Record a tree removed, or one whose canopy was taken | ކަނޑާލާފައިވާ ގަހެއް"
 title: "[Lost] "
 labels: ["tree record", "lost", "unverified"]
 body:
@@ -49,6 +49,16 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: what
+    attributes:
+      label: "What happened? | ވީ ކިހިނެއް؟"
+      options:
+        - "It was cut down or removed | ކަނޑާލާފައި"
+        - "It is still alive, but most of the canopy was taken | ކޮށާލާފައި"
+    validations:
+      required: true
+
   - type: input
     id: when
     attributes:
@@ -71,6 +81,8 @@ body:
         - "Storm damage | ވިއްސާރައިގެ ގެއްލުން"
         - "Disease or decay | ބައްޔެއް ނުވަތަ ފީވުން"
         - "Safety works | ރައްކާތެރިކަމުގެ މަސައްކަތް"
+        - "Power lines | ކަރަންޓު ވައުތައް"
+        - "Routine maintenance | އާދައިގެ މަރާމާތު"
         - "Moved elsewhere, not felled | އެހެން ތަނަކަށް ބަދަލުކުރުން"
         - "Not known | ނޭނގޭ"
       default: 6

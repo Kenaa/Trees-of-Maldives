@@ -63,7 +63,8 @@ def clean(row, species_ids, problems):
         problems.append("%s: species %r is unknown, filed as unidentified" % (ref, species))
         species = "unknown"
 
-    status = "lost" if row.get("recording", "").strip().lower().startswith("cut") else "standing"
+    rec_kind = row.get("recording", "").strip().lower()
+    status = {"cut down": "lost", "cut back": "cutback"}.get(rec_kind, "standing")
     lang = "dv" if row.get("language") == "dv" else "en"
 
     # Coordinates are optional on the form. A record without them still belongs
@@ -89,9 +90,13 @@ def clean(row, species_ids, problems):
     }
     if row.get("submitter", "").strip():
         rec["credit"] = row["submitter"].strip()
+    # What the submitter calls it, kept verbatim. Useful when the list has no
+    # entry for the tree, and the thing a Dhivehi speaker can act on later.
+    if row.get("speciesOther", "").strip():
+        rec["speciesAsNamed"] = row["speciesOther"].strip()
     if row.get("privateLand", "").strip().lower() == "yes":
         rec["privateLand"] = True
-    if status == "lost":
+    if status in ("lost", "cutback"):
         reason = row.get("lostReason", "").strip()
         rec["lost"] = {
             "date": row.get("lostDate", "").strip(),
@@ -101,7 +106,7 @@ def clean(row, species_ids, problems):
     return rec
 
 
-def save_photo(exec_url, photo_id, record_id, problems):
+def save_photo(exec_url, photo_id, record_id, suffix, problems):
     try:
         out = get_json(exec_url + "?photo=" + photo_id)
     except Exception as e:
@@ -111,7 +116,7 @@ def save_photo(exec_url, photo_id, record_id, problems):
         problems.append("%s: photograph refused (%s)" % (record_id, out.get("error")))
         return None
     ext = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}.get(out.get("mimeType"), "jpg")
-    rel = "photos/%s.%s" % (record_id, ext)
+    rel = "photos/%s%s.%s" % (record_id, suffix, ext)
     with open(os.path.join(ROOT, rel), "wb") as f:
         f.write(base64.b64decode(out["base64"]))
     return rel
@@ -151,18 +156,21 @@ def main():
         if not rec:
             continue
         rec["id"] = next_id(data["trees"])
-        if row.get("photoId"):
-            rel = save_photo(url, row["photoId"], rec["id"], problems)
-            if rel:
-                rec["photos"] = [{
-                    "src": rel,
-                    "alt": {"en": "Photograph of the tree recorded at %s." % rec["place"].get("en", rec["id"])},
-                    "credit": rec.get("credit", ""),
-                    "date": rec["recorded"],
-                    # Nobody has looked at this image yet, so the alt text says
-                    # only what provenance guarantees. It needs a human.
-                    "altReview": True,
-                }]
+        ids = row.get("photoIds") or ([row["photoId"]] if row.get("photoId") else [])
+        for n, pid in enumerate(ids, start=1):
+            suffix = "" if len(ids) == 1 else "-%d" % n
+            rel = save_photo(url, pid, rec["id"], suffix, problems)
+            if not rel:
+                continue
+            rec["photos"].append({
+                "src": rel,
+                "alt": {"en": "Photograph of the tree recorded at %s." % rec["place"].get("en", rec["id"])},
+                "credit": rec.get("credit", ""),
+                "date": rec["recorded"],
+                # Nobody has looked at this image yet, so the alt text says only
+                # what provenance guarantees. It needs a human.
+                "altReview": True,
+            })
         data["trees"].append(rec)
         added += 1
         print("    + %s  %s" % (rec["id"], rec["place"].get("en") or rec["place"].get("dv")))

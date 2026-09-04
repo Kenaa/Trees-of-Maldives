@@ -321,9 +321,11 @@ tr.is-lost:hover .rec-id::after, tr.is-lost.is-active .rec-id::after { transform
 .stamp-threatened { color: var(--verm); }
 .stamp-lost       { color: var(--verm); border-width: 2px; }
 .stamp-relocated  { color: var(--muted); }
+.stamp-cutback    { color: var(--verm); }
 /* Hovering a record inverts its stamp: the ink-on-paper gesture, reversed. */
 tr:hover .stamp-standing,   tr.is-active .stamp-standing   { background: var(--ink);  color: var(--paper); }
 tr:hover .stamp-threatened, tr.is-active .stamp-threatened,
+tr:hover .stamp-cutback,    tr.is-active .stamp-cutback,
 tr:hover .stamp-lost,       tr.is-active .stamp-lost       { background: var(--verm); color: var(--on-verm); }
 tr:hover .stamp-relocated,  tr.is-active .stamp-relocated  { background: var(--muted); color: var(--paper); }
 
@@ -346,6 +348,17 @@ tr:hover .stamp-relocated,  tr.is-active .stamp-relocated  { background: var(--m
 /* Cross-highlight: the marker answers when its row is pointed at. */
 .marker.is-active { transform: scale(1.5); z-index: 1000 !important; }
 .map-note { font-size: .82rem; color: var(--muted); padding-block: .7rem; }
+
+/* The location picker on the submission form. */
+#picker {
+  block-size: clamp(240px, 38vh, 380px);
+  border: 2px solid var(--edge);
+  background: var(--sheet);
+  z-index: 1;
+  margin-block-start: .35rem;
+}
+#picker:focus-within { border-color: var(--focus); }
+#picker .leaflet-marker-icon { cursor: grab; }
 
 /* ---------- the lost panel (memorial) ----------------------------------- */
 .losses { list-style: none; margin: 0; padding: 0; }
