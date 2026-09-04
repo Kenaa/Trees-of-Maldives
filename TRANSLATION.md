@@ -40,68 +40,91 @@ the English; a faithful rewrite that reads naturally is better than a literal on
 
 ## 3. Species names: `data/species.js`
 
-Source: FAO, *Trees and shrubs of the Maldives* (Selvam, 2007, RAP Publication
-2007/12). The text supplied covers pp. 3-81: 33 species accounts running from
-*Adenanthera pavonina* to *Desmodium umbellatum*. Eight of our species fall in
-that range. `dvLatin` holds the book's romanisation verbatim; `dv` holds Thaana.
+Source: FAO, *Trees and Shrubs of the Maldives* (Selvam, 2007, RAP Publication
+2007/12). Every species in the register now carries a name from it. They were
+resolved by matching page numbers between the book's two indexes, the index of
+scientific and common names and the index of Dhivehi names, so each one is
+checkable against a specific page.
+
+Each species carries four fields:
+
+| field | meaning |
+|---|---|
+| `dv` | the name in Thaana, which is what the site displays |
+| `dvLatin` | the book's romanisation, copied verbatim |
+| `dvPage` | the page in the book, so the name can be checked |
+| `dvReview` | true where the Thaana is my transliteration, not a checked spelling |
+
+### Please check these first (15)
+
+The romanisation is the book's and is reliable. The Thaana beside it is my
+transliteration of that romanisation, which is the step most likely to be wrong.
+
+| page | species | book spelling | Thaana |
+|---|---|---|---|
+| 17 | `adenanthera-pavonina` | Madhoshi | މަދޮށި |
+| 21 | `allophylus-cobbe` | Dhon'moosa | ދޮންމޫސާ |
+| 41 | `barringtonia-asiatica` | Kin'bi | ކިންބި |
+| 101 | `guettarda-speciosa` | Uni | އުނި |
+| 103 | `hernandia-nymphaeifolia` | Kandhu | ކަންދު |
+| 105 | `hibiscus-tiliaceus` | Dhigga | ދިގގަ |
+| 117 | `morinda-citrifolia` | Ahi | އަހި |
+| 125 | `ochrosia-oppositifolia` | Dhun'buri | ދުންބުރި |
+| 133 | `pisonia-grandis` | Lhos | ޅޮސް |
+| 137 | `plumeria-obtusa` | Bodu gulchampa | ބޮޑު ގުލްޗަމްޕާ |
+| 139 | `premna-serratifolia` | Dhakan'dhaa | ދަކަންދާ |
+| 153 | `suriana-maritima` | Halaveli | ހަލަވެލި |
+| 169 | `tournefortia-argentea` | Boshi | ބޮށި |
+| 219 | `pandanus-tectorius` | Boa kashikeyo | ކަށިކެޔޮ |
+| 225 | `casuarina-equisetifolia` | Fithuroanu | ފިތުރޯނު |
+
+Set `"dvReview": false` on each once you have confirmed the spelling.
+
+### Settled (12)
+
+Book spelling and Thaana agree, and these are everyday words. Nothing to do.
+
+| page | species | book spelling | Thaana |
+|---|---|---|---|
+| 19 | `samanea-saman` | Bodu gas | ބޮޑު ގަސް |
+| 31 | `artocarpus-altilis` | Ban'bukeyo | ބަނބުކެޔޮ |
+| 39 | `azadirachta-indica` | Hithi gas | ހިތި ގަސް |
+| 49 | `calophyllum-inophyllum` | Funa | ފުނަ |
+| 77 | `cordia-subcordata` | Kaani | ކާނި |
+| 91 | `ficus-benghalensis` | Nika | ނިކަ |
+| 111 | `mangifera-indica` | An'bu | އަނބު |
+| 149 | `scaevola-taccada` | Magoo | މަގޫ |
+| 165 | `terminalia-catappa` | Midhili gas | މިދިލި |
+| 167 | `thespesia-populnea` | Hirun'dhu | ހިރުނދު |
+| 197 | `pemphis-acidula` | Kuredhi | ކުރެދި |
+| 211 | `cocos-nucifera` | Dhivehi ruh | ރުއް |
+
+### Where the book gives more than one name
+
+- `samanea-saman` (p. 19): Book files it under the synonym Albizia saman.
+- `barringtonia-asiatica` (p. 41): Also indexed as Kim'bi.
+- `cordia-subcordata` (p. 77): Also indexed as Kauni.
+- `ficus-benghalensis` (p. 91): Also indexed as Kiri gas.
+- `hernandia-nymphaeifolia` (p. 103): Also indexed as Mas kandhu.
+- `hibiscus-tiliaceus` (p. 105): Book spells it Dhigga; I had recorded Dhiggaa.
+- `plumeria-obtusa` (p. 137): Page 137 covers several Plumeria; it also lists Raiy gulchampa for the red one.
+- `pemphis-acidula` (p. 197): Also indexed as Keredhi.
+- `cocos-nucifera` (p. 211): Book's full entry name is Dhivehi ruh.
+- `pandanus-tectorius` (p. 219): Book's entry name is Boa kashikeyo; kashikeyo alone is the everyday word.
+
+### Species with no Dhivehi name
+
+None. Only the `unknown` placeholder has no book entry, which is correct.
 
 
-### Settled against the book (5)
-
-Romanisation from the book, Thaana confirmed to match it. Nothing to do here.
-
-- `calophyllum-inophyllum`: ފުނަ (Funa).
-- `artocarpus-altilis`: ބަނބުކެޔޮ (Ban'bukeyo).
-- `azadirachta-indica`: ހިތި ގަސް (Hithi gas).
-- `samanea-saman`: ބޮޑު ގަސް (Bodu gas). Book files it under the synonym Albizia saman.
-- `cordia-subcordata`: ކާނި (Kaani).
-
-### Romanisation is sourced, Thaana is mine (3) — please check these first
-
-The book gives the name only in Latin script. I transliterated it into Thaana,
-which is the step most likely to be wrong. The romanisation in brackets is
-authoritative; the Thaana beside it is not.
-
-- `allophylus-cobbe`: ދޮންމޫސާ — book says **Dhon'moosa**.
-- `adenanthera-pavonina`: މަދޮށި — book says **Madhoshi**.
-- `barringtonia-asiatica`: ކިންބި — book says **Kin'bi**. Also recorded as Kim'bi.
-
-### Not in the supplied pages, still unverified (5)
-
-- `scaevola-taccada`: given as މަގޫ
-- `hibiscus-tiliaceus`: given as ދިގގާ
-- `plumeria-obtusa`: given as ގުލްޗަނބޭލީ
-- `pemphis-acidula`: given as ކުރެދި
-- `unknown`: given as ދެނެގަނެވިފައި ނުވޭ
-
-### Not in the supplied pages, believed right (6)
-
-Common names I am reasonably confident of, but none has been checked:
-
-- ނިކަ، ރުއް، މިދިލި، އަނބު، ހިރުނދު، ކަށިކެޔޮ
-
-### Still with no Dhivehi name at all (9)
-
-- `suriana-maritima`: Bay cedar (*Suriana maritima*)
-- `guettarda-speciosa`: Beach gardenia (*Guettarda speciosa*)
-- `casuarina-equisetifolia`: Casuarina (*Casuarina equisetifolia*)
-- `premna-serratifolia`: Headache tree (*Premna serratifolia*)
-- `hernandia-nymphaeifolia`: Lantern tree (*Hernandia nymphaeifolia*)
-- `pisonia-grandis`: Lettuce tree (*Pisonia grandis*)
-- `morinda-citrifolia`: Noni (*Morinda citrifolia*)
-- `ochrosia-oppositifolia`: Ochrosia (*Ochrosia oppositifolia*)
-- `tournefortia-argentea`: Tree heliotrope (*Tournefortia argentea*)
-
-The **Index of Dhivehi names on p. 238** would close all of these at once. It is
-not in the pages supplied so far. Add the name to `dv`, put the book's spelling in
-`dvLatin`, set `"dvSource": "FAO"`, then run:
+After changing any species name, run:
 
 ```bash
 python3 tools/build-forms.py && python3 tools/validate.py
 ```
 
-The first regenerates the GitHub issue-form menus from the data; the second checks
-they match. Never hand-edit the species list inside the `.yml` forms.
+The first regenerates the GitHub issue-form menus from the data; the second
+checks they match. Never hand-edit the species list inside the `.yml` forms.
 
 Place names live in each record's `place.dv` in `data/trees.js`.
 

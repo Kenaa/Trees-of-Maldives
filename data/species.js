@@ -4,9 +4,9 @@
 window.SPECIES_DATA =
 {
  "meta": {
-  "note": "Dhivehi names marked dvSource:FAO come from FAO, Trees and Shrubs of the Maldives. dvLatin is that book's romanisation, verbatim. Where dvReview is true the Thaana is a transliteration of the romanisation and still needs a native-speaker check. See TRANSLATION.md.",
+  "note": "Dhivehi names come from FAO, Trees and Shrubs of the Maldives. dvLatin is that book's romanisation verbatim and dvPage is the page its two indexes agree on, so every name here is checkable. Where dvReview is true the Thaana is a transliteration of the romanisation and still wants a native speaker's eye.",
   "reviewed": false,
-  "source": "FAO, Trees and Shrubs of the Maldives (species A-D verified against the text)"
+  "source": "FAO, Trees and Shrubs of the Maldives (Selvam 2007). Names resolved via the index of scientific and common names and the index of Dhivehi names."
  },
  "species": [
   {
@@ -17,7 +17,8 @@ window.SPECIES_DATA =
    "native": true,
    "dvReview": false,
    "dvLatin": "Funa",
-   "dvSource": "FAO"
+   "dvSource": "FAO",
+   "dvPage": 49
   },
   {
    "id": "allophylus-cobbe",
@@ -29,7 +30,8 @@ window.SPECIES_DATA =
    "enReview": true,
    "source": "FAO 2007",
    "dvLatin": "Dhon'moosa",
-   "dvSource": "FAO"
+   "dvSource": "FAO",
+   "dvPage": 21
   },
   {
    "id": "ficus-benghalensis",
@@ -37,16 +39,23 @@ window.SPECIES_DATA =
    "en": "Banyan",
    "dv": "ނިކަ",
    "native": true,
-   "dvReview": false
+   "dvReview": false,
+   "dvLatin": "Nika",
+   "dvPage": 91,
+   "dvSource": "FAO",
+   "dvNote": "Also indexed as Kiri gas."
   },
   {
    "id": "suriana-maritima",
    "sci": "Suriana maritima",
    "en": "Bay cedar",
-   "dv": "",
+   "dv": "ހަލަވެލި",
    "native": true,
    "dvReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Halaveli",
+   "dvPage": 153,
+   "dvSource": "FAO"
   },
   {
    "id": "scaevola-taccada",
@@ -54,24 +63,34 @@ window.SPECIES_DATA =
    "en": "Beach cabbage",
    "dv": "މަގޫ",
    "native": true,
-   "dvReview": true
+   "dvReview": false,
+   "dvLatin": "Magoo",
+   "dvPage": 149,
+   "dvSource": "FAO"
   },
   {
    "id": "guettarda-speciosa",
    "sci": "Guettarda speciosa",
    "en": "Beach gardenia",
-   "dv": "",
+   "dv": "އުނި",
    "native": true,
    "dvReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Uni",
+   "dvPage": 101,
+   "dvSource": "FAO"
   },
   {
    "id": "hibiscus-tiliaceus",
    "sci": "Hibiscus tiliaceus",
    "en": "Beach hibiscus",
-   "dv": "ދިގގާ",
+   "dv": "ދިގގަ",
    "native": true,
-   "dvReview": true
+   "dvReview": true,
+   "dvLatin": "Dhigga",
+   "dvPage": 105,
+   "dvSource": "FAO",
+   "dvNote": "Book spells it Dhigga; I had recorded Dhiggaa."
   },
   {
    "id": "artocarpus-altilis",
@@ -81,16 +100,20 @@ window.SPECIES_DATA =
    "native": false,
    "dvReview": false,
    "dvLatin": "Ban'bukeyo",
-   "dvSource": "FAO"
+   "dvSource": "FAO",
+   "dvPage": 31
   },
   {
    "id": "casuarina-equisetifolia",
    "sci": "Casuarina equisetifolia",
    "en": "Casuarina",
-   "dv": "",
+   "dv": "ފިތުރޯނު",
    "native": null,
    "dvReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Fithuroanu",
+   "dvPage": 225,
+   "dvSource": "FAO"
   },
   {
    "id": "cocos-nucifera",
@@ -98,24 +121,35 @@ window.SPECIES_DATA =
    "en": "Coconut palm",
    "dv": "ރުއް",
    "native": true,
-   "dvReview": false
+   "dvReview": false,
+   "dvLatin": "Dhivehi ruh",
+   "dvPage": 211,
+   "dvSource": "FAO",
+   "dvNote": "Book's full entry name is Dhivehi ruh."
   },
   {
    "id": "plumeria-obtusa",
    "sci": "Plumeria obtusa",
    "en": "Frangipani",
-   "dv": "ގުލްޗަނބޭލީ",
+   "dv": "ބޮޑު ގުލްޗަމްޕާ",
    "native": false,
-   "dvReview": true
+   "dvReview": true,
+   "dvLatin": "Bodu gulchampa",
+   "dvPage": 137,
+   "dvSource": "FAO",
+   "dvNote": "Page 137 covers several Plumeria; it also lists Raiy gulchampa for the red one."
   },
   {
    "id": "premna-serratifolia",
    "sci": "Premna serratifolia",
    "en": "Headache tree",
-   "dv": "",
+   "dv": "ދަކަންދާ",
    "native": true,
    "dvReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Dhakan'dhaa",
+   "dvPage": 139,
+   "dvSource": "FAO"
   },
   {
    "id": "terminalia-catappa",
@@ -123,7 +157,10 @@ window.SPECIES_DATA =
    "en": "Indian almond",
    "dv": "މިދިލި",
    "native": true,
-   "dvReview": false
+   "dvReview": false,
+   "dvLatin": "Midhili gas",
+   "dvPage": 165,
+   "dvSource": "FAO"
   },
   {
    "id": "pemphis-acidula",
@@ -131,25 +168,36 @@ window.SPECIES_DATA =
    "en": "Ironwood",
    "dv": "ކުރެދި",
    "native": true,
-   "dvReview": true
+   "dvReview": false,
+   "dvLatin": "Kuredhi",
+   "dvPage": 197,
+   "dvSource": "FAO",
+   "dvNote": "Also indexed as Keredhi."
   },
   {
    "id": "hernandia-nymphaeifolia",
    "sci": "Hernandia nymphaeifolia",
    "en": "Lantern tree",
-   "dv": "",
+   "dv": "ކަންދު",
    "native": true,
    "dvReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Kandhu",
+   "dvPage": 103,
+   "dvSource": "FAO",
+   "dvNote": "Also indexed as Mas kandhu."
   },
   {
    "id": "pisonia-grandis",
    "sci": "Pisonia grandis",
    "en": "Lettuce tree",
-   "dv": "",
+   "dv": "ޅޮސް",
    "native": true,
    "dvReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Lhos",
+   "dvPage": 133,
+   "dvSource": "FAO"
   },
   {
    "id": "mangifera-indica",
@@ -157,7 +205,10 @@ window.SPECIES_DATA =
    "en": "Mango",
    "dv": "އަނބު",
    "native": false,
-   "dvReview": false
+   "dvReview": false,
+   "dvLatin": "An'bu",
+   "dvPage": 111,
+   "dvSource": "FAO"
   },
   {
    "id": "azadirachta-indica",
@@ -167,26 +218,33 @@ window.SPECIES_DATA =
    "native": false,
    "dvReview": false,
    "dvLatin": "Hithi gas",
-   "dvSource": "FAO"
+   "dvSource": "FAO",
+   "dvPage": 39
   },
   {
    "id": "morinda-citrifolia",
    "sci": "Morinda citrifolia",
    "en": "Noni",
-   "dv": "",
+   "dv": "އަހި",
    "native": true,
    "dvReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Ahi",
+   "dvPage": 117,
+   "dvSource": "FAO"
   },
   {
    "id": "ochrosia-oppositifolia",
    "sci": "Ochrosia oppositifolia",
    "en": "Ochrosia",
-   "dv": "",
+   "dv": "ދުންބުރި",
    "native": true,
    "dvReview": true,
    "enReview": true,
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Dhun'buri",
+   "dvPage": 125,
+   "dvSource": "FAO"
   },
   {
    "id": "thespesia-populnea",
@@ -194,7 +252,10 @@ window.SPECIES_DATA =
    "en": "Portia tree",
    "dv": "ހިރުނދު",
    "native": true,
-   "dvReview": false
+   "dvReview": false,
+   "dvLatin": "Hirun'dhu",
+   "dvPage": 167,
+   "dvSource": "FAO"
   },
   {
    "id": "samanea-saman",
@@ -205,7 +266,8 @@ window.SPECIES_DATA =
    "dvReview": false,
    "dvLatin": "Bodu gas",
    "dvSource": "FAO",
-   "dvNote": "Book files it under the synonym Albizia saman."
+   "dvNote": "Book files it under the synonym Albizia saman.",
+   "dvPage": 19
   },
   {
    "id": "adenanthera-pavonina",
@@ -216,7 +278,8 @@ window.SPECIES_DATA =
    "dvReview": true,
    "source": "FAO 2007",
    "dvLatin": "Madhoshi",
-   "dvSource": "FAO"
+   "dvSource": "FAO",
+   "dvPage": 17
   },
   {
    "id": "pandanus-tectorius",
@@ -224,8 +287,12 @@ window.SPECIES_DATA =
    "en": "Screwpine",
    "dv": "ކަށިކެޔޮ",
    "native": true,
-   "dvReview": false,
-   "syn": "Pandanus odoratissimus"
+   "dvReview": true,
+   "syn": "Pandanus odoratissimus",
+   "dvLatin": "Boa kashikeyo",
+   "dvPage": 219,
+   "dvSource": "FAO",
+   "dvNote": "Book's entry name is Boa kashikeyo; kashikeyo alone is the everyday word."
   },
   {
    "id": "barringtonia-asiatica",
@@ -237,7 +304,8 @@ window.SPECIES_DATA =
    "source": "FAO 2007",
    "dvLatin": "Kin'bi",
    "dvSource": "FAO",
-   "dvNote": "Also recorded as Kim'bi."
+   "dvNote": "Also indexed as Kim'bi.",
+   "dvPage": 41
   },
   {
    "id": "cordia-subcordata",
@@ -247,17 +315,22 @@ window.SPECIES_DATA =
    "native": true,
    "dvReview": false,
    "dvLatin": "Kaani",
-   "dvSource": "FAO"
+   "dvSource": "FAO",
+   "dvPage": 77,
+   "dvNote": "Also indexed as Kauni."
   },
   {
    "id": "tournefortia-argentea",
    "sci": "Tournefortia argentea",
    "en": "Tree heliotrope",
-   "dv": "",
+   "dv": "ބޮށި",
    "native": true,
    "dvReview": true,
    "syn": "Heliotropium foertherianum",
-   "source": "FAO 2007"
+   "source": "FAO 2007",
+   "dvLatin": "Boshi",
+   "dvPage": 169,
+   "dvSource": "FAO"
   },
   {
    "id": "unknown",
