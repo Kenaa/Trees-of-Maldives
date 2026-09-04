@@ -92,9 +92,15 @@ To take something down again, delete its row from `data/trees.js`. Clearing the
 One row per record, with the photograph saved to Drive and linked from the
 `Photo` column:
 
-`Ref · Received · Recording · Species · Where · Ward · Lat · Lng · Private land ·
-Removed when · Removed why · Notes · Submitter · Email · Photo · Form language ·
-Reviewed`
+`Ref · Received · Recording · Species · Species as named · Where · Ward ·
+Lat · Lng · Private land · Happened when · Happened why · Notes · Submitter ·
+Email · People check · Photos · Form language · Reviewed`
+
+`Recording` is one of Standing, Cut down or Cut back. `Photos` holds one Drive
+link per line, since a submission may carry up to five. `Species as named` is
+whatever the submitter called the tree when the list had no entry for it, kept
+verbatim. `People check` records that they confirmed nobody is identifiable in
+the photographs.
 
 `Ref` is how the ingest knows which rows it has already taken. Leave it alone.
 
