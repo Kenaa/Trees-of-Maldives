@@ -22,7 +22,7 @@ window.CONFIG = {
 
      Leave it as "" and the form still works. It hands the submitter a tidy
      summary to copy and a pre-filled email to you, so nothing is lost. */
-  submitEndpoint: "",
+  submitEndpoint: "https://script.google.com/macros/s/AKfycbx6XVchRMDOxhK7fUWsP5NVmpkgM3Cem-N9Du7RU5bQEtXNXZebEmP_yPrOPJffZ8EY6Q/exec",
 
   /* 2. FALLBACK INBOX -------------------------------------------------------
      Used for the "send by email" fallback above. Put a real address here. */
