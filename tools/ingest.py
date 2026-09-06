@@ -115,7 +115,9 @@ def clean(row, species_ids, problems):
         problems.append("%s: coordinates were not numbers, dropped" % ref)
 
     rec = {
-        "id": None, "status": status, "verified": False, "species": species,
+        # Verification comes from the Reviewed column saying so in words.
+        # Publishing and vouching are different acts.
+        "id": None, "status": status, "verified": bool(row.get("verified")), "species": species,
         # Deliberately no "name". A submitter tells us where a tree is, not what
         # it is called, and copying the street into both fields made records
         # that printed the same line twice. The register falls back to the
@@ -180,6 +182,40 @@ def to_jpeg(raw, record_id, problems):
         return raw, "heic"
 
 
+# What the sheet is the authority on. Everything else in a record was added by
+# a person working in the repository, and an update must not throw that away.
+FROM_SHEET = ("status", "verified", "species", "speciesAsNamed", "ward", "place",
+              "lat", "lng", "notes", "credit", "lost", "recorded")
+
+
+def merge(old, new):
+    """Update a published record from its sheet row, in place.
+
+    Only the fields the sheet actually knows about are replaced. A name someone
+    gave the tree, a girth somebody measured, sources, translations: all of that
+    was added in the repository and the sheet has no opinion on it, so it stays.
+
+    Photographs are replaced, but alt text a person has written is carried over
+    by filename, because that is the one part of a photograph record that takes
+    a human eye and it would be tedious to lose on every correction.
+    """
+    written = {}
+    for p in old.get("photos") or []:
+        if p.get("src") and not p.get("altReview"):
+            written[p["src"]] = p.get("alt")
+    for p in new.get("photos") or []:
+        if p.get("src") in written:
+            p["alt"] = written[p["src"]]
+            p.pop("altReview", None)
+
+    for key in FROM_SHEET:
+        if key in new:
+            old[key] = new[key]
+        else:
+            old.pop(key, None)
+    old["photos"] = new.get("photos") or []
+
+
 def save_photo(exec_url, photo_id, record_id, suffix, problems):
     try:
         out = get_json(exec_url + "?photo=" + photo_id)
@@ -231,17 +267,21 @@ def main():
         return 1
 
     approved = feed.get("records", [])
-    have = {t.get("ref") for t in data["trees"] if t.get("ref")}
-    fresh = [r for r in approved if r.get("ref") and r["ref"] not in have]
-    print("  approved in the sheet: %d, already in the register: %d, to add: %d"
-          % (len(approved), len(approved) - len(fresh), len(fresh)))
+    existing = {t["ref"]: t for t in data["trees"] if t.get("ref")}
+    fresh = [r for r in approved if r.get("ref") and r["ref"] not in existing]
+    redo = [r for r in approved if r.get("ref") in existing and r.get("update")]
+    print("  approved in the sheet: %d, new: %d, marked for update: %d"
+          % (len(approved), len(fresh), len(redo)))
 
-    problems, added = [], 0
-    for row in fresh:
+    problems, added, updated = [], 0, 0
+
+    for row in fresh + redo:
         rec = clean(row, species_ids, problems)
         if not rec:
             continue
-        rec["id"] = next_id(data["trees"])
+        old = existing.get(row["ref"])
+        rec["id"] = old["id"] if old else next_id(data["trees"])
+
         ids = row.get("photoIds") or ([row["photoId"]] if row.get("photoId") else [])
         for n, pid in enumerate(ids, start=1):
             suffix = "" if len(ids) == 1 else "-%d" % n
@@ -257,10 +297,18 @@ def main():
                 # what provenance guarantees. It needs a human.
                 "altReview": True,
             })
-        data["trees"].append(rec)
-        added += 1
-        print("    + %s  %s" % (rec["id"], rec["place"].get("en") or rec["place"].get("dv")))
 
+        if old:
+            merge(old, rec)
+            updated += 1
+            print("    ~ %s  %s" % (old["id"], old["place"].get("en") or old["place"].get("dv")))
+        else:
+            data["trees"].append(rec)
+            added += 1
+            print("    + %s  %s" % (rec["id"], rec["place"].get("en") or rec["place"].get("dv")))
+
+    if updated:
+        print("  updated %d record(s) from the sheet" % updated)
     for p in problems:
         print("  skipped: %s" % p)
 

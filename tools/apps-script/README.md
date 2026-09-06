@@ -104,8 +104,39 @@ the photographs.
 
 `Ref` is how the ingest knows which rows it has already taken. Leave it alone.
 
-`Reviewed` is left empty on purpose. It is yours to mark as you work through
-submissions and copy the good ones into `data/trees.js`.
+## The two columns you drive it with
+
+**Reviewed** decides whether a record is published, and how it is described.
+
+| You type | What happens |
+|---|---|
+| *(blank)* | Nothing. The record stays in the sheet. |
+| `yes` | Published, and labelled **unverified** on the site. |
+| `verified` | Published, and labelled **verified**. |
+
+Approving and verifying are different acts. `yes` says the record is fit to
+publish. `verified` says you have seen the tree yourself, or you hold a dated
+photograph or a named source for what happened to it. A stranger's record can
+be worth publishing while still unconfirmed, and the register says which it is
+rather than quietly implying somebody went and looked. A tick box counts as
+`yes`; verifying takes the word, because it is a claim about what you know.
+
+**Update** is how a correction reaches a record already on the site.
+
+Edit that row in the sheet, put `yes` in Update, and the next run re-imports
+it over the published record. It keeps its record number. Leave the column
+blank and the row is never touched again, which is what stops each run
+overwriting work done since.
+
+An update replaces only what the sheet knows: status, species, place, ward,
+coordinates, notes, credit, what happened and when, and the photographs.
+Anything added in the repository is left alone, so a name you gave the tree, a
+girth someone measured, sources, and Dhivehi translations all survive. Alt text
+that a person wrote is carried across by filename too, since describing a
+photograph takes an eye and it would be tedious to lose on every correction.
+
+A row with Update ticked but Reviewed blank is ignored: nothing reaches the
+register without being approved first.
 
 ## What the form does before sending
 

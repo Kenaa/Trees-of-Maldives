@@ -20,15 +20,30 @@ var PHOTO_DIR = '1Esf-Lz2qIvaVZ0-Jj_kdABoFMVU0Fj5Z';             // "Submitted p
 var COLUMNS = [
   'Ref', 'Received', 'Recording', 'Species', 'Species as named', 'Where', 'Ward',
   'Lat', 'Lng', 'Private land', 'Happened when', 'Happened why', 'Notes',
-  'Submitter', 'Email', 'People check', 'Photos', 'Form language', 'Reviewed'
+  'Submitter', 'Email', 'People check', 'Photos', 'Form language',
+  'Reviewed', 'Update'
 ];
 
 /* What the three radio buttons on the form become in the sheet. */
 var RECORDING = { standing: 'Standing', lost: 'Cut down', cutback: 'Cut back' };
 
-/* Anything in this list, in the Reviewed column, means "publish it". A tick
-   box gives a real boolean, so that counts too. */
-var APPROVED = ['yes', 'y', 'true', 'approved', 'ok', 'x'];
+/* Reviewed decides two things at once.
+
+   yes       publish it, but say plainly that nobody has checked it
+   verified  publish it as checked: you have seen this tree yourself, or you
+             have a dated photograph or a named source for what happened to it
+
+   Approving is not the same as verifying. A stranger's record can be worth
+   publishing while still unconfirmed, and the register should say so rather
+   than quietly imply that someone went and looked. */
+var APPROVED = ['yes', 'y', 'true', 'approved', 'ok', 'x', 'verified', 'v'];
+var VERIFIED = ['verified', 'v'];
+
+/* Update is a separate column on purpose. Ticking it re-imports that one row
+   over the record already in the register, which is how a correction or a new
+   detail reaches a tree published weeks ago. Leaving it blank is what stops
+   every run overwriting work done since. */
+var UPDATE = ['yes', 'y', 'true', 'update', 'ok', 'x'];
 
 /* Visiting the /exec URL in a browser should tell you it is alive.
    ?list=approved  the rows ticked Reviewed, for the ingest workflow
@@ -52,10 +67,23 @@ function rows() {
   });
 }
 
-function isApproved(row) {
+function flagged(value, words) {
+  if (value === true) return true;
+  return words.indexOf(String(value === null || value === undefined ? '' : value)
+    .trim().toLowerCase()) !== -1;
+}
+
+function isApproved(row) { return flagged(row['Reviewed'], APPROVED); }
+function wantsUpdate(row) { return flagged(row['Update'], UPDATE); }
+
+/* Verification has to be written, not clicked. A tick box in Reviewed means
+   "publish this"; saying a record is verified is a claim that someone went and
+   looked, and that claim should take a word rather than a checkbox. */
+function isVerified(row) {
   var v = row['Reviewed'];
-  if (v === true) return true;
-  return APPROVED.indexOf(String(v || '').trim().toLowerCase()) !== -1;
+  if (v === true) return false;
+  return VERIFIED.indexOf(String(v === null || v === undefined ? '' : v)
+    .trim().toLowerCase()) !== -1;
 }
 
 function fileIdFrom(url) {
@@ -94,6 +122,8 @@ function approvedRecords() {
       notes: cell(r['Notes']),
       submitter: cell(r['Submitter']),
       language: String(r['Form language'] || 'en'),
+      verified: isVerified(r),
+      update: wantsUpdate(r),
       photoIds: cell(r['Photos']).split('\n')
         .map(fileIdFrom).filter(function (x) { return x; })
     };
@@ -121,6 +151,34 @@ function approvedPhoto(id) {
   }
 }
 
+/**
+ * Make sure row 1 names the columns this script writes.
+ *
+ * Only ever widens. If the header already there is the start of COLUMNS, the
+ * missing names are added on the end, which keeps every existing row lined up
+ * with its data and saves anyone emptying the sheet when a field is added. A
+ * header rearranged by hand is left alone, because guessing would file values
+ * under the wrong headings.
+ */
+function ensureHeader(sheet) {
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(COLUMNS);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, COLUMNS.length).setFontWeight('bold');
+    return;
+  }
+  var head = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]
+    .map(function (h) { return String(h === null || h === undefined ? '' : h).trim(); });
+  while (head.length && head[head.length - 1] === '') head.pop();
+
+  var startsRight = head.length <= COLUMNS.length &&
+    head.every(function (h, i) { return h === COLUMNS[i]; });
+
+  if (startsRight && head.length < COLUMNS.length) {
+    sheet.getRange(1, 1, 1, COLUMNS.length).setValues([COLUMNS]).setFontWeight('bold');
+  }
+}
+
 function doPost(e) {
   try {
     var body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
@@ -132,11 +190,7 @@ function doPost(e) {
     if (!body.consent) return json({ ok: false, error: 'consent-missing' });
 
     var sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(COLUMNS);
-      sheet.setFrozenRows(1);
-      sheet.getRange(1, 1, 1, COLUMNS.length).setFontWeight('bold');
-    }
+    ensureHeader(sheet);
 
     sheet.appendRow([
       'S-' + Utilities.formatDate(new Date(), 'Indian/Maldives', 'yyyyMMdd-HHmmss') +
