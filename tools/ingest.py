@@ -122,6 +122,41 @@ def clean(row, species_ids, problems):
     return rec
 
 
+HEIC_TYPES = {"image/heic", "image/heif", "image/heic-sequence", "image/heif-sequence"}
+
+# The form shrinks photographs in the browser before sending, but only for
+# formats the browser can decode. HEIC skips that, so it is also the one that
+# arrives at full size. Same ceiling here, for the same reason.
+MAX_PX = 2000
+
+
+def to_jpeg(raw, record_id, problems):
+    """Return (bytes, extension), converting HEIC to JPEG where possible.
+
+    If the conversion library is missing the file is kept as-is with an honest
+    .heic extension and a problem is recorded, because a picture that will not
+    open is better named than disguised.
+    """
+    try:
+        from PIL import Image
+        try:
+            import pillow_heif
+            pillow_heif.register_heif_opener()
+        except ImportError:
+            pass
+        im = Image.open(io.BytesIO(raw))
+        im = im.convert("RGB")
+        im.thumbnail((MAX_PX, MAX_PX))
+        buf = io.BytesIO()
+        im.save(buf, "JPEG", quality=86, optimize=True)
+        return buf.getvalue(), "jpg"
+    except Exception as e:
+        problems.append(
+            "%s: could not convert a HEIC photograph to JPEG (%s). Saved as .heic, "
+            "which most browsers cannot display." % (record_id, e))
+        return raw, "heic"
+
+
 def save_photo(exec_url, photo_id, record_id, suffix, problems):
     try:
         out = get_json(exec_url + "?photo=" + photo_id)
@@ -131,10 +166,22 @@ def save_photo(exec_url, photo_id, record_id, suffix, problems):
     if not out.get("ok"):
         problems.append("%s: photograph refused (%s)" % (record_id, out.get("error")))
         return None
-    ext = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}.get(out.get("mimeType"), "jpg")
+    raw = base64.b64decode(out["base64"])
+    mime = (out.get("mimeType") or "").lower()
+    name = (out.get("name") or "").lower()
+
+    # iPhones shoot HEIC, and the form only re-encodes formats the browser can
+    # decode, so HEIC arrives untouched. No browser but Safari can display it,
+    # and the old code wrote it out as .jpg, which made an image nobody could
+    # open and nothing that would say so. Convert it here instead.
+    if mime in HEIC_TYPES or name.endswith((".heic", ".heif")):
+        raw, ext = to_jpeg(raw, record_id, problems)
+    else:
+        ext = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}.get(mime, "jpg")
+
     rel = "photos/%s%s.%s" % (record_id, suffix, ext)
     with open(os.path.join(ROOT, rel), "wb") as f:
-        f.write(base64.b64decode(out["base64"]))
+        f.write(raw)
     return rel
 
 

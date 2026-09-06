@@ -30,7 +30,9 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install pyyaml
+      # pillow-heif is here for one reason: phones shoot HEIC and the register
+      # has to end up with pictures a browser can actually show.
+      - run: pip install pyyaml pillow pillow-heif
 
       - name: Fetch approved rows
         run: python3 tools/ingest.py
