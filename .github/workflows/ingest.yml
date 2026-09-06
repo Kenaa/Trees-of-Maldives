@@ -3,9 +3,10 @@ name: Ingest approved submissions
 # Picks up rows ticked Reviewed in the Google Sheet and commits them to the
 # register. Nothing reaches the site until the validator has passed on it.
 #
-# The schedule is a best effort: GitHub runs cron jobs late when it is busy, so
-# treat "every 15 minutes" as "within the hour". Use the Run workflow button on
-# the Actions tab when you want a record up now.
+# The schedule below asks for every 15 minutes. GitHub does not honour that on
+# a free public repository: observed gaps between runs have been one to four
+# and a half hours. The cron is a backstop, not a promise. When you want a
+# record on the site now, press Run workflow on the Actions tab.
 
 on:
   schedule:

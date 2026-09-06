@@ -13,7 +13,7 @@ Records arrive with "verified": false. Approving a submission means it is fit
 to publish, not that anyone has confirmed the tree is what the submitter said
 it was. Those are different claims and the register keeps them apart.
 """
-import base64, io, json, os, re, sys, urllib.request
+import base64, io, json, os, re, sys, time, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
@@ -29,9 +29,25 @@ def endpoint():
     return m.group(1) if m else ""
 
 
-def get_json(url):
-    with urllib.request.urlopen(url, timeout=TIMEOUT) as r:
-        return json.loads(r.read().decode("utf-8"))
+def get_json(url, attempts=4):
+    """Fetch and parse, retrying a few times first.
+
+    Apps Script answers /exec with a redirect to a one-shot result URL, and
+    that occasionally 404s or times out when Google is busy or the deployment
+    is being replaced. A scheduled job should ride that out rather than mail
+    the maintainer about a blip, so transient failures are retried with a
+    growing pause and only a persistent one is raised.
+    """
+    last = None
+    for n in range(attempts):
+        try:
+            with urllib.request.urlopen(url, timeout=TIMEOUT) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except Exception as e:
+            last = e
+            if n < attempts - 1:
+                time.sleep(3 * (n + 1))
+    raise last
 
 
 def write_data(path, var, obj):
