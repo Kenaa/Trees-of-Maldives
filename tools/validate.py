@@ -65,12 +65,22 @@ def check_trees(data, species_ids):
         if not isinstance(t.get("verified"), bool):
             err("%s: verified must be true or false" % where)
 
-        for field in ("name", "place"):
-            v = t.get(field)
-            if not isinstance(v, dict) or not v.get("en"):
-                err("%s: %s needs at least an English value" % (where, field))
-            elif not v.get("dv"):
-                warn("%s: %s has no Dhivehi translation" % (where, field))
+        # A place is required; a name is not. Submitted records have no name
+        # until someone gives them one, and the register falls back to the
+        # species. Inventing a name from the street is what produced records
+        # that printed the same line twice.
+        v = t.get("place")
+        if not isinstance(v, dict) or not v.get("en"):
+            err("%s: place needs at least an English value" % where)
+        elif not v.get("dv"):
+            warn("%s: place has no Dhivehi translation" % where)
+
+        n = t.get("name")
+        if n is not None:
+            if not isinstance(n, dict) or not n.get("en"):
+                err("%s: name is present but has no English value; omit it instead" % where)
+            elif n.get("en") == (t.get("place") or {}).get("en"):
+                warn("%s: name repeats the place, so it is telling the reader nothing new" % where)
 
         # Coordinates are optional: the form lets someone give a street name
         # instead. Such a record belongs in the register, it just cannot be

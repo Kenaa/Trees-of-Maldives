@@ -80,6 +80,28 @@
   /* --- state ------------------------------------------------------------- */
   var state = { q: "", status: "", ward: "", species: "", sort: "id", dir: "asc", tab: 0 };
 
+  /* What to call a record in a heading.
+
+     A tree with a name people actually use keeps it: the Sultan Park banyan is
+     the Sultan Park banyan. A submitted record has no such name, so it is
+     called what it is, and the street underneath says where. Repeating the
+     street in both lines, which is what happened before, told the reader
+     nothing twice and buried the species. */
+  function titleOf(x) {
+    if (pick(x.name)) return bi(x.name);
+    var s = byId[x.species];
+    if (!s) return el("span", { text: x.id });
+    if (window.i18n.current === "dv" && (s.dv || s.dvLatin)) {
+      return el("span", { text: s.dv || s.dvLatin });
+    }
+    return el("span", { text: s.en });
+  }
+
+  function titleText(x) {
+    var n = titleOf(x);
+    return n.textContent || "";
+  }
+
   function speciesLabel(id) {
     var s = byId[id];
     if (!s) return id;
@@ -97,7 +119,7 @@
     if (state.species && x.species !== state.species) return false;
     if (state.q) {
       var s = byId[x.species] || {};
-      var hay = [x.id, pick(x.name), pick(x.place), s.sci, s.en, s.dv,
+      var hay = [x.id, pick(x.name), pick(x.place), s.sci, s.en, s.dv, s.dvLatin,
                  t("ward." + x.ward), t("status." + x.status)].join(" ").toLowerCase();
       if (hay.indexOf(state.q.toLowerCase()) === -1) return false;
     }
@@ -110,7 +132,7 @@
     return list.slice().sort(function (a, b) {
       var r;
       if (k === "girth") r = (a.girthCm || 0) - (b.girthCm || 0);
-      else if (k === "name") r = coll.compare(pick(a.name), pick(b.name));
+      else if (k === "name") r = coll.compare(titleText(a), titleText(b));
       else if (k === "species") r = coll.compare((byId[a.species] || {}).sci || "", (byId[b.species] || {}).sci || "");
       else if (k === "ward") r = coll.compare(t("ward." + a.ward), t("ward." + b.ward));
       else if (k === "status") r = STATUSES.indexOf(a.status) - STATUSES.indexOf(b.status);
@@ -151,7 +173,7 @@
     tr.appendChild(el("td", { "class": "rec-id", text: x.id }));
 
     var link = el("a", { href: "?tree=" + encodeURIComponent(x.id) });
-    link.appendChild(bi(x.name));
+    link.appendChild(titleOf(x));
     tr.appendChild(el("td", { "class": "rec-name" }, [
       link, el("div", { "class": "dim", style: "font-size:.82rem;font-weight:400" }, [bi(x.place)])
     ]));
@@ -183,7 +205,7 @@
       var s = byId[x.species] || {};
       var when = (x.lost && x.lost.date) || t("tree.unknown");
       var link = el("a", { href: "?tree=" + encodeURIComponent(x.id) });
-      link.appendChild(bi(x.name));
+      link.appendChild(titleOf(x));
 
       var body = el("div", {}, [
         el("h3", {}, [link]),
@@ -253,10 +275,10 @@
       if (typeof x.lat !== "number" || typeof x.lng !== "number") return;
       var m = L.marker([x.lat, x.lng], {
         icon: markerIcon(x.status), keyboard: true,
-        alt: pick(x.name) + ", " + t("status." + x.status), title: pick(x.name)
+        alt: titleText(x) + ", " + t("status." + x.status), title: titleText(x)
       });
       var pop = el("div", {}, [
-        el("h3", { style: "margin:0 0 .2rem" }, [bi(x.name)]),
+        el("h3", { style: "margin:0 0 .2rem" }, [titleOf(x)]),
         el("p", { "class": "rec-sci", style: "margin:0 0 .4rem", lang: "la",
                   text: (byId[x.species] || {}).sci || "" }),
         el("p", { style: "margin:0 0 .5rem" }, [stamp(x.status)]),
@@ -360,14 +382,14 @@
     var s = byId[x.species] || {};
     var title = $("detail-title");
     title.textContent = "";
-    title.appendChild(bi(x.name));
+    title.appendChild(titleOf(x));
 
     var b = $("detail-body");
     b.textContent = "";
 
     if (x.photos && x.photos.length) {
       x.photos.forEach(function (p) {
-        b.appendChild(el("img", { src: p.src, alt: pick(p.alt) || pick(x.name) }));
+        b.appendChild(el("img", { src: p.src, alt: pick(p.alt) || titleText(x) }));
       });
     } else {
       b.appendChild(el("p", { "class": "hint", text: t("tree.noPhoto") + ". " + t("tree.noPhotoHint") }));

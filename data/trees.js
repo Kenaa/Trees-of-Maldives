@@ -529,9 +529,6 @@ window.TREE_DATA =
    "status": "lost",
    "verified": false,
    "species": "pterocarpus-indicus",
-   "name": {
-    "en": "Hushnuheenaa Magu, infront of Seera"
-   },
    "ward": "henveiru",
    "place": {
     "en": "Hushnuheenaa Magu, infront of Seera"

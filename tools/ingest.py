@@ -97,7 +97,11 @@ def clean(row, species_ids, problems):
 
     rec = {
         "id": None, "status": status, "verified": False, "species": species,
-        "name": {lang: place}, "ward": ward, "place": {lang: place},
+        # Deliberately no "name". A submitter tells us where a tree is, not what
+        # it is called, and copying the street into both fields made records
+        # that printed the same line twice. The register falls back to the
+        # species until a person gives the tree a name worth having.
+        "ward": ward, "place": {lang: place},
         "lat": lat, "lng": lng,
         "girthCm": None, "heightM": None, "ageYears": None,
         "notes": {lang: row.get("notes", "").strip()} if row.get("notes", "").strip() else {lang: ""},
