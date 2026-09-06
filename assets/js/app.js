@@ -87,6 +87,36 @@
      called what it is, and the street underneath says where. Repeating the
      street in both lines, which is what happened before, told the reader
      nothing twice and buried the species. */
+  /* The common name, with the other language's name beside it. Both are shown
+     because a reader looking for "ruh" and a reader looking for "coconut palm"
+     are looking for the same tree. */
+  function commonName(x) {
+    var sp = byId[x.species];
+    var wrap = el("span");
+    if (!sp) { wrap.textContent = x.species || x.id; return wrap; }
+    var dvName = sp.dv || sp.dvLatin || "";
+    var thaana = !!sp.dv;
+    if (window.i18n.current === "dv") {
+      wrap.appendChild(el("span", { text: dvName || sp.en }));
+      if (dvName && sp.en) {
+        wrap.appendChild(el("span", { "class": "alt-name", lang: "en", dir: "ltr", text: sp.en }));
+      }
+    } else {
+      wrap.appendChild(el("span", { text: sp.en }));
+      if (dvName) {
+        wrap.appendChild(el("span", {
+          "class": "alt-name", lang: "dv", dir: thaana ? "rtl" : "ltr", text: dvName
+        }));
+      }
+    }
+    return wrap;
+  }
+
+  function coords(x) {
+    if (typeof x.lat !== "number" || typeof x.lng !== "number") return "\u2014";
+    return x.lat.toFixed(5) + ", " + x.lng.toFixed(5);
+  }
+
   function titleOf(x) {
     if (pick(x.name)) return bi(x.name);
     var s = byId[x.species];
@@ -131,8 +161,10 @@
     var k = state.sort, sign = state.dir === "desc" ? -1 : 1;
     return list.slice().sort(function (a, b) {
       var r;
-      if (k === "girth") r = (a.girthCm || 0) - (b.girthCm || 0);
+      if (k === "age") r = (a.ageYears || 0) - (b.ageYears || 0);
+      else if (k === "girth") r = (a.girthCm || 0) - (b.girthCm || 0);
       else if (k === "name") r = coll.compare(titleText(a), titleText(b));
+      else if (k === "location") r = coll.compare(pick(a.place), pick(b.place));
       else if (k === "species") r = coll.compare((byId[a.species] || {}).sci || "", (byId[b.species] || {}).sci || "");
       else if (k === "ward") r = coll.compare(t("ward." + a.ward), t("ward." + b.ward));
       else if (k === "status") r = STATUSES.indexOf(a.status) - STATUSES.indexOf(b.status);
@@ -172,20 +204,30 @@
 
     tr.appendChild(el("td", { "class": "rec-id", text: x.id }));
 
+    /* Species: the common name over the binomial. This is the column that
+       answers "what is it", so it carries the link to the full record. */
     var link = el("a", { href: "?tree=" + encodeURIComponent(x.id) });
-    link.appendChild(titleOf(x));
-    tr.appendChild(el("td", { "class": "rec-name" }, [
-      link, el("div", { "class": "dim", style: "font-size:.82rem;font-weight:400" }, [bi(x.place)])
-    ]));
+    link.appendChild(commonName(x));
+    var speciesCell = el("td", { "class": "rec-name" }, [link]);
+    if (s.sci) {
+      speciesCell.appendChild(el("div", { "class": "rec-sci", lang: "la", text: s.sci }));
+    }
+    tr.appendChild(speciesCell);
 
-    tr.appendChild(el("td", { "class": "col-opt rec-sci", lang: "la", text: s.sci || "" }));
+    /* Location: the coordinates over whatever the recorder called the place. */
+    var loc = el("td", { "class": "col-opt" });
+    loc.appendChild(el("div", { "class": "num", text: coords(x) }));
+    loc.appendChild(el("div", { "class": "dim", style: "font-size:.82rem" }, [bi(x.place)]));
+    tr.appendChild(loc);
+
     tr.appendChild(el("td", { "class": "col-opt", text: t("ward." + x.ward) }));
 
     var st = el("td", {}, [stamp(x.status)]);
     if (!x.verified) { st.appendChild(document.createTextNode(" ")); st.appendChild(unverified()); }
     tr.appendChild(st);
 
-    tr.appendChild(el("td", { "class": "col-opt num", text: x.girthCm ? x.girthCm + " cm" : "—" }));
+    tr.appendChild(el("td", { "class": "col-opt num",
+      text: x.ageYears ? x.ageYears + " " + t("tree.years") : "\u2014" }));
     return tr;
   }
 
@@ -420,6 +462,11 @@
     spec(dl, "tree.girth", el("span", { "class": "mono", text: x.girthCm ? x.girthCm + " cm" : t("tree.unknown") }));
     spec(dl, "tree.height", el("span", { "class": "mono", text: x.heightM ? x.heightM + " m" : t("tree.unknown") }));
     spec(dl, "tree.age", el("span", { "class": "mono", text: x.ageYears ? x.ageYears + " " + t("tree.years") : t("tree.unknown") }));
+    /* The form says a name is "used to credit the record", so it has to appear
+       somewhere. This is that somewhere. */
+    if (x.credit) spec(dl, "tree.credit", el("span", { text: x.credit }));
+    /* What the submitter called the tree when the list had no entry for it. */
+    if (x.speciesAsNamed) spec(dl, "tree.asNamed", el("span", { lang: "dv", text: x.speciesAsNamed }));
     spec(dl, "tree.recorded", el("span", { "class": "mono", text: x.recorded || t("tree.unknown") }));
     spec(dl, "tree.id", el("span", { "class": "mono", text: x.id }));
     b.appendChild(dl);

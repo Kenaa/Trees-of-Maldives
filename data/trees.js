@@ -554,7 +554,7 @@ window.TREE_DATA =
    ],
    "recorded": "2026-09-06",
    "lost": {
-    "date": "Wed Jul 08 2026 00:00:00 GMT+0500 (Maldives Time)",
+    "date": "2026-07-08",
     "reason": "unknown",
     "evidence": {
      "en": "At first they cut down the full canopy, then they took down the tree."

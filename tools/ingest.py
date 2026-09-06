@@ -61,6 +61,25 @@ def next_id(trees):
     return "MLE-%04d" % ((max(used) + 1) if used else 1)
 
 
+MONTHS = {"Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06",
+          "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"}
+
+
+def tidy_date(v):
+    """Turn whatever the sheet gave us into something a register can print.
+
+    Google Sheets returns a Date object for any cell it reads as a date, which
+    arrives here as "Wed Jul 08 2026 00:00:00 GMT+0500 (Maldives Time)". The
+    script now formats those itself, but old rows and hand-typed cells still
+    come through this way, so it is fixed on the way in as well.
+    """
+    text = (v or "").strip()
+    m = re.match(r"^\w{3} (\w{3}) (\d{1,2}) (\d{4})", text)
+    if m and m.group(1) in MONTHS:
+        return "%s-%s-%02d" % (m.group(3), MONTHS[m.group(1)], int(m.group(2)))
+    return text
+
+
 def clean(row, species_ids, problems):
     """Turn one sheet row into a register record, or None if it cannot be trusted."""
     ref = row.get("ref", "").strip()
@@ -119,7 +138,7 @@ def clean(row, species_ids, problems):
     if status in ("lost", "cutback"):
         reason = row.get("lostReason", "").strip()
         rec["lost"] = {
-            "date": row.get("lostDate", "").strip(),
+            "date": tidy_date(row.get("lostDate", "")),
             "reason": reason if reason in REASONS else "unknown",
             "evidence": {lang: row.get("notes", "").strip()},
         }

@@ -68,26 +68,33 @@ function fileIdFrom(url) {
  * never publishes it, so it should not leave the sheet at all. The submitter's
  * name does travel, because that is the credit they agreed to.
  */
+/* Sheets hands back a Date for anything it decides is a date, and String() on
+   that gives "Wed Jul 08 2026 00:00:00 GMT+0500 (Maldives Time)". A register
+   wants a date, so dates are formatted and everything else passes through. */
+function cell(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, 'Indian/Maldives', 'yyyy-MM-dd');
+  return String(v === null || v === undefined ? '' : v);
+}
+
 function approvedRecords() {
   return rows().filter(isApproved).map(function (r) {
     return {
-      ref: String(r['Ref'] || ''),
-      received: r['Received'] instanceof Date
-        ? Utilities.formatDate(r['Received'], 'Indian/Maldives', 'yyyy-MM-dd') : String(r['Received'] || ''),
-      recording: String(r['Recording'] || ''),
-      species: String(r['Species'] || ''),
-      place: String(r['Where'] || ''),
-      ward: String(r['Ward'] || ''),
-      lat: String(r['Lat'] || ''),
-      lng: String(r['Lng'] || ''),
-      privateLand: String(r['Private land'] || ''),
-      speciesOther: String(r['Species as named'] || ''),
-      lostDate: String(r['Happened when'] || ''),
-      lostReason: String(r['Happened why'] || ''),
-      notes: String(r['Notes'] || ''),
-      submitter: String(r['Submitter'] || ''),
+      ref: cell(r['Ref']),
+      received: cell(r['Received']),
+      recording: cell(r['Recording']),
+      species: cell(r['Species']),
+      place: cell(r['Where']),
+      ward: cell(r['Ward']),
+      lat: cell(r['Lat']),
+      lng: cell(r['Lng']),
+      privateLand: cell(r['Private land']),
+      speciesOther: cell(r['Species as named']),
+      lostDate: cell(r['Happened when']),
+      lostReason: cell(r['Happened why']),
+      notes: cell(r['Notes']),
+      submitter: cell(r['Submitter']),
       language: String(r['Form language'] || 'en'),
-      photoIds: String(r['Photos'] || '').split('\n')
+      photoIds: cell(r['Photos']).split('\n')
         .map(fileIdFrom).filter(function (x) { return x; })
     };
   });

@@ -304,6 +304,12 @@ tr.is-lost:hover .rec-id::after, tr.is-lost.is-active .rec-id::after { transform
 .rec-name a { text-decoration: none; }
 .rec-name a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
 .rec-sci { font-style: italic; color: var(--muted); font-size: .85rem; }
+/* The same tree's name in the other language, beside the first. */
+.alt-name {
+  font-weight: 400; color: var(--muted); font-size: .85rem;
+  margin-inline-start: .5rem;
+}
+.alt-name[dir="rtl"] { font-family: var(--font-thaana); }
 .num { font-family: var(--font-mono); font-size: .84rem; white-space: nowrap; }
 .dim { color: var(--muted); }
 
