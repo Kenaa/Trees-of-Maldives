@@ -5,8 +5,8 @@ window.TREE_DATA =
 {
  "meta": {
   "version": 1,
-  "updated": "2026-09-03",
-  "seed": true,
+  "updated": "2026-09-06",
+  "seed": false,
   "notice": {
    "en": "SEED DATA. Every record below is an unverified placeholder created to build and test the archive. Coordinates are approximate, measurements are invented, and no felling date here has been confirmed against a source. Correct or delete each record as real fieldwork replaces it.",
    "dv": "މިއީ ފެށުމުގެ ޑޭޓާއެވެ. ތިރީގައިވާ ހުރިހާ ރެކޯޑަކީ ކަށަވަރު ނުކުރެވޭ ވަގުތީ މަޢުލޫމާތެވެ."
@@ -523,6 +523,49 @@ window.TREE_DATA =
     }
    },
    "sources": []
+  },
+  {
+   "id": "MLE-0018",
+   "status": "lost",
+   "verified": false,
+   "species": "pterocarpus-indicus",
+   "name": {
+    "en": "Hushnuheenaa Magu, infront of Seera"
+   },
+   "ward": "henveiru",
+   "place": {
+    "en": "Hushnuheenaa Magu, infront of Seera"
+   },
+   "lat": 4.17597,
+   "lng": 73.51334,
+   "girthCm": null,
+   "heightM": null,
+   "ageYears": null,
+   "notes": {
+    "en": "At first they cut down the full canopy, then they took down the tree."
+   },
+   "photos": [
+    {
+     "src": "photos/MLE-0018.jpg",
+     "alt": {
+      "en": "Photograph of the tree recorded at Hushnuheenaa Magu, infront of Seera."
+     },
+     "credit": "Ahmed Aiham",
+     "date": "2026-09-06",
+     "altReview": true
+    }
+   ],
+   "recorded": "2026-09-06",
+   "lost": {
+    "date": "Wed Jul 08 2026 00:00:00 GMT+0500 (Maldives Time)",
+    "reason": "unknown",
+    "evidence": {
+     "en": "At first they cut down the full canopy, then they took down the tree."
+    }
+   },
+   "sources": [],
+   "ref": "S-20260906-194851-1cb4",
+   "credit": "Ahmed Aiham"
   }
  ]
 };
