@@ -374,6 +374,14 @@ tr:hover .stamp-relocated,  tr.is-active .stamp-relocated  { background: var(--m
 .maplibregl-popup-close-button:hover { background: var(--chip); }
 .maplibregl-ctrl-group { border-radius: 0; border: 1px solid var(--edge); }
 .maplibregl-ctrl-group button { border-radius: 0; }
+.map-layer-btn {
+  inline-size: auto !important; block-size: auto !important;
+  padding: .45rem .7rem; font-family: var(--font-mono); font-size: .7rem;
+  text-transform: uppercase; letter-spacing: .06em; white-space: nowrap;
+  background: var(--sheet); color: var(--ink); border: 0; cursor: pointer;
+}
+.map-layer-btn:hover { background: var(--chip); }
+.map-layer-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .maplibregl-ctrl-attrib { font-size: .7rem; }
 
 .leaflet-container { font: inherit; background: var(--sheet); }

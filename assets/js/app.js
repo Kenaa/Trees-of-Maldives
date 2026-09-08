@@ -333,6 +333,7 @@
     } catch (e) { return false; }
 
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
+    map.addControl(new LayerToggle(), "top-right");
     map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
 
     /* The canvas is a picture to anything that cannot see it. Naming it and
@@ -355,10 +356,72 @@
        throttled, or never finishes. */
     map.on("load", function () {
       try { showBuildings(); } catch (e) { /* the style may not carry the layer */ }
+      try { addSatellite(); } catch (e) { /* imagery is an extra, never a blocker */ }
     });
     map.on("error", function () { /* a missing tile should not take the page down */ });
     return true;
   }
+
+  /* --- satellite ------------------------------------------------------------
+     Esri's World Imagery, which needs no API key and has sub-metre coverage
+     over Malé. For a register of trees this is not decoration: canopy is
+     visible in imagery in a way it never is on a street map, so a contributor
+     can check a record against what is actually on the ground.
+
+     The raster goes in below the building layers, so buildings and every label
+     still draw on top and the result reads as a hybrid rather than a bare
+     photograph. */
+  var satelliteOn = false;
+
+  function addSatellite() {
+    if (map.getSource("satellite")) return;
+    map.addSource("satellite", {
+      type: "raster",
+      tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/" +
+              "World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+      tileSize: 256,
+      maxzoom: 19,
+      attribution: 'Imagery &copy; <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics'
+    });
+    map.addLayer({
+      id: "satellite", type: "raster", source: "satellite",
+      layout: { visibility: "none" }
+    }, map.getLayer("building") ? "building" : undefined);
+  }
+
+  function setSatellite(on) {
+    if (!map || !map.getLayer("satellite")) return;
+    satelliteOn = on;
+    map.setLayoutProperty("satellite", "visibility", on ? "visible" : "none");
+    /* The flat building fill would sit as grey blocks over the photograph and
+       hide the very thing someone switched to imagery to look at. The extruded
+       version stays, because it only shows when the map is tilted. */
+    if (map.getLayer("building")) {
+      map.setLayoutProperty("building", "visibility", on ? "none" : "visible");
+    }
+  }
+
+  function LayerToggle() {}
+  LayerToggle.prototype.onAdd = function () {
+    var wrap = document.createElement("div");
+    wrap.className = "maplibregl-ctrl maplibregl-ctrl-group";
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "map-layer-btn";
+    b.textContent = t("map.satellite");
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function () {
+      setSatellite(!satelliteOn);
+      b.textContent = t(satelliteOn ? "map.streets" : "map.satellite");
+      b.setAttribute("aria-pressed", String(satelliteOn));
+    });
+    wrap.appendChild(b);
+    this._el = wrap;
+    return wrap;
+  };
+  LayerToggle.prototype.onRemove = function () {
+    if (this._el && this._el.parentNode) this._el.parentNode.removeChild(this._el);
+  };
 
   /* The Liberty style ships a building-3d extrusion layer. It is switched on
      here and tinted to the register's palette so the city reads as mass rather
