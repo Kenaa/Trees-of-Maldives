@@ -531,7 +531,8 @@ window.TREE_DATA =
    "species": "pterocarpus-indicus",
    "ward": "henveiru",
    "place": {
-    "en": "Hushnuheenaa Magu, infront of Seera"
+    "en": "Hushnuheenaa Magu, infront of Seera",
+    "dv": "ހުސްނުހީނާ މަގު"
    },
    "lat": 4.17597,
    "lng": 73.51334,
