@@ -400,6 +400,10 @@
     });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: c.maxZoom,
+      /* OpenStreetMap's raster tiles stop at 19. Without this the picker would
+         request a level that does not exist and show blank squares at the very
+         zoom someone is using to place a pin precisely. */
+      maxNativeZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(picker);
     picker.on("click", function (e) {

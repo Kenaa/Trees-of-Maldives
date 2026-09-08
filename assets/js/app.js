@@ -322,10 +322,11 @@
         zoom: c.zoom, minZoom: c.minZoom, maxZoom: c.maxZoom,
         maxBounds: [[c.maxBounds[0][1], c.maxBounds[0][0]],
                     [c.maxBounds[1][1], c.maxBounds[1][0]]],
-        /* Tilted on arrival, because the tilt is the point. Anyone who has
-           asked not to be moved around gets it flat. */
-        pitch: flat ? 0 : 50,
-        bearing: flat ? 0 : -18,
+        /* Flat. With the extrusions gone there is no height to look around,
+           and a tilted flat map only makes the far side harder to read. The
+           compass still tilts it for anyone who wants to. */
+        pitch: 0,
+        bearing: 0,
         scrollZoom: false,
         dragRotate: true,
         attributionControl: false
@@ -380,13 +381,23 @@
       tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/" +
               "World_Imagery/MapServer/tile/{z}/{y}/{x}"],
       tileSize: 256,
+      /* Esri has real imagery over Malé to zoom 19. Past that it serves a
+         blank tile, so the source stops here and MapLibre stretches the last
+         level rather than showing nothing. */
       maxzoom: 19,
       attribution: 'Imagery &copy; <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics'
     });
+    /* Under the roads, not over them. The style paints background, landcover,
+       water and tunnels first and only then the road network, so slotting the
+       photograph in just before the roads leaves every street, junction and
+       label drawn on top of it. That is what makes imagery navigable rather
+       than a picture you have to guess your way across. */
+    var below = map.getLayer("road_area_pattern") ? "road_area_pattern"
+              : (map.getLayer("building") ? "building" : undefined);
     map.addLayer({
       id: "satellite", type: "raster", source: "satellite",
       layout: { visibility: "none" }
-    }, map.getLayer("building") ? "building" : undefined);
+    }, below);
   }
 
   function setSatellite(on) {
@@ -401,6 +412,13 @@
     }
   }
 
+  /* The button shows where it will take you, not where you are, which is the
+     way every map that offers this does it. */
+  var ICON_SAT = '<circle cx="12" cy="12" r="6.5"/>' +
+                 '<ellipse cx="12" cy="12" rx="11" ry="4.2" transform="rotate(-32 12 12)"/>';
+  var ICON_STREET = '<path d="M5.5 21 8 3"/><path d="M18.5 21 16 3"/>' +
+                    '<path d="M12 4.5v3"/><path d="M12 10.5v3"/><path d="M12 16.5v3"/>';
+
   function LayerToggle() {}
   LayerToggle.prototype.onAdd = function () {
     var wrap = document.createElement("div");
@@ -408,13 +426,21 @@
     var b = document.createElement("button");
     b.type = "button";
     b.className = "map-layer-btn";
-    b.textContent = t("map.satellite");
-    b.setAttribute("aria-pressed", "false");
-    b.addEventListener("click", function () {
-      setSatellite(!satelliteOn);
-      b.textContent = t(satelliteOn ? "map.streets" : "map.satellite");
-      b.setAttribute("aria-pressed", String(satelliteOn));
-    });
+
+    function paint() {
+      var toSat = !satelliteOn;
+      b.innerHTML = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" ' +
+        'stroke="currentColor" stroke-width="1.9" stroke-linecap="round" ' +
+        'stroke-linejoin="round" aria-hidden="true">' +
+        (toSat ? ICON_SAT : ICON_STREET) + "</svg>";
+      var label = t(toSat ? "map.satellite" : "map.streets");
+      b.setAttribute("aria-label", label);
+      b.setAttribute("title", label);
+    }
+    paint();
+    b.addEventListener("click", function () { setSatellite(!satelliteOn); paint(); });
+    document.addEventListener("langchange", paint);
+
     wrap.appendChild(b);
     this._el = wrap;
     return wrap;
@@ -423,14 +449,17 @@
     if (this._el && this._el.parentNode) this._el.parentNode.removeChild(this._el);
   };
 
-  /* The Liberty style ships a building-3d extrusion layer. It is switched on
-     here and tinted to the register's palette so the city reads as mass rather
-     than as decoration. */
+  /* Extruded buildings are off. Malé has height data for 74 of its 951 mapped
+     buildings, so the massing was mostly invented, and it earned its screen
+     space by looking impressive rather than by telling anyone anything. Flat
+     footprints show the same street pattern honestly. */
   function showBuildings() {
-    if (!map.getLayer("building-3d")) return;
-    map.setLayoutProperty("building-3d", "visibility", "visible");
-    map.setPaintProperty("building-3d", "fill-extrusion-color", css("--rule"));
-    map.setPaintProperty("building-3d", "fill-extrusion-opacity", 0.85);
+    if (map.getLayer("building-3d")) {
+      map.setLayoutProperty("building-3d", "visibility", "none");
+    }
+    if (map.getLayer("building")) {
+      map.setLayoutProperty("building", "visibility", "visible");
+    }
   }
 
   var lastList = [];

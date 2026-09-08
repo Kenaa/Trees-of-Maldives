@@ -33,7 +33,9 @@ window.CONFIG = {
     center: [4.1755, 73.5093],   // Malé
     zoom: 14,
     minZoom: 11,
-    maxZoom: 19,
+    /* 20 lets you get close enough to place a pin on one tree. Both tile
+       sources are sharp to 19 and are stretched for the last step. */
+    maxZoom: 20,
     maxBounds: [[4.10, 73.40], [4.30, 73.60]]  // Malé, Villimalé, Hulhumalé
   },
 
