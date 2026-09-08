@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- One policy shared by all three pages. It is a meta tag because GitHub
+     Pages serves static files and cannot set headers, which also means
+     frame-ancestors cannot be enforced here: it is ignored in meta.
+     'unsafe-inline' is needed for style only, because MapLibre and Leaflet
+     both write inline styles; no inline script is allowed. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://tiles.openfreemap.org https://server.arcgisonline.com https://*.tile.openstreetmap.org; connect-src 'self' https://tiles.openfreemap.org https://script.google.com https://script.googleusercontent.com; worker-src blob:">
+
 <title>The Last Trees of Malé</title>
 <meta name="description" content="A public register of the trees still standing in Malé City, and the ones that are gone.">
 <meta name="color-scheme" content="dark light">
@@ -13,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..112,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
 <link rel="stylesheet" href="assets/css/style.css">
 <!-- In the head on purpose: choosing the theme after first paint is what
      makes a dark-mode page flash white on the way in. -->
@@ -211,7 +218,7 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.js" integrity="sha384-SYKAG6cglRMN0RVvhNeBY0r3FYKNOJtznwA0v7B5Vp9tr31xAHsZC0DqkQ/pZDmj" crossorigin="anonymous"></script>
 <script src="data/species.js"></script>
 <script src="data/trees.js"></script>
 <script src="assets/js/config.js"></script>

@@ -490,7 +490,7 @@ dialog.sheet::backdrop { background: rgba(10, 11, 13, .7); }
 .radio-card:hover { border-color: var(--ink); }
 .radio-card:has(input:checked) { border-color: var(--ink); background: var(--sheet); }
 .radio-card:has(input:focus-visible), .check:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
-.radio-card input, .check input { inline-size: 20px; block-size: 20px; accent-color: var(--verm); flex: none; margin-block-start: .2rem; }
+.radio-card input, .check input { inline-size: 24px; block-size: 24px; accent-color: var(--verm); flex: none; margin-block-start: .1rem; }
 .check { display: flex; align-items: flex-start; gap: .7rem; cursor: pointer; }
 
 .error-summary { border: 3px solid var(--verm); padding: 1rem 1.15rem; }
@@ -547,4 +547,18 @@ pre.summary {
   .masthead, .site-footer, .rail, .tabs, .map-panel, .btn { display: none !important; }
   body { background: #fff; color: #000; }
   .register tbody tr { break-inside: avoid; }
+}
+
+
+/* --- pointer target sizes (WCAG 2.2, 2.5.8) --------------------------------
+   Everything here already met 2.1 AA, which has no target-size rule at AA.
+   These are small paddings that take the remaining links and boxes to 24px so
+   the site also satisfies 2.2, which costs nothing and helps anyone tapping
+   with a thumb. */
+.rec-name a { display: inline-block; padding-block: 4px; }
+.site-footer a { display: inline-block; padding-block: 3px; }
+.loss h3 a { display: inline-block; padding-block: 2px; }
+/* Third-party attribution links, which ship at the library's own size. */
+.maplibregl-ctrl-attrib a, .leaflet-control-attribution a {
+  display: inline-block; padding-block: 3px;
 }

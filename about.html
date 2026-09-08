@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- One policy shared by all three pages. It is a meta tag because GitHub
+     Pages serves static files and cannot set headers, which also means
+     frame-ancestors cannot be enforced here: it is ignored in meta.
+     'unsafe-inline' is needed for style only, because MapLibre and Leaflet
+     both write inline styles; no inline script is allowed. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://tiles.openfreemap.org https://server.arcgisonline.com https://*.tile.openstreetmap.org; connect-src 'self' https://tiles.openfreemap.org https://script.google.com https://script.googleusercontent.com; worker-src blob:">
+
 <title>About · The Last Trees of Malé</title>
 <meta name="description" content="Why this archive exists, what counts as a record, and how to contribute.">
 <meta name="color-scheme" content="dark light">
