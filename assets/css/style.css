@@ -23,7 +23,10 @@
 
   --font-text:  "Archivo", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
   --font-mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-thaana:"MV Faseyha", "Faruma", "A_Faruma", "Noto Sans Thaana", var(--font-text);
+  --font-thaana:"Faruma", "A_Faruma", "MV Faseyha", "Noto Sans Thaana", var(--font-text);
+  /* Thaana sits optically smaller than Latin at the same size, so it is set
+     up a step wherever the two meet. */
+  --thaana-scale: 1.18;
 
   --t-fast: 120ms;
   --t:      180ms;
@@ -61,7 +64,7 @@ body {
 }
 
 /* Thaana needs more leading and a larger optical size than Archivo. */
-[lang="dv"] { font-family: var(--font-thaana); line-height: 2; font-size: 1.0625rem; }
+[lang="dv"] { font-family: var(--font-thaana); line-height: 2; font-size: calc(1rem * var(--thaana-scale)); }
 :root[lang="dv"] body { font-family: var(--font-thaana); line-height: 2; }
 
 
@@ -305,11 +308,22 @@ tr.is-lost:hover .rec-id::after, tr.is-lost.is-active .rec-id::after { transform
 .rec-name a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
 .rec-sci { font-style: italic; color: var(--muted); font-size: .85rem; }
 /* The same tree's name in the other language, beside the first. */
-.alt-name {
-  font-weight: 400; color: var(--muted); font-size: .85rem;
-  margin-inline-start: .5rem;
+/* The two names sit on one line. The gap belongs to the row, not to either
+   name: a margin on the Thaana would resolve against its own right-to-left
+   direction and open up on the wrong side. */
+.name-pair {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: .55rem;
+  row-gap: .1rem;
 }
-.alt-name[dir="rtl"] { font-family: var(--font-thaana); }
+.alt-name { font-weight: 400; color: var(--muted); font-size: .85rem; }
+.alt-name[dir="rtl"] {
+  font-family: var(--font-thaana);
+  font-size: calc(.9rem * var(--thaana-scale));
+  line-height: 1.7;
+}
 .num { font-family: var(--font-mono); font-size: .84rem; white-space: nowrap; }
 .dim { color: var(--muted); }
 

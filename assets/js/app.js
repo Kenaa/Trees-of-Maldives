@@ -92,7 +92,7 @@
      are looking for the same tree. */
   function commonName(x) {
     var sp = byId[x.species];
-    var wrap = el("span");
+    var wrap = el("span", { "class": "name-pair" });
     if (!sp) { wrap.textContent = x.species || x.id; return wrap; }
     var dvName = sp.dv || sp.dvLatin || "";
     var thaana = !!sp.dv;
