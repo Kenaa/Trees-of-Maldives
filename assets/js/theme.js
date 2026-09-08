@@ -1,10 +1,10 @@
 /* ---------------------------------------------------------------------------
    Light or dark, chosen or inherited.
 
-   Three states, not two. With nothing stored the page follows the operating
-   system, which is what most people want and never have to think about. A
-   click stores a choice and that choice then wins, in both directions, so
-   someone on a dark system can hold this one page light.
+   Dark by default, whatever the operating system says. A register of trees is
+   mostly looked at as a map, and the imagery it opens on reads better against
+   a dark ground. Light is one click away and the choice is remembered, so
+   anyone who finds dark harder to read pays for it once.
 
    The first few lines run from <head>, before anything is painted. Deciding
    the theme after first paint is what produces the white flash that dark-mode
@@ -25,14 +25,12 @@
     else root.removeAttribute("data-theme");
   }
 
-  apply(stored());
-
   function current() {
     var v = stored();
-    if (v === "light" || v === "dark") return v;
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark" : "light";
+    return v === "light" || v === "dark" ? v : "dark";
   }
+
+  apply(current());
 
   var SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2' +
             'M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2' +
@@ -63,14 +61,6 @@
 
     /* The label is words, so it changes with the language. */
     document.addEventListener("langchange", paint);
-
-    /* Still following the system? Then follow it when it changes. */
-    if (window.matchMedia) {
-      var mq = window.matchMedia("(prefers-color-scheme: dark)");
-      var onChange = function () { if (!stored()) paint(); };
-      if (mq.addEventListener) mq.addEventListener("change", onChange);
-      else if (mq.addListener) mq.addListener(onChange);
-    }
 
     paint();
   }

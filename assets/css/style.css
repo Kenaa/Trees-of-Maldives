@@ -11,15 +11,15 @@
    ========================================================================== */
 
 :root {
-  --paper:  #E6E6E1;   /* mount board */
-  --sheet:  #F3F3EF;   /* the specimen sheet itself */
-  --ink:    #16171A;
-  --muted:  #565853;
-  --verm:   #A82A12;   /* the only colour. loss, and things heading that way */
-  --rule:   #C4C4BC;   /* hairlines */
-  --edge:   #63665F;   /* control borders */
-  --focus:  #0F4C81;
-  --on-verm:#F3F3EF;
+  --paper:  #131417;
+  --sheet:  #1C1E22;
+  --ink:    #E8E8E3;
+  --muted:  #9B9E98;
+  --verm:   #FF7C5E;   /* the only colour. loss, and things heading that way */
+  --rule:   #2F3238;   /* hairlines */
+  --edge:   #80847D;   /* control borders */
+  --focus:  #7FB2E5;
+  --on-verm:#131417;
 
   --font-text:  "Archivo", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
   --font-mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -35,41 +35,26 @@
   --gutter: clamp(1rem, 4vw, 2.5rem);
 
   /* Native controls and scrollbars follow the theme too. */
+  color-scheme: dark;
+}
+
+/* Light is the opt-in, so it is the only palette that needs a selector.
+
+   Dark being the base means it also survives with no JavaScript, and it kills
+   the duplication the previous arrangement needed: a media query cannot sit in
+   a selector list, so supporting both a system preference and an override
+   meant writing dark out twice and keeping the copies in step. */
+:root[data-theme="light"] {
+  --paper:  #E6E6E1;   /* mount board */
+  --sheet:  #F3F3EF;   /* the specimen sheet itself */
+  --ink:    #16171A;
+  --muted:  #565853;
+  --verm:   #A82A12;   /* the only colour. loss, and things heading that way */
+  --rule:   #C4C4BC;   /* hairlines */
+  --edge:   #63665F;   /* control borders */
+  --focus:  #0F4C81;
+  --on-verm:#F3F3EF;
   color-scheme: light;
-}
-
-/* Dark, twice over, and the two lists must be kept in step.
-
-   The first applies when the system asks for dark and the reader has not
-   overridden it. The second applies when they have chosen dark outright. A
-   media query cannot be part of a selector list, so there is no way to say
-   this once without giving up the ability to override the system. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper:  #131417;
-    --sheet:  #1C1E22;
-    --ink:    #E8E8E3;
-    --muted:  #9B9E98;
-    --verm:   #FF7C5E;
-    --rule:   #2F3238;
-    --edge:   #80847D;
-    --focus:  #7FB2E5;
-    --on-verm:#131417;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
-    --paper:  #131417;
-    --sheet:  #1C1E22;
-    --ink:    #E8E8E3;
-    --muted:  #9B9E98;
-    --verm:   #FF7C5E;
-    --rule:   #2F3238;
-    --edge:   #80847D;
-    --focus:  #7FB2E5;
-    --on-verm:#131417;
-    color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
