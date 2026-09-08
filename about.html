@@ -10,7 +10,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..112,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316171A' stroke-width='2'><circle cx='12' cy='9' r='6'/><path d='M12 15v7'/></svg>"><text y='26' font-size='26'>🌳</text></svg>">
+<!-- In the head on purpose: choosing the theme after first paint is what
+     makes a dark-mode page flash white on the way in. -->
+<script src="assets/js/theme.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316171A' stroke-width='2'><circle cx='12' cy='9' r='6'/><path d='M12 15v7'/></svg>">
 </head>
 <body>
 
@@ -33,6 +36,9 @@
           <li><a href="about.html" aria-current="page" data-i18n="nav.about">About</a></li>
         </ul>
       </nav>
+      <button type="button" class="btn reactive" data-theme-toggle
+              aria-label="Switch theme"></button>
+
       <button type="button" class="btn reactive" data-lang-toggle
               data-i18n-attr="aria-label:lang.label" aria-label="Language">
         <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none"

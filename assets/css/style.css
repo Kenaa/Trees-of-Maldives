@@ -33,10 +33,19 @@
   --ease:   cubic-bezier(.2, .7, .2, 1);
 
   --gutter: clamp(1rem, 4vw, 2.5rem);
+
+  /* Native controls and scrollbars follow the theme too. */
+  color-scheme: light;
 }
 
+/* Dark, twice over, and the two lists must be kept in step.
+
+   The first applies when the system asks for dark and the reader has not
+   overridden it. The second applies when they have chosen dark outright. A
+   media query cannot be part of a selector list, so there is no way to say
+   this once without giving up the ability to override the system. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper:  #131417;
     --sheet:  #1C1E22;
     --ink:    #E8E8E3;
@@ -46,7 +55,21 @@
     --edge:   #80847D;
     --focus:  #7FB2E5;
     --on-verm:#131417;
+    color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+    --paper:  #131417;
+    --sheet:  #1C1E22;
+    --ink:    #E8E8E3;
+    --muted:  #9B9E98;
+    --verm:   #FF7C5E;
+    --rule:   #2F3238;
+    --edge:   #80847D;
+    --focus:  #7FB2E5;
+    --on-verm:#131417;
+    color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
