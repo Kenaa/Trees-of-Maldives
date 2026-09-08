@@ -266,72 +266,137 @@
     $("lost-empty").hidden = gone.length !== 0;
   }
 
-  /* --- map ---------------------------------------------------------------- */
-  var map = null, layer = null, markers = {};
+  /* --- map -----------------------------------------------------------------
+     MapLibre with OpenFreeMap's vector tiles, which need no API key. Vector
+     tiles are what make the pitch and rotate possible, and they carry the
+     building footprints the island reads by.
+
+     The map is an enhancement throughout. Every tree on it is in the register
+     table, which is the path that works with a keyboard and a screen reader,
+     so nothing is lost when the library or the tile host is unreachable. */
+  var map = null, markers = {};
   var MARK = { standing: "--ink", lost: "--verm", threatened: "--verm",
                relocated: "--muted", cutback: "--verm" };
 
   function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
-  function markerIcon(status) {
-    var c = css(MARK[status]);
-    var paper = css("--paper");
-    return L.divIcon({
-      className: "marker",
-      iconSize: [24, 24], iconAnchor: [12, 12],
-      html: '<svg width="24" height="24" viewBox="0 0 24 24" fill="' + paper + '" stroke="' + c +
-            '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
-            '<rect x="1" y="1" width="22" height="22" fill="' + paper + '" stroke="' + c +
-            '" stroke-width="2"/>' + GLYPH[status] + '</svg>'
-    });
+  function markerEl(x) {
+    var c = css(MARK[x.status]), paper = css("--paper");
+    var d = document.createElement("div");
+    d.className = "marker";
+    d.setAttribute("data-id", x.id);
+    d.innerHTML =
+      '<svg width="24" height="24" viewBox="0 0 24 24" fill="' + paper + '" stroke="' + c +
+      '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<rect x="1" y="1" width="22" height="22" fill="' + paper + '" stroke="' + c +
+      '" stroke-width="2"/>' + GLYPH[x.status] + '</svg>';
+    return d;
+  }
+
+  function popupFor(x) {
+    return el("div", {}, [
+      el("h3", { style: "margin:0 0 .2rem" }, [titleOf(x)]),
+      el("p", { "class": "rec-sci", style: "margin:0 0 .4rem", lang: "la",
+                text: (byId[x.species] || {}).sci || "" }),
+      el("p", { style: "margin:0 0 .5rem" }, [stamp(x.status)]),
+      el("p", { style: "margin:0" }, [
+        el("a", { href: "?tree=" + encodeURIComponent(x.id), text: t("tree.open") })
+      ])
+    ]);
   }
 
   function initMap() {
-    if (typeof L === "undefined") return false;      // offline, or the CDN is blocked
+    if (typeof maplibregl === "undefined") return false;
     var c = window.CONFIG.map;
-    map = L.map("map", {
-      center: c.center, zoom: c.zoom, minZoom: c.minZoom, maxZoom: c.maxZoom,
-      maxBounds: c.maxBounds, maxBoundsViscosity: .7, scrollWheelZoom: false
+    var flat = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    try {
+      map = new maplibregl.Map({
+        container: "map",
+        style: "https://tiles.openfreemap.org/styles/liberty",
+        /* CONFIG stores lat,lng because that is how people write coordinates
+           and how the form collects them. MapLibre wants lng,lat, so the flip
+           happens here and nowhere else. */
+        center: [c.center[1], c.center[0]],
+        zoom: c.zoom, minZoom: c.minZoom, maxZoom: c.maxZoom,
+        maxBounds: [[c.maxBounds[0][1], c.maxBounds[0][0]],
+                    [c.maxBounds[1][1], c.maxBounds[1][0]]],
+        /* Tilted on arrival, because the tilt is the point. Anyone who has
+           asked not to be moved around gets it flat. */
+        pitch: flat ? 0 : 50,
+        bearing: flat ? 0 : -18,
+        scrollZoom: false,
+        dragRotate: true,
+        attributionControl: false
+      });
+    } catch (e) { return false; }
+
+    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
+
+    /* The canvas is a picture to anything that cannot see it. Naming it and
+       pointing at the table is more honest than leaving it unlabelled. */
+    var canvas = map.getCanvas();
+    canvas.setAttribute("aria-label", t("map.note"));
+
+    /* Wheel zoom would otherwise swallow the page scroll, so it only engages
+       once someone has actually put focus or a click on the map. */
+    function wheelOn() { map.scrollZoom.enable(); }
+    function wheelOff() { map.scrollZoom.disable(); }
+    canvas.addEventListener("focus", wheelOn);
+    canvas.addEventListener("blur", wheelOff);
+    map.on("click", wheelOn);
+    map.getContainer().addEventListener("mouseleave", wheelOff);
+
+    /* Only the building layer waits for the style: it edits paint properties
+       that do not exist until then. Markers are DOM elements the map merely
+       positions, so they go on immediately and survive a style that is slow,
+       throttled, or never finishes. */
+    map.on("load", function () {
+      try { showBuildings(); } catch (e) { /* the style may not carry the layer */ }
     });
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: c.maxZoom,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-    layer = L.layerGroup().addTo(map);
-    /* The raster basemap carries no information a screen reader can use, and
-       Leaflet ships its tiles without alt text. Markers live in a separate
-       pane, so hiding this one costs nothing. */
-    map.getPane("tilePane").setAttribute("aria-hidden", "true");
-    /* Keyboard users must be able to scroll past the map, so wheel zoom only
-       engages once the map itself has focus. */
-    map.on("focus", function () { map.scrollWheelZoom.enable(); });
-    map.on("blur", function () { map.scrollWheelZoom.disable(); });
+    map.on("error", function () { /* a missing tile should not take the page down */ });
     return true;
   }
 
+  /* The Liberty style ships a building-3d extrusion layer. It is switched on
+     here and tinted to the register's palette so the city reads as mass rather
+     than as decoration. */
+  function showBuildings() {
+    if (!map.getLayer("building-3d")) return;
+    map.setLayoutProperty("building-3d", "visibility", "visible");
+    map.setPaintProperty("building-3d", "fill-extrusion-color", css("--rule"));
+    map.setPaintProperty("building-3d", "fill-extrusion-opacity", 0.85);
+  }
+
+  var lastList = [];
+
   function renderMap(list) {
+    lastList = list;
     if (!map) return;
-    layer.clearLayers();
+    Object.keys(markers).forEach(function (id) { markers[id].remove(); });
     markers = {};
     list.forEach(function (x) {
       if (typeof x.lat !== "number" || typeof x.lng !== "number") return;
-      var m = L.marker([x.lat, x.lng], {
-        icon: markerIcon(x.status), keyboard: true,
-        alt: titleText(x) + ", " + t("status." + x.status), title: titleText(x)
+      var elm = markerEl(x);
+      var m = new maplibregl.Marker({ element: elm })
+        .setLngLat([x.lng, x.lat])
+        .setPopup(new maplibregl.Popup({ offset: 16, closeButton: true })
+          .setDOMContent(popupFor(x)))
+        .addTo(map);
+      /* MapLibre stamps its own role and a generic "Map marker" label onto the
+         element when it is added, so the real one goes on afterwards. A pin
+         that announces itself as "Map marker" tells a screen-reader user
+         nothing about which tree they have landed on. */
+      elm.setAttribute("role", "button");
+      elm.setAttribute("tabindex", "0");
+      elm.setAttribute("aria-label", titleText(x) + ", " + t("status." + x.status));
+      elm.addEventListener("mouseenter", function () { highlight(x.id, false); });
+      elm.addEventListener("mouseleave", function () { highlight(null, false); });
+      elm.addEventListener("focus", function () { highlight(x.id, false); });
+      elm.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); m.togglePopup(); }
       });
-      var pop = el("div", {}, [
-        el("h3", { style: "margin:0 0 .2rem" }, [titleOf(x)]),
-        el("p", { "class": "rec-sci", style: "margin:0 0 .4rem", lang: "la",
-                  text: (byId[x.species] || {}).sci || "" }),
-        el("p", { style: "margin:0 0 .5rem" }, [stamp(x.status)]),
-        el("p", { style: "margin:0" }, [
-          el("a", { href: "?tree=" + encodeURIComponent(x.id), text: t("tree.open") })
-        ])
-      ]);
-      m.bindPopup(pop);
-      m.on("mouseover", function () { highlight(x.id, false); });
-      m.on("mouseout", function () { highlight(null, false); });
-      layer.addLayer(m);
       markers[x.id] = m;
     });
   }
@@ -386,7 +451,7 @@
     $("tabs").classList.toggle("is-lost", i === 2);
     moveIndicator();
     if (focus) $(TABS[i][0]).focus();
-    if (i === 1 && map) setTimeout(function () { map.invalidateSize(); }, 0);
+    if (i === 1 && map) setTimeout(function () { map.resize(); }, 0);
   }
 
   TABS.forEach(function (pair, i) {

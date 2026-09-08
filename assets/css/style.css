@@ -360,6 +360,22 @@ tr:hover .stamp-relocated,  tr.is-active .stamp-relocated  { background: var(--m
   block-size: clamp(360px, 62vh, 660px);
   border-block: 1px solid var(--ink); background: var(--sheet); z-index: 1;
 }
+/* MapLibre on the register map. The picker on the submission form is still
+   Leaflet, so both sets of rules stay. */
+.maplibregl-map { font: inherit; background: var(--sheet); }
+.maplibregl-popup-content {
+  padding: .85rem 1rem; border-radius: 0; background: var(--sheet);
+  color: var(--ink); border: 2px solid var(--ink); box-shadow: none;
+}
+.maplibregl-popup-tip { display: none; }
+.maplibregl-popup-close-button {
+  font-size: 1.2rem; color: var(--ink); inline-size: 32px; block-size: 32px;
+}
+.maplibregl-popup-close-button:hover { background: var(--chip); }
+.maplibregl-ctrl-group { border-radius: 0; border: 1px solid var(--edge); }
+.maplibregl-ctrl-group button { border-radius: 0; }
+.maplibregl-ctrl-attrib { font-size: .7rem; }
+
 .leaflet-container { font: inherit; background: var(--sheet); }
 .leaflet-popup-content { margin: .85rem 1rem; font: inherit; }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { border-radius: 0; }

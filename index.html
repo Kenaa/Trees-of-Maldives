@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..112,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.css">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316171A' stroke-width='2'><circle cx='12' cy='9' r='6'/><path d='M12 15v7'/></svg>">
 </head>
@@ -169,7 +169,10 @@
   <!-- Map ----------------------------------------------------------------- -->
   <section id="p-map" role="tabpanel" aria-labelledby="t-map" tabindex="0" hidden>
     <div class="bleed map-panel"><div id="map"></div></div>
-    <div class="wrap"><p class="map-note" data-i18n="map.note"></p></div>
+    <div class="wrap">
+      <p class="map-note" data-i18n="map.note"></p>
+      <p class="map-note" data-i18n="map.buildings"></p>
+    </div>
   </section>
 
   <!-- Lost ---------------------------------------------------------------- -->
@@ -203,7 +206,7 @@
   </div>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.js"></script>
 <script src="data/species.js"></script>
 <script src="data/trees.js"></script>
 <script src="assets/js/config.js"></script>
