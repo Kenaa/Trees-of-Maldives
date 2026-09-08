@@ -379,10 +379,16 @@ tr:hover .stamp-relocated,  tr.is-active .stamp-relocated  { background: var(--m
 .leaflet-container { font: inherit; background: var(--sheet); }
 .leaflet-popup-content { margin: .85rem 1rem; font: inherit; }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { border-radius: 0; }
-.marker { display: block; transition: transform var(--t) var(--ease); }
+/* MapLibre positions each marker by writing transform: translate() onto this
+   element, so nothing here may set transform on it: doing so tears the pin off
+   its coordinates, and a transition on it makes every pin lag the map on each
+   pan. The highlight scales an inner span instead. */
+.marker { display: block; }
 .marker svg { display: block; }
+.marker-pin { display: block; transition: transform var(--t) var(--ease); }
 /* Cross-highlight: the marker answers when its row is pointed at. */
-.marker.is-active { transform: scale(1.5); z-index: 1000 !important; }
+.marker.is-active { z-index: 1000; }
+.marker.is-active .marker-pin { transform: scale(1.5); }
 .map-note { font-size: .82rem; color: var(--muted); padding-block: .7rem; }
 
 /* The location picker on the submission form. */
@@ -501,7 +507,8 @@ pre.summary {
     animation-duration: .001ms !important; transition-duration: .001ms !important;
     scroll-behavior: auto !important;
   }
-  .marker.is-active { transform: none; outline: 3px solid var(--ink); }
+  .marker.is-active .marker-pin { transform: none; }
+  .marker.is-active { outline: 3px solid var(--ink); }
 }
 
 @media (forced-colors: active) {

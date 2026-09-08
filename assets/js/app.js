@@ -286,10 +286,11 @@
     d.className = "marker";
     d.setAttribute("data-id", x.id);
     d.innerHTML =
+      '<span class="marker-pin">' +
       '<svg width="24" height="24" viewBox="0 0 24 24" fill="' + paper + '" stroke="' + c +
       '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
       '<rect x="1" y="1" width="22" height="22" fill="' + paper + '" stroke="' + c +
-      '" stroke-width="2"/>' + GLYPH[x.status] + '</svg>';
+      '" stroke-width="2"/>' + GLYPH[x.status] + '</svg></span>';
     return d;
   }
 
