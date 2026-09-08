@@ -309,8 +309,6 @@
   function initMap() {
     if (typeof maplibregl === "undefined") return false;
     var c = window.CONFIG.map;
-    var flat = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     try {
       map = new maplibregl.Map({
         container: "map",
@@ -322,10 +320,11 @@
         zoom: c.zoom, minZoom: c.minZoom, maxZoom: c.maxZoom,
         maxBounds: [[c.maxBounds[0][1], c.maxBounds[0][0]],
                     [c.maxBounds[1][1], c.maxBounds[1][0]]],
-        /* Flat. With the extrusions gone there is no height to look around,
-           and a tilted flat map only makes the far side harder to read. The
-           compass still tilts it for anyone who wants to. */
-        pitch: 0,
+        /* A modest tilt on arrival. MapLibre counts pitch up from straight
+           down, so 30 here is the "about 60 degrees" of looking at the ground
+           at an angle rather than from directly overhead. Drag or use the
+           compass for more; 60 is as far as it goes. */
+        pitch: 30,
         bearing: 0,
         scrollZoom: false,
         dragRotate: true,
@@ -357,7 +356,13 @@
        throttled, or never finishes. */
     map.on("load", function () {
       try { showBuildings(); } catch (e) { /* the style may not carry the layer */ }
-      try { addSatellite(); } catch (e) { /* imagery is an extra, never a blocker */ }
+      try {
+        addSatellite();
+        /* Imagery first. Canopy is visible in a photograph and invisible on a
+           street map, which is the whole reason someone opens this map. */
+        setSatellite(true);
+        repaintToggle();
+      } catch (e) { /* imagery is an extra, never a blocker */ }
     });
     map.on("error", function () { /* a missing tile should not take the page down */ });
     return true;
@@ -419,6 +424,10 @@
   var ICON_STREET = '<path d="M5.5 21 8 3"/><path d="M18.5 21 16 3"/>' +
                     '<path d="M12 4.5v3"/><path d="M12 10.5v3"/><path d="M12 16.5v3"/>';
 
+  /* The control is added before the style finishes loading, so its icon is
+     drawn once more when the imagery actually goes on. */
+  var repaintToggle = function () {};
+
   function LayerToggle() {}
   LayerToggle.prototype.onAdd = function () {
     var wrap = document.createElement("div");
@@ -438,6 +447,7 @@
       b.setAttribute("title", label);
     }
     paint();
+    repaintToggle = paint;
     b.addEventListener("click", function () { setSatellite(!satelliteOn); paint(); });
     document.addEventListener("langchange", paint);
 

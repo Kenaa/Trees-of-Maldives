@@ -375,14 +375,23 @@ tr:hover .stamp-relocated,  tr.is-active .stamp-relocated  { background: var(--m
 .maplibregl-ctrl-group { border-radius: 0; border: 1px solid var(--edge); }
 .maplibregl-ctrl-group button { border-radius: 0; }
 /* Sits under the compass in the same stack, so it reads as one set of map
-   controls rather than a stray button. */
-.map-layer-btn {
+   controls rather than a stray button.
+
+   The selector is qualified because MapLibre's own `.maplibregl-ctrl-group
+   button` is more specific than a lone class and would otherwise win, keeping
+   the button display:block and leaving the icon sitting in a corner. */
+.maplibregl-ctrl-group button.map-layer-btn {
   display: flex; align-items: center; justify-content: center;
   inline-size: 29px; block-size: 29px; padding: 0;
   background: var(--sheet); color: var(--ink); border: 0; cursor: pointer;
 }
-.map-layer-btn:hover { background: var(--chip); }
-.map-layer-btn svg { display: block; }
+.maplibregl-ctrl-group button.map-layer-btn:hover { background: var(--chip); }
+.maplibregl-ctrl-group button.map-layer-btn svg {
+  display: block;
+  /* Explicit rather than currentColor: these controls sit inside MapLibre's
+     own markup, and inheriting from it produced a washed-out grey icon. */
+  stroke: var(--ink);
+}
 .maplibregl-ctrl-attrib { font-size: .7rem; }
 
 .leaflet-container { font: inherit; background: var(--sheet); }
