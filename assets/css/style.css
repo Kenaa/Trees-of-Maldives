@@ -357,7 +357,7 @@ tr:hover .stamp-relocated,  tr.is-active .stamp-relocated  { background: var(--m
 /* ---------- map ---------------------------------------------------------- */
 .map-panel { padding-block-start: 1rem; }
 #map {
-  block-size: clamp(360px, 62vh, 660px);
+  block-size: clamp(440px, 78vh, 820px);
   border-block: 1px solid var(--ink); background: var(--sheet); z-index: 1;
 }
 /* MapLibre on the register map. The picker on the submission form is still
